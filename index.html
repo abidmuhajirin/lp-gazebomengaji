@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gazebo Mengaji — Dari Tongkrongan Menjadi Wadah Kebaikan</title>
 
+    <link rel="icon" type="image/png" href="images/favicon-gazmen.png">
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -43,7 +45,6 @@
     </script>
 
     <style>
-        /* Smooth Mobile & Theme Transitions */
         html {
             -webkit-tap-highlight-color: transparent;
         }
@@ -164,34 +165,42 @@
         </div>
     </header>
 
-    <!-- 2. PROMINENT HIJRI & UPCOMING PRAYER TIME SECTION -->
+    <!-- 2. PROMINENT HIJRI & UPCOMING PRAYER TIME SECTION WITH COUNTDOWN & ALIGNED MOBILE DATE -->
     <section class="bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 py-6 sm:py-8 px-4 transition-colors">
         <div class="max-w-7xl mx-auto">
             <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-sm">
                 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
                     
-                    <!-- Kiri: Tanggal Hijriah -->
-                    <div class="lg:col-span-6 border-b lg:border-b-0 lg:border-r border-zinc-200 dark:border-zinc-800 pb-5 lg:pb-0 lg:pr-8">
+                    <!-- Kiri: Tanggal Hijriah (Aligned Straight Left with Location on Mobile) -->
+                    <div class="lg:col-span-6 border-b lg:border-b-0 lg:border-r border-zinc-200 dark:border-zinc-800 pb-5 lg:pb-0 lg:pr-8 flex flex-col items-start text-left">
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[11px] sm:text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-widest mb-2.5">
                             <i data-lucide="calendar-days" class="w-3.5 h-3.5"></i>
                             <span>Kalender Hijriah Real-time</span>
                         </div>
-                        <h2 id="large-hijri-date" class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-black dark:text-white tracking-tight leading-snug">
+                        <h2 id="large-hijri-date" class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-black dark:text-white tracking-tight leading-snug break-words">
                             Menghitung Tanggal...
                         </h2>
-                        <p class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-2 flex items-center gap-1.5 font-medium">
+                        <p class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-2.5 flex items-center gap-1.5 font-medium leading-normal">
                             <i data-lucide="map-pin" class="w-3.5 h-3.5 text-zinc-400 shrink-0"></i>
                             <span>Wilayah Yogyakarta &amp; Sekitarnya (Standar Kemenag RI)</span>
                         </p>
                     </div>
 
-                    <!-- Kanan: Jadwal Sholat Mendatang -->
+                    <!-- Kanan: Jadwal Sholat Mendatang dengan Hitungan Mundur (Countdown) -->
                     <div class="lg:col-span-6">
                         <div class="bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 sm:p-7 flex flex-row items-center justify-between gap-4">
-                            <div class="space-y-1">
-                                <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-zinc-400 block">Jadwal Sholat Mendatang</span>
-                                <div id="large-next-prayer-name" class="text-xl sm:text-3xl font-extrabold text-black dark:text-white">
+                            <div class="space-y-1.5">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-zinc-400 block">Jadwal Sholat Mendatang</span>
+                                    <!-- Countdown Badge -->
+                                    <span id="prayer-countdown-badge" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-[10px] font-bold border border-emerald-200/80 dark:border-emerald-800/80 shadow-sm">
+                                        <i data-lucide="timer" class="w-3 h-3"></i>
+                                        <span id="prayer-countdown-text">Kurang 0 min lagi</span>
+                                    </span>
+                                </div>
+                                
+                                <div id="large-next-prayer-name" class="text-2xl sm:text-3xl font-extrabold text-black dark:text-white">
                                     Ashar
                                 </div>
                                 <p id="large-next-prayer-sub" class="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-medium">Pukul 15:12 WIB • Wilayah Yogyakarta</p>
@@ -893,20 +902,20 @@
         </div>
     </section>
 
-    <!-- 12. DONASI DAKWAH & SPONSOR -->
+    <!-- 12. DONASI DAKWAH & SPONSOR (AMAL JARIYAH WITH SOFT PASTEL GREEN CONTAINER BACKGROUND) -->
     <section class="py-16 sm:py-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 sm:p-12 space-y-8 shadow-sm">
+        <div class="rounded-3xl border border-emerald-200/80 dark:border-emerald-800/50 bg-emerald-50/70 dark:bg-emerald-950/30 p-6 sm:p-12 space-y-8 shadow-sm transition-colors">
             <div class="space-y-4">
-                <span class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-zinc-400">Amal Jariyah</span>
+                <span class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/60 px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-800 inline-block">Amal Jariyah</span>
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-black dark:text-white tracking-tight">Dukung Keberlanjutan Dakwah Ini</h2>
-                <p class="text-zinc-600 dark:text-zinc-400 text-xs sm:text-base leading-relaxed italic border-l-2 border-black dark:border-white pl-3.5">
+                <p class="text-zinc-700 dark:text-zinc-300 text-xs sm:text-base leading-relaxed italic border-l-2 border-emerald-600 dark:border-emerald-400 pl-3.5">
                     "Dakwah ini tidak bisa berjalan sendiri. Kami bukan siapa-siapa tanpa pertolongan Allah dan uluran tangan dari Abang, Kakak, serta Sahabat sekalian. Gazebo Mengaji hanyalah jembatan—jika ada harta yang ingin dijadikan amal jariyah, izinkan kami mengelolanya untuk kelancaran operasional dan kegiatan dakwah umat."
                 </p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
                 <!-- Option 1 -->
-                <div class="p-5 sm:p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 flex flex-col justify-between space-y-4">
+                <div class="p-5 sm:p-6 rounded-2xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex flex-col justify-between space-y-4 shadow-sm">
                     <div>
                         <h3 class="text-base sm:text-lg font-bold text-black dark:text-white">Donasi Operasional</h3>
                         <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed">Dukungan infak operasional kajian, konsumsi jamaah, dan fasilitas dakwah gratis.</p>
@@ -918,7 +927,7 @@
                 </div>
 
                 <!-- Option 2 -->
-                <div class="p-5 sm:p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 flex flex-col justify-between space-y-4">
+                <div class="p-5 sm:p-6 rounded-2xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex flex-col justify-between space-y-4 shadow-sm">
                     <div>
                         <h3 class="text-base sm:text-lg font-bold text-black dark:text-white">Sponsorship &amp; Kemitraan</h3>
                         <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed">Terbuka bagi UMKM dan brand muslim yang ingin berkolaborasi dalam dakwah.</p>
@@ -1041,7 +1050,7 @@
         // Initialize Lucide Icons
         lucide.createIcons();
 
-        // --- 1. DARK / LIGHT MODE TOGGLE (DEFAULT LIGHT THEME) ---
+        // --- 1. DARK / LIGHT MODE TOGGLE ---
         function toggleTheme() {
             const html = document.documentElement;
             if (html.classList.contains('dark')) {
@@ -1066,7 +1075,7 @@
             if (menu) menu.classList.toggle('hidden');
         }
 
-        // --- 2. HIJRI DATE & PRAYER TIME DISPLAY ---
+        // --- 2. HIJRI DATE & PRAYER TIME COUNTDOWN CALCULATION ---
         function updateHijriAndPrayerTimes() {
             const today = new Date();
             
@@ -1086,38 +1095,57 @@
             const largeHijriEl = document.getElementById('large-hijri-date');
             if (largeHijriEl) largeHijriEl.innerText = hijriText;
 
-            // Determine upcoming prayer
-            const hours = today.getHours();
-            let pName = "Ashar";
-            let pTime = "15:12";
+            // Prayer times schedule for Yogyakarta (24-hour format)
+            const prayers = [
+                { name: "Subuh", time: "04:35", h: 4, m: 35 },
+                { name: "Dzuhur", time: "11:52", h: 11, m: 52 },
+                { name: "Ashar", time: "15:12", h: 15, m: 12 },
+                { name: "Maghrib", time: "17:49", h: 17, m: 49 },
+                { name: "Isya", time: "18:59", h: 18, m: 59 }
+            ];
 
-            if (hours >= 4 && hours < 11) {
-                pName = "Dzuhur";
-                pTime = "11:52";
-            } else if (hours >= 11 && hours < 15) {
-                pName = "Ashar";
-                pTime = "15:12";
-            } else if (hours >= 15 && hours < 17) {
-                pName = "Maghrib";
-                pTime = "17:49";
-            } else if (hours >= 17 && hours < 18) {
-                pName = "Isya";
-                pTime = "18:59";
+            const nowMinutes = today.getHours() * 60 + today.getMinutes();
+            let nextP = prayers[0];
+            let targetMinutes = prayers[0].h * 60 + prayers[0].m;
+
+            for (let i = 0; i < prayers.length; i++) {
+                const pM = prayers[i].h * 60 + prayers[i].m;
+                if (pM > nowMinutes) {
+                    nextP = prayers[i];
+                    targetMinutes = pM;
+                    break;
+                }
+            }
+
+            let diffMinutes = targetMinutes - nowMinutes;
+            if (diffMinutes <= 0) {
+                // Target Subuh tomorrow (+24 hours)
+                diffMinutes += 24 * 60;
+            }
+
+            let diffText = "";
+            const hoursLeft = Math.floor(diffMinutes / 60);
+            const minsLeft = diffMinutes % 60;
+
+            if (hoursLeft > 0) {
+                diffText = `Kurang ${hoursLeft} jam ${minsLeft} min lagi`;
             } else {
-                pName = "Subuh";
-                pTime = "04:35";
+                diffText = `Kurang ${minsLeft} min lagi`;
             }
 
             const pNameEl = document.getElementById('large-next-prayer-name');
             const pTimeEl = document.getElementById('large-next-prayer-time');
             const pSubEl = document.getElementById('large-next-prayer-sub');
+            const pCountEl = document.getElementById('prayer-countdown-text');
 
-            if (pNameEl) pNameEl.innerText = pName;
-            if (pTimeEl) pTimeEl.innerText = pTime;
-            if (pSubEl) pSubEl.innerText = `Pukul ${pTime} WIB • Wilayah Yogyakarta`;
+            if (pNameEl) pNameEl.innerText = nextP.name;
+            if (pTimeEl) pTimeEl.innerText = nextP.time;
+            if (pSubEl) pSubEl.innerText = `Pukul ${nextP.time} WIB • Wilayah Yogyakarta`;
+            if (pCountEl) pCountEl.innerText = diffText;
         }
 
         updateHijriAndPrayerTimes();
+        setInterval(updateHijriAndPrayerTimes, 60000); // Refresh countdown every minute
 
         // --- 3. REKAMAN PEMBELAJARAN MEDIA FILTER ---
         function filterMedia(type) {
