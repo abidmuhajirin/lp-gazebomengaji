@@ -480,132 +480,141 @@
                 </div>
             </div>
 
-            <!-- Slider Container (Clean Without Side Fade Mask) -->
+            <!-- Slider Container (Clean Without Side Fade Mask & Unobstructed 9:16 Posters) -->
             <div class="relative">
                 <div id="kajian-slider-container" class="flex gap-5 sm:gap-6 overflow-x-auto pb-4 pt-1 no-scrollbar scroll-smooth snap-x snap-mandatory">
                     
-                    <!-- Card 1 (HANYA INI YANG KAJIAN MENDATANG) -->
-                    <div class="snap-start min-w-[260px] sm:min-w-[280px] max-w-[290px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
+                    <!-- Card 1 (KAJIAN MENDATANG - BADGE & INFO DI LUAR THUMBNAIL) -->
+                    <div class="snap-start min-w-[250px] sm:min-w-[270px] max-w-[280px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
                         <div>
-                            <div class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-4 bg-zinc-100 dark:bg-zinc-800">
-                                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80" alt="Flyer Kajian 1" class="w-full h-full object-cover">
-                                
-                                <!-- ONLY 1 HAS THIS BADGE -->
-                                <div class="absolute top-3 left-3 bg-white text-red-600 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider shadow-lg flex items-center gap-1.5 border border-red-100">
-                                    <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                            <!-- Badge Label di Luar Thumbnail -->
+                            <div class="mb-3 flex items-center justify-between">
+                                <span class="bg-red-50 text-red-600 dark:bg-red-950/80 dark:text-red-400 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5 border border-red-200/60 dark:border-red-800/60">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
                                     <span>Kajian Mendatang</span>
-                                </div>
-
-                                <div class="absolute bottom-3 left-3 right-3 bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10 text-white">
-                                    <p class="text-[11px] font-mono text-zinc-300">Kamis, 10 Sep • 19.30 WIB</p>
-                                    <h4 class="text-sm font-bold leading-snug mt-1">Menjemput Rezeki Tanpa Kehilangan Hati</h4>
-                                </div>
+                                </span>
                             </div>
 
-                            <p class="text-xs text-zinc-500 dark:text-zinc-400">Pengisi: <strong class="text-black dark:text-white">Ustadz Anshori, Lc.</strong></p>
+                            <!-- Thumbnail Clean 9:16 Poster -->
+                            <div class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-3 bg-zinc-100 dark:bg-zinc-800">
+                                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80" alt="Flyer Kajian 1" class="w-full h-full object-cover">
+                            </div>
+
+                            <!-- Detail Pengisi Kajian -->
+                            <div class="pt-1">
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400">Pengisi: <strong class="text-black dark:text-white">Ustadz Anshori, Lc.</strong></p>
+                            </div>
                         </div>
 
-                        <a href="https://youtube.com" target="_blank" class="mt-4 border border-zinc-300 dark:border-zinc-800 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
+                        <a href="https://youtube.com" target="_blank" class="mt-4 w-full bg-black text-white dark:bg-white dark:text-black py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95">
                             <span>Lihat Detail</span>
                             <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
                         </a>
                     </div>
 
                     <!-- Card 2 (KAJIAN KEMARIN) -->
-                    <div class="snap-start min-w-[260px] sm:min-w-[280px] max-w-[290px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
+                    <div class="snap-start min-w-[250px] sm:min-w-[270px] max-w-[280px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
                         <div>
-                            <div class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-4 bg-zinc-100 dark:bg-zinc-800">
-                                <img src="images/kajian-kemarin1.jpeg" alt="Flyer Kajian 2" class="w-full h-full object-cover">
-                                
-                                <div class="absolute top-3 left-3 bg-zinc-800 text-zinc-300 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
+                            <!-- Badge Label di Luar Thumbnail -->
+                            <div class="mb-3 flex items-center justify-between">
+                                <span class="bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider border border-zinc-200 dark:border-zinc-700">
                                     Kajian Kemarin
-                                </div>
-
-                                <div class="absolute bottom-3 left-3 right-3 bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10 text-white">
-                                    <p class="text-[11px] font-mono text-zinc-300">Rabu, 02 Sep • 20.00 WIB</p>
-                                    <h4 class="text-sm font-bold leading-snug mt-1">Dosa Menguping Rahasia Orang Lain</h4>
-                                </div>
+                                </span>
                             </div>
 
-                            <p class="text-xs text-zinc-500 dark:text-zinc-400">Pengisi: <strong class="text-black dark:text-white">Ustadz Muhammad Ihsan, S.UD, M.H.I.</strong></p>
+                            <!-- Thumbnail Clean 9:16 Poster -->
+                            <div class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-3 bg-zinc-100 dark:bg-zinc-800">
+                                <img src="images/kajian-kemarin1.jpeg" alt="Flyer Kajian 2" class="w-full h-full object-cover">
+                            </div>
+
+                            <!-- Detail Pengisi Kajian -->
+                            <div class="pt-1">
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400">Pengisi: <strong class="text-black dark:text-white">Ustadz Muhammad Ihsan, S.UD, M.H.I.</strong></p>
+                            </div>
                         </div>
 
-                        <a href="https://youtube.com" target="_blank" class="mt-4 border border-zinc-300 dark:border-zinc-800 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
+                        <a href="https://youtube.com" target="_blank" class="mt-4 w-full bg-black text-white dark:bg-white dark:text-black py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95">
                             <span>Tonton Rekaman</span>
                             <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
                         </a>
                     </div>
 
                     <!-- Card 3 (KAJIAN KEMARIN) -->
-                    <div class="snap-start min-w-[260px] sm:min-w-[280px] max-w-[290px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
+                    <div class="snap-start min-w-[250px] sm:min-w-[270px] max-w-[280px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
                         <div>
-                            <div class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-4 bg-zinc-100 dark:bg-zinc-800">
-                                <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=600&q=80" alt="Flyer Kajian 3" class="w-full h-full object-cover">
-                                
-                                <div class="absolute top-3 left-3 bg-zinc-800 text-zinc-300 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
+                            <!-- Badge Label di Luar Thumbnail -->
+                            <div class="mb-3 flex items-center justify-between">
+                                <span class="bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider border border-zinc-200 dark:border-zinc-700">
                                     Kajian Kemarin
-                                </div>
-
-                                <div class="absolute bottom-3 left-3 right-3 bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10 text-white">
-                                    <p class="text-[11px] font-mono text-zinc-300">Kamis, 03 Sep • 19.30 WIB</p>
-                                    <h4 class="text-sm font-bold leading-snug mt-1">Pemuda Berani &amp; Berilmu</h4>
-                                </div>
+                                </span>
                             </div>
 
-                            <p class="text-xs text-zinc-500 dark:text-zinc-400">Pengisi: <strong class="text-black dark:text-white">Ustadz Aldi Mursalat</strong></p>
+                            <!-- Thumbnail Clean 9:16 Poster -->
+                            <div class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-3 bg-zinc-100 dark:bg-zinc-800">
+                                <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=600&q=80" alt="Flyer Kajian 3" class="w-full h-full object-cover">
+                            </div>
+
+                            <!-- Detail Pengisi Kajian -->
+                            <div class="pt-1">
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400">Pengisi: <strong class="text-black dark:text-white">Ustadz Aldi Mursalat</strong></p>
+                            </div>
                         </div>
 
-                        <a href="https://youtube.com" target="_blank" class="mt-4 border border-zinc-300 dark:border-zinc-800 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
+                        <a href="https://youtube.com" target="_blank" class="mt-4 w-full bg-black text-white dark:bg-white dark:text-black py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95">
                             <span>Tonton Rekaman</span>
                             <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
                         </a>
                     </div>
 
                     <!-- Card 4 (KAJIAN KEMARIN) -->
-                    <div class="snap-start min-w-[260px] sm:min-w-[280px] max-w-[290px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
+                    <div class="snap-start min-w-[250px] sm:min-w-[270px] max-w-[280px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
                         <div>
-                            <div class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-4 bg-zinc-100 dark:bg-zinc-800">
-                                <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80" alt="Flyer Kajian 4" class="w-full h-full object-cover">
-                                
-                                <div class="absolute top-3 left-3 bg-zinc-800 text-zinc-300 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
+                            <!-- Badge Label di Luar Thumbnail -->
+                            <div class="mb-3 flex items-center justify-between">
+                                <span class="bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider border border-zinc-200 dark:border-zinc-700">
                                     Kajian Kemarin
-                                </div>
-
-                                <div class="absolute bottom-3 left-3 right-3 bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10 text-white">
-                                    <p class="text-[11px] font-mono text-zinc-300">Ahad, 30 Agu • 19.30 WIB</p>
-                                    <h4 class="text-sm font-bold leading-snug mt-1">Rahasia Surah Al-Kahfi</h4>
-                                </div>
+                                </span>
                             </div>
 
-                            <p class="text-xs text-zinc-500 dark:text-zinc-400">Pengisi: <strong class="text-black dark:text-white">Ustadz Anshori, Lc.</strong></p>
+                            <!-- Thumbnail Clean 9:16 Poster -->
+                            <div class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-3 bg-zinc-100 dark:bg-zinc-800">
+                                <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80" alt="Flyer Kajian 4" class="w-full h-full object-cover">
+                            </div>
+
+                            <!-- Detail Pengisi Kajian -->
+                            <div class="pt-1">
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400">Pengisi: <strong class="text-black dark:text-white">Ustadz Anshori, Lc.</strong></p>
+                            </div>
                         </div>
 
-                        <a href="https://youtube.com" target="_blank" class="mt-4 border border-zinc-300 dark:border-zinc-800 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
+                        <a href="https://youtube.com" target="_blank" class="mt-4 w-full bg-black text-white dark:bg-white dark:text-black py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95">
                             <span>Tonton Rekaman</span>
                             <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
                         </a>
                     </div>
 
                     <!-- Card 5 (KAJIAN KEMARIN) -->
-                    <div class="snap-start min-w-[260px] sm:min-w-[280px] max-w-[290px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
+                    <div class="snap-start min-w-[250px] sm:min-w-[270px] max-w-[280px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
                         <div>
-                            <div class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-4 bg-zinc-100 dark:bg-zinc-800">
-                                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=600&q=80" alt="Flyer Kajian 5" class="w-full h-full object-cover">
-                                
-                                <div class="absolute top-3 left-3 bg-zinc-800 text-zinc-300 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
+                            <!-- Badge Label di Luar Thumbnail -->
+                            <div class="mb-3 flex items-center justify-between">
+                                <span class="bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider border border-zinc-200 dark:border-zinc-700">
                                     Kajian Kemarin
-                                </div>
-
-                                <div class="absolute bottom-3 left-3 right-3 bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10 text-white">
-                                    <p class="text-[11px] font-mono text-zinc-300">Kamis, 27 Agu • 19.30 WIB</p>
-                                    <h4 class="text-sm font-bold leading-snug mt-1">Adab Menuntut Ilmu &amp; Guru</h4>
-                                </div>
+                                </span>
                             </div>
 
-                            <p class="text-xs text-zinc-500 dark:text-zinc-400">Pengisi: <strong class="text-black dark:text-white">Ustadz Ihsan Abu Hafsh</strong></p>
+                            <!-- Thumbnail Clean 9:16 Poster -->
+                            <div class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-3 bg-zinc-100 dark:bg-zinc-800">
+                                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=600&q=80" alt="Flyer Kajian 5" class="w-full h-full object-cover">
+                            </div>
+
+                            <!-- Detail Pengisi Kajian -->
+                            <div class="pt-1">
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400">Pengisi: <strong class="text-black dark:text-white">Ustadz Ihsan Abu Hafsh</strong></p>
+                            </div>
                         </div>
 
-                        <a href="https://youtube.com" target="_blank" class="mt-4 border border-zinc-300 dark:border-zinc-800 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
+                        <a href="https://youtube.com" target="_blank" class="mt-4 w-full bg-black text-white dark:bg-white dark:text-black py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95">
                             <span>Tonton Rekaman</span>
                             <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
                         </a>
@@ -870,8 +879,8 @@
     <!-- 10. SECTION KUTIPAN HADITS (BEBAS TEKS ARAB & RIWAYAT) -->
     <section class="py-16 sm:py-20 bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 transition-colors">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5 sm:space-y-6">
-            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black text-white dark:bg-white dark:text-black flex items-center justify-center mx-auto text-xl sm:text-2xl font-serif shadow-sm">
-                “
+            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-black text-white dark:bg-white dark:text-black flex items-center justify-center mx-auto shadow-sm">
+                <i data-lucide="quote" class="w-5 h-5 sm:w-6 sm:h-6 fill-current"></i>
             </div>
             <h2 class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-black dark:text-white tracking-tight leading-snug">
                 Barangsiapa menempuh suatu jalan untuk menuntut ilmu, maka Allah akan memudahkan baginya jalan menuju surga.
@@ -880,7 +889,7 @@
         </div>
     </section>
 
-    <!-- 11. GALERI KEGIATAN (SLIDE CAROUSEL WITH FADE MASK) -->
+    <!-- 11. GALERI KEGIATAN (SLIDE CAROUSEL WITH INSTAGRAM STORY PORTRAIT ASPECT RATIO) -->
     <section id="galeri" class="py-16 sm:py-20 border-b border-zinc-200 dark:border-zinc-800 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
@@ -900,34 +909,34 @@
                 </div>
             </div>
 
-            <!-- Gallery Slide Container With Gallery Edge Mask -->
+            <!-- Gallery Slide Container With Gallery Edge Mask & Instagram Story Portrait Ratio -->
             <div class="relative gallery-mask">
                 <div id="gallery-slider" class="flex gap-5 sm:gap-6 overflow-x-auto pb-4 pt-1 no-scrollbar scroll-smooth snap-x snap-mandatory">
                     
-                    <div class="snap-start min-w-[260px] sm:min-w-[360px] h-64 sm:h-72 rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-900 relative group shrink-0 shadow-sm">
+                    <div class="snap-start min-w-[220px] sm:min-w-[260px] max-w-[280px] aspect-[9/16] rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-900 relative group shrink-0 shadow-sm">
                         <img src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=800&q=80" alt="Galeri 1" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-5">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
                             <span class="text-xs font-semibold text-white">Suasana Mengaji Malam Hari</span>
                         </div>
                     </div>
 
-                    <div class="snap-start min-w-[260px] sm:min-w-[360px] h-64 sm:h-72 rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-900 relative group shrink-0 shadow-sm">
+                    <div class="snap-start min-w-[220px] sm:min-w-[260px] max-w-[280px] aspect-[9/16] rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-900 relative group shrink-0 shadow-sm">
                         <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80" alt="Galeri 2" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-5">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
                             <span class="text-xs font-semibold text-white">Diskusi Kopi &amp; Pemuda</span>
                         </div>
                     </div>
 
-                    <div class="snap-start min-w-[260px] sm:min-w-[360px] h-64 sm:h-72 rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-900 relative group shrink-0 shadow-sm">
+                    <div class="snap-start min-w-[220px] sm:min-w-[260px] max-w-[280px] aspect-[9/16] rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-900 relative group shrink-0 shadow-sm">
                         <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80" alt="Galeri 3" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-5">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
                             <span class="text-xs font-semibold text-white">Kebersamaan Santap Makan</span>
                         </div>
                     </div>
 
-                    <div class="snap-start min-w-[260px] sm:min-w-[360px] h-64 sm:h-72 rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-900 relative group shrink-0 shadow-sm">
+                    <div class="snap-start min-w-[220px] sm:min-w-[260px] max-w-[280px] aspect-[9/16] rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-900 relative group shrink-0 shadow-sm">
                         <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80" alt="Galeri 4" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-5">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
                             <span class="text-xs font-semibold text-white">Kajian Subuh Berjamaah</span>
                         </div>
                     </div>
