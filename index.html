@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gazebo Mengaji — Dari Tongkrongan Menjadi Wadah Kebaikan</title>
+    <title>Gazebo Mengaji</title>
 
-    <link rel="icon" type="image/png" href="images/favicon-gazmen.png">
+    <link rel="icon" type="image/png" href="images/gazmen-white.png">
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -214,34 +214,34 @@
 
                     <!-- Kanan: Card Jadwal Sholat Mendatang dengan Hitungan Mundur (Countdown) Rapi -->
                     <div class="lg:col-span-6">
-                        <div class="bg-zinc-50 dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="bg-zinc-50 dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-4 sm:p-6 flex flex-row items-center justify-between gap-3 sm:gap-4">
                             
                             <!-- Informasi Sholat & Countdown Badge -->
-                            <div class="space-y-2 w-full sm:w-auto">
+                            <div class="space-y-1.5 sm:space-y-2 min-w-0 flex-1">
                                 <div class="flex items-center gap-2 flex-wrap">
                                     <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-zinc-400">Jadwal Sholat Mendatang</span>
                                     
                                     <!-- Countdown Badge -->
-                                    <span id="prayer-countdown-badge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold border border-emerald-200/80 dark:border-emerald-800/80 shadow-sm">
-                                        <i data-lucide="timer" class="w-3.5 h-3.5 shrink-0"></i>
+                                    <span id="prayer-countdown-badge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 text-[10px] sm:text-[11px] font-bold border border-emerald-200/80 dark:border-emerald-800/80 shadow-sm">
+                                        <i data-lucide="timer" class="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0"></i>
                                         <span id="prayer-countdown-text">Kurang 0 min lagi</span>
                                     </span>
                                 </div>
                                 
-                                <div id="large-next-prayer-name" class="text-2xl sm:text-3xl font-extrabold text-black dark:text-white tracking-tight">
+                                <div id="large-next-prayer-name" class="text-xl sm:text-3xl font-extrabold text-black dark:text-white tracking-tight">
                                     Ashar
                                 </div>
                                 
-                                <p id="large-next-prayer-sub" class="text-xs text-zinc-500 dark:text-zinc-400 font-medium flex items-center gap-1.5">
-                                    <i data-lucide="clock" class="w-3.5 h-3.5 text-zinc-400 shrink-0"></i>
-                                    <span>Pukul 15:12 WIB • Wilayah Yogyakarta</span>
+                                <p id="large-next-prayer-sub" class="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-medium flex items-center gap-1.5 truncate">
+                                    <i data-lucide="clock" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-zinc-400 shrink-0"></i>
+                                    <span class="truncate">Pukul 15:12 WIB • Yogyakarta</span>
                                 </p>
                             </div>
 
-                            <!-- Jam Waktu Sholat -->
-                            <div class="bg-black text-white dark:bg-white dark:text-black rounded-2xl px-5 py-3 font-mono font-extrabold text-2xl sm:text-3xl shadow-sm text-center shrink-0 min-w-[100px] w-full sm:w-auto flex flex-col items-center justify-center">
-                                <span id="large-next-prayer-time">15:12</span>
-                                <span class="text-[10px] sm:text-xs font-sans font-bold block opacity-80 uppercase tracking-wider">WIB</span>
+                            <!-- Jam Waktu Sholat (Proporsional & Ringkas di Mobile) -->
+                            <div class="bg-black text-white dark:bg-white dark:text-black rounded-xl sm:rounded-2xl px-3.5 py-2.5 sm:px-5 sm:py-3 font-mono font-extrabold shadow-sm text-center shrink-0 flex flex-col items-center justify-center">
+                                <span id="large-next-prayer-time" class="text-lg sm:text-3xl leading-none">15:12</span>
+                                <span class="text-[9px] sm:text-xs font-sans font-bold block opacity-80 uppercase tracking-wider mt-0.5">WIB</span>
                             </div>
 
                         </div>
