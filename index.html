@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gazebo Mengaji — Dari Tongkrongan Menjadi Wadah Kebaikan</title>
+    <title>Gazebo Mengaji</title>
 
     <link rel="icon" type="image/png" href="images/favicon-gazmen.png">
     
@@ -185,6 +185,23 @@
                             <i data-lucide="map-pin" class="w-3.5 h-3.5 text-zinc-400 shrink-0"></i>
                             <span>Wilayah Yogyakarta &amp; Sekitarnya (Standar Kemenag RI)</span>
                         </p>
+
+                        <!-- Social Media Links (Instagram, TikTok, Facebook, YouTube) -->
+                        <div class="flex items-center gap-2.5 mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800/80 w-full">
+                            <span class="text-[11px] font-semibold text-zinc-400 mr-1">Ikuti Kami:</span>
+                            <a href="https://instagram.com" target="_blank" class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black flex items-center justify-center text-xs transition-all active:scale-95" aria-label="Instagram">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                            <a href="https://tiktok.com" target="_blank" class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black flex items-center justify-center text-xs transition-all active:scale-95" aria-label="TikTok">
+                                <i class="fa-brands fa-tiktok"></i>
+                            </a>
+                            <a href="https://facebook.com" target="_blank" class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black flex items-center justify-center text-xs transition-all active:scale-95" aria-label="Facebook">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+                            <a href="https://youtube.com" target="_blank" class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black flex items-center justify-center text-xs transition-all active:scale-95" aria-label="YouTube">
+                                <i class="fa-brands fa-youtube"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- Kanan: Jadwal Sholat Mendatang dengan Hitungan Mundur (Countdown) -->
@@ -974,9 +991,19 @@
                 <span class="font-bold text-black dark:text-white text-sm">Gazebo Mengaji</span>
             </div>
             <p>© 2026 Gazebo Mengaji. Berawal dari Nongkrong, Tumbuh Menjadi Kebaikan.</p>
-            <div class="flex items-center gap-4">
-                <a href="#" class="hover:text-black dark:hover:text-white p-1" aria-label="Instagram"><i data-lucide="instagram" class="w-4 h-4"></i></a>
-                <a href="#" class="hover:text-black dark:hover:text-white p-1" aria-label="YouTube"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+            <div class="flex items-center gap-2.5">
+                <a href="https://instagram.com" target="_blank" class="w-8 h-8 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black flex items-center justify-center text-xs transition-all active:scale-95" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="https://tiktok.com" target="_blank" class="w-8 h-8 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black flex items-center justify-center text-xs transition-all active:scale-95" aria-label="TikTok">
+                    <i class="fa-brands fa-tiktok"></i>
+                </a>
+                <a href="https://facebook.com" target="_blank" class="w-8 h-8 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black flex items-center justify-center text-xs transition-all active:scale-95" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="https://youtube.com" target="_blank" class="w-8 h-8 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black flex items-center justify-center text-xs transition-all active:scale-95" aria-label="YouTube">
+                    <i class="fa-brands fa-youtube"></i>
+                </a>
             </div>
         </div>
     </footer>
@@ -1087,7 +1114,8 @@
                     month: 'long',
                     year: 'numeric'
                 });
-                hijriText = hijriFormatter.format(today) + " H";
+                let formatted = hijriFormatter.format(today).replace(/\s*(AH|H)\s*$/i, '').trim();
+                hijriText = `${formatted} H`;
             } catch (e) {
                 hijriText = "15 Safar 1448 H";
             }
