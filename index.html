@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gazebo Mengaji — Dari Tongkrongan Menjadi Wadah Kebaikan</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome 6 Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    animation: {
+                        'marquee': 'marquee 30s linear infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Smooth Mobile & Theme Transitions */
+        html {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        /* Minimalist Touch-Friendly Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d4d4d8;
+            border-radius: 9999px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #3f3f46;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Marquee Edge Mask */
+        .marquee-mask {
+            mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+        }
+
+        /* Gallery Mask */
+        .gallery-mask {
+            mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
+        }
+    </style>
+</head>
+
+<body class="bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 font-sans antialiased selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black min-h-screen flex flex-col">
+
+    <!-- 1. NAVIGATION BAR (HEADER) -->
+    <header class="sticky top-0 z-40 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                
+                <!-- Logo Minimalis -->
+                <a href="#" class="flex items-center gap-2.5 sm:gap-3 group">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-black text-white dark:bg-white dark:text-black flex items-center justify-center font-extrabold text-base sm:text-lg transition-transform group-hover:scale-105 shadow-sm">
+                        GM
+                    </div>
+                    <div>
+                        <span class="text-sm sm:text-base font-extrabold tracking-tight block text-zinc-900 dark:text-white uppercase">GAZEBO MENGAJI</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu -->
+                <nav class="hidden lg:flex items-center gap-8 text-sm font-semibold text-zinc-600 dark:text-zinc-400">
+                    <a href="#tentang" class="hover:text-black dark:hover:text-white transition-colors">Tentang</a>
+                    <a href="#pengajar" class="hover:text-black dark:hover:text-white transition-colors">Pengajar</a>
+                    <a href="#jadwal" class="hover:text-black dark:hover:text-white transition-colors">Jadwal Kajian</a>
+                    <a href="#karya-tulis" class="hover:text-black dark:hover:text-white transition-colors">E-Book</a>
+                    <a href="#rekaman" class="hover:text-black dark:hover:text-white transition-colors">Rekaman</a>
+                    <a href="#galeri" class="hover:text-black dark:hover:text-white transition-colors">Galeri</a>
+                </nav>
+
+                <!-- Actions: Theme Switcher & Donasi CTA -->
+                <div class="hidden sm:flex items-center gap-3">
+                    <button id="theme-toggle" onclick="toggleTheme()" class="p-2.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:border-zinc-400 dark:hover:border-zinc-600 transition-all active:scale-95" aria-label="Toggle Theme" title="Ubah Tema (Terang/Gelap)">
+                        <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+                        <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
+                    </button>
+
+                    <button onclick="openDonateModal()" class="bg-black text-white dark:bg-white dark:text-black font-semibold text-xs px-5 py-2.5 rounded-full hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all active:scale-95 flex items-center gap-2 shadow-sm">
+                        <i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i>
+                        <span>Donasi Dakwah</span>
+                    </button>
+                </div>
+
+                <!-- Mobile Navigation Controls -->
+                <div class="flex items-center gap-2 lg:hidden">
+                    <button onclick="toggleTheme()" class="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 active:scale-95" aria-label="Ubah Tema">
+                        <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+                        <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
+                    </button>
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 active:scale-95" aria-label="Buka Menu">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Mobile Drawer with Smooth Slide Transition -->
+        <div id="mobile-menu" class="hidden lg:hidden border-b border-zinc-200 dark:border-zinc-800 bg-white/98 dark:bg-zinc-950/98 backdrop-blur-lg px-5 py-5 space-y-4 shadow-xl">
+            <nav class="flex flex-col space-y-2 text-sm font-semibold">
+                <a href="#tentang" onclick="toggleMobileMenu()" class="text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white py-2 px-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">Tentang Us</a>
+                <a href="#pengajar" onclick="toggleMobileMenu()" class="text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white py-2 px-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">Pengajar</a>
+                <a href="#jadwal" onclick="toggleMobileMenu()" class="text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white py-2 px-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">Jadwal Kajian</a>
+                <a href="#karya-tulis" onclick="toggleMobileMenu()" class="text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white py-2 px-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">E-Book</a>
+                <a href="#rekaman" onclick="toggleMobileMenu()" class="text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white py-2 px-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">Rekaman Pembelajaran</a>
+                <a href="#galeri" onclick="toggleMobileMenu()" class="text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white py-2 px-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">Galeri Kegiatan</a>
+            </nav>
+            <div class="pt-3 border-t border-zinc-200 dark:border-zinc-800">
+                <button onclick="toggleMobileMenu(); openDonateModal();" class="w-full bg-black text-white dark:bg-white dark:text-black font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 active:scale-95 shadow-sm">
+                    <i data-lucide="heart" class="w-4 h-4 fill-current"></i>
+                    <span>Donasi Dakwah</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. PROMINENT HIJRI & UPCOMING PRAYER TIME SECTION -->
+    <section class="bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 py-6 sm:py-8 px-4 transition-colors">
+        <div class="max-w-7xl mx-auto">
+            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-sm">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+                    
+                    <!-- Kiri: Tanggal Hijriah -->
+                    <div class="lg:col-span-6 border-b lg:border-b-0 lg:border-r border-zinc-200 dark:border-zinc-800 pb-5 lg:pb-0 lg:pr-8">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[11px] sm:text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-widest mb-2.5">
+                            <i data-lucide="calendar-days" class="w-3.5 h-3.5"></i>
+                            <span>Kalender Hijriah Real-time</span>
+                        </div>
+                        <h2 id="large-hijri-date" class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-black dark:text-white tracking-tight leading-snug">
+                            Menghitung Tanggal...
+                        </h2>
+                        <p class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-2 flex items-center gap-1.5 font-medium">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-zinc-400 shrink-0"></i>
+                            <span>Wilayah Yogyakarta &amp; Sekitarnya (Standar Kemenag RI)</span>
+                        </p>
+                    </div>
+
+                    <!-- Kanan: Jadwal Sholat Mendatang -->
+                    <div class="lg:col-span-6">
+                        <div class="bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 sm:p-7 flex flex-row items-center justify-between gap-4">
+                            <div class="space-y-1">
+                                <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-zinc-400 block">Jadwal Sholat Mendatang</span>
+                                <div id="large-next-prayer-name" class="text-xl sm:text-3xl font-extrabold text-black dark:text-white">
+                                    Ashar
+                                </div>
+                                <p id="large-next-prayer-sub" class="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-medium">Pukul 15:12 WIB • Wilayah Yogyakarta</p>
+                            </div>
+
+                            <div class="bg-black text-white dark:bg-white dark:text-black rounded-2xl px-4 sm:px-6 py-2.5 sm:py-3 font-mono font-extrabold text-xl sm:text-3xl shadow-sm text-center shrink-0">
+                                <span id="large-next-prayer-time">15:12</span>
+                                <span class="text-[10px] sm:text-xs font-sans font-bold block opacity-80 uppercase tracking-wider">WIB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. HERO SECTION -->
+    <section class="py-12 sm:py-16 lg:py-24 px-4 max-w-7xl mx-auto border-b border-zinc-200 dark:border-zinc-800">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+            
+            <!-- Sisi Kiri: Tagline -->
+            <div class="lg:col-span-7 space-y-5 sm:space-y-6">
+                
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                    <span>Komunitas Mengaji &amp; Tongkrongan Pemuda</span>
+                </div>
+
+                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-black dark:text-white leading-[1.15]">
+                    Berawal dari Tempat Nongkrong, Tumbuh Menjadi Wadah Kebaikan.
+                </h1>
+
+                <p class="text-zinc-600 dark:text-zinc-400 text-sm sm:text-lg font-normal leading-relaxed max-w-2xl">
+                    Dari kopi cangkir dan obrolan meja kayu, lahir kesadaran bersama untuk menghidupkan ruang kumpul dengan majelis ilmu. Tempat terbuka bagi siapa saja yang ingin pulang dan belajar.
+                </p>
+
+                <div class="flex flex-wrap items-center gap-3.5 pt-2">
+                    <a href="#jadwal" class="bg-black text-white dark:bg-white dark:text-black px-6 sm:px-7 py-3 sm:py-3.5 rounded-full font-bold text-xs sm:text-sm transition-transform hover:scale-105 active:scale-95 flex items-center gap-2 shadow-sm">
+                        <span>Ikuti Kajian</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+
+                    <button onclick="openDonateModal()" class="border border-zinc-300 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-black dark:text-white px-6 sm:px-7 py-3 sm:py-3.5 rounded-full font-bold text-xs sm:text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all active:scale-95">
+                        <span>Donasi Sekarang</span>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 sm:gap-6 pt-6 sm:pt-8 border-t border-zinc-200 dark:border-zinc-800">
+                    <div>
+                        <div class="text-xl sm:text-3xl font-extrabold text-black dark:text-white">100%</div>
+                        <div class="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-0.5">Gratis &amp; Terbuka</div>
+                    </div>
+                    <div>
+                        <div class="text-xl sm:text-3xl font-extrabold text-black dark:text-white">80+</div>
+                        <div class="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-0.5">Sesi Terlaksana</div>
+                    </div>
+                    <div>
+                        <div class="text-xl sm:text-3xl font-extrabold text-black dark:text-white">450+</div>
+                        <div class="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-0.5">Anggota Aktif</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Sisi Kanan: Visual Photo -->
+            <div class="lg:col-span-5">
+                <div class="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 shadow-sm">
+                    <img 
+                        src="https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=1000&q=80" 
+                        alt="Suasana Mengaji Gazebo" 
+                        class="w-full h-80 sm:h-[420px] object-cover transition-all duration-500"
+                        loading="lazy"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-5 left-5 right-5 text-white">
+                        <span class="text-[9px] sm:text-[10px] uppercase font-bold tracking-widest text-zinc-300 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">Suasana Gazebo</span>
+                        <h3 class="text-base sm:text-lg font-bold mt-2">Duduk Melingkar Menimba Ilmu</h3>
+                        <p class="text-[11px] sm:text-xs text-zinc-300 font-light mt-0.5">Pendekatan santai, hangat, dan berbobot syar'i.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 4. SPONSOR / PARTNER LOGO MARQUEE -->
+    <section class="py-10 sm:py-12 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-black overflow-hidden transition-colors">
+        <div class="max-w-7xl mx-auto px-4 mb-5 text-center">
+            <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-zinc-400">Didukung Oleh Mitra &amp; Sponsor Dakwah</span>
+        </div>
+
+        <!-- Marquee Container -->
+        <div class="relative w-full overflow-hidden marquee-mask">
+            <div class="flex items-center gap-10 sm:gap-16 w-max animate-marquee py-2 select-none">
+                
+                <div class="flex items-center gap-2 font-mono font-bold text-base sm:text-lg text-zinc-500 dark:text-zinc-500 hover:text-black dark:hover:text-white transition-all cursor-pointer">
+                    <i data-lucide="coffee" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <span>KOPI UKHUWAH</span>
+                </div>
+
+                <div class="flex items-center gap-2 font-mono font-bold text-base sm:text-lg text-zinc-500 dark:text-zinc-500 hover:text-black dark:hover:text-white transition-all cursor-pointer">
+                    <i data-lucide="book-open" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <span>PUSTAKA DAKWAH</span>
+                </div>
+
+                <div class="flex items-center gap-2 font-mono font-bold text-base sm:text-lg text-zinc-500 dark:text-zinc-500 hover:text-black dark:hover:text-white transition-all cursor-pointer">
+                    <i data-lucide="home" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <span>BAITUL MAAL JOGJA</span>
+                </div>
+
+                <div class="flex items-center gap-2 font-mono font-bold text-base sm:text-lg text-zinc-500 dark:text-zinc-500 hover:text-black dark:hover:text-white transition-all cursor-pointer">
+                    <i data-lucide="shield-check" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <span>HALAL HUB MEDIA</span>
+                </div>
+
+                <div class="flex items-center gap-2 font-mono font-bold text-base sm:text-lg text-zinc-500 dark:text-zinc-500 hover:text-black dark:hover:text-white transition-all cursor-pointer">
+                    <i data-lucide="cpu" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <span>MUSLIM TECH STUDIO</span>
+                </div>
+
+                <div class="flex items-center gap-2 font-mono font-bold text-base sm:text-lg text-zinc-500 dark:text-zinc-500 hover:text-black dark:hover:text-white transition-all cursor-pointer">
+                    <i data-lucide="layers" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <span>GAZEBO SPACE</span>
+                </div>
+
+                <!-- Duplicate Loop Seamless Continuous Infinite -->
+                <div class="flex items-center gap-2 font-mono font-bold text-base sm:text-lg text-zinc-500 dark:text-zinc-500 hover:text-black dark:hover:text-white transition-all cursor-pointer">
+                    <i data-lucide="coffee" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <span>KOPI UKHUWAH</span>
+                </div>
+
+                <div class="flex items-center gap-2 font-mono font-bold text-base sm:text-lg text-zinc-500 dark:text-zinc-500 hover:text-black dark:hover:text-white transition-all cursor-pointer">
+                    <i data-lucide="book-open" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <span>PUSTAKA DAKWAH</span>
+                </div>
+
+                <div class="flex items-center gap-2 font-mono font-bold text-base sm:text-lg text-zinc-500 dark:text-zinc-500 hover:text-black dark:hover:text-white transition-all cursor-pointer">
+                    <i data-lucide="home" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <span>BAITUL MAAL JOGJA</span>
+                </div>
+
+                <div class="flex items-center gap-2 font-mono font-bold text-base sm:text-lg text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-all cursor-pointer">
+                    <i data-lucide="shield-check" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <span>HALAL HUB MEDIA</span>
+                </div>
+
+                <div class="flex items-center gap-2 font-mono font-bold text-base sm:text-lg text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-all cursor-pointer">
+                    <i data-lucide="cpu" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <span>MUSLIM TECH STUDIO</span>
+                </div>
+
+                <div class="flex items-center gap-2 font-mono font-bold text-base sm:text-lg text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-all cursor-pointer">
+                    <i data-lucide="layers" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <span>GAZEBO SPACE</span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. PROFILE GAZEBO MENGAJI -->
+    <section id="tentang" class="py-16 sm:py-20 border-b border-zinc-200 dark:border-zinc-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="rounded-2xl sm:rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-8 sm:p-14 text-center shadow-sm">
+                <div class="max-w-2xl mx-auto space-y-4">
+                    <span class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-zinc-400 block">Cerita Awal Niat</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold text-black dark:text-white tracking-tight">Perjalanan Lahirnya Gazebo Mengaji</h2>
+                    <p class="text-zinc-600 dark:text-zinc-400 text-sm sm:text-base leading-relaxed pt-2">
+                        Gazebo Mengaji diawali dari inisiatif sederhana kawan-kawan yang biasa menghabiskan waktu luang di gazebo warung kopi. Kesadaran untuk mengisi kebersamaan dengan hal yang berjangka panjang menggerakkan kami mengundang guru dan membaca kitab agama.
+                    </p>
+                    <p class="text-zinc-600 dark:text-zinc-400 text-sm sm:text-base leading-relaxed">
+                        Kini, Gazebo Mengaji tumbuh menjadi ruang terbuka tanpa sekat sosial, tempat siapa saja dapat menimba ilmu syar'i secara sejuk dan berimbang.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. PROFIL ASATIDZH -->
+    <section id="pengajar" class="py-16 sm:py-20 border-b border-zinc-200 dark:border-zinc-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="mb-8 sm:mb-12">
+                <span class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-zinc-400">Guru Pembimbing</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-black dark:text-white tracking-tight mt-1">Ustadz Pengisi Kajian</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                
+                <!-- Ustadz 1 -->
+                <div class="rounded-2xl sm:rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 sm:p-6 shadow-sm">
+                    <div class="aspect-square rounded-2xl overflow-hidden mb-5 bg-zinc-100 dark:bg-zinc-800">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80" alt="Ustadz Anshori" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-[10px] font-mono font-semibold uppercase bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-3 py-1 rounded-full">Fiqih &amp; Muamalah</span>
+                    <h3 class="text-lg sm:text-xl font-bold mt-3 text-black dark:text-white">Ustadz Anshori, Lc.</h3>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed">Mengajar prinsip dasar fiqih ibadah praktis dan etika muamalah kontemporer bagi pemuda.</p>
+                </div>
+
+                <!-- Ustadz 2 -->
+                <div class="rounded-2xl sm:rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 sm:p-6 shadow-sm">
+                    <div class="aspect-square rounded-2xl overflow-hidden mb-5 bg-zinc-100 dark:bg-zinc-800">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80" alt="Ustadz Ihsan" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-[10px] font-mono font-semibold uppercase bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-3 py-1 rounded-full">Tazkiyatun Nufs</span>
+                    <h3 class="text-lg sm:text-xl font-bold mt-3 text-black dark:text-white">Ustadz Ihsan Abu Hafsh</h3>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed">Membimbing penyucian jiwa, adab penuntut ilmu, dan penataan niat dalam keseharian.</p>
+                </div>
+
+                <!-- Ustadz 3 -->
+                <div class="rounded-2xl sm:rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 sm:p-6 shadow-sm">
+                    <div class="aspect-square rounded-2xl overflow-hidden mb-5 bg-zinc-100 dark:bg-zinc-800">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80" alt="Ustadz Aldi Mursalat" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-[10px] font-mono font-semibold uppercase bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-3 py-1 rounded-full">Sirah Nabawiyah</span>
+                    <h3 class="text-lg sm:text-xl font-bold mt-3 text-black dark:text-white">Ustadz Aldi Mursalat, M.Ag.</h3>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed">Menyampaikan keteladanan perjuangan Nabi dan kisah para sahabat dengan narasi segar.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. JADWAL KAJIAN (WITHOUT FADE MASK AS REQUESTED) -->
+    <section id="jadwal" class="py-16 sm:py-20 border-b border-zinc-200 dark:border-zinc-800 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="flex items-end justify-between mb-8">
+                <div>
+                    <span class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-zinc-400">Agenda Kegiatan</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-black dark:text-white tracking-tight mt-1">Agenda Kajian</h2>
+                </div>
+                <!-- Controls -->
+                <div class="flex items-center gap-2">
+                    <button onclick="scrollKajianSlider(-300)" class="p-2.5 sm:p-3 rounded-full border border-zinc-300 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors active:scale-95" aria-label="Slide Kiri">
+                        <i data-lucide="chevron-left" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    </button>
+                    <button onclick="scrollKajianSlider(300)" class="p-2.5 sm:p-3 rounded-full border border-zinc-300 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors active:scale-95" aria-label="Slide Kanan">
+                        <i data-lucide="chevron-right" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Slider Container (Clean Without Side Fade Mask) -->
+            <div class="relative">
+                <div id="kajian-slider-container" class="flex gap-5 sm:gap-6 overflow-x-auto pb-4 pt-1 no-scrollbar scroll-smooth snap-x snap-mandatory">
+                    
+                    <!-- Card 1 (HANYA INI YANG KAJIAN MENDATANG) -->
+                    <div class="snap-start min-w-[260px] sm:min-w-[280px] max-w-[290px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
+                        <div>
+                            <div class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-4 bg-zinc-100 dark:bg-zinc-800">
+                                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80" alt="Flyer Kajian 1" class="w-full h-full object-cover">
+                                
+                                <!-- ONLY 1 HAS THIS BADGE -->
+                                <div class="absolute top-3 left-3 bg-white text-red-600 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider shadow-lg flex items-center gap-1.5 border border-red-100">
+                                    <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                                    <span>Kajian Mendatang</span>
+                                </div>
+
+                                <div class="absolute bottom-3 left-3 right-3 bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10 text-white">
+                                    <p class="text-[11px] font-mono text-zinc-300">Kamis, 10 Sep • 19.30 WIB</p>
+                                    <h4 class="text-sm font-bold leading-snug mt-1">Menjemput Rezeki Tanpa Kehilangan Hati</h4>
+                                </div>
+                            </div>
+
+                            <p class="text-xs text-zinc-500 dark:text-zinc-400">Pengisi: <strong class="text-black dark:text-white">Ustadz Anshori, Lc.</strong></p>
+                        </div>
+
+                        <a href="https://youtube.com" target="_blank" class="mt-4 border border-zinc-300 dark:border-zinc-800 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
+                            <span>Lihat Detail</span>
+                            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+
+                    <!-- Card 2 (KAJIAN KEMARIN) -->
+                    <div class="snap-start min-w-[260px] sm:min-w-[280px] max-w-[290px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
+                        <div>
+                            <div class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-4 bg-zinc-100 dark:bg-zinc-800">
+                                <img src="https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&w=600&q=80" alt="Flyer Kajian 2" class="w-full h-full object-cover">
+                                
+                                <div class="absolute top-3 left-3 bg-zinc-800 text-zinc-300 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
+                                    Kajian Kemarin
+                                </div>
+
+                                <div class="absolute bottom-3 left-3 right-3 bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10 text-white">
+                                    <p class="text-[11px] font-mono text-zinc-300">Ahad, 06 Sep • 08.30 WIB</p>
+                                    <h4 class="text-sm font-bold leading-snug mt-1">Obat Penawar Hati Lelah</h4>
+                                </div>
+                            </div>
+
+                            <p class="text-xs text-zinc-500 dark:text-zinc-400">Pengisi: <strong class="text-black dark:text-white">Ustadz Ihsan Abu Hafsh</strong></p>
+                        </div>
+
+                        <a href="https://youtube.com" target="_blank" class="mt-4 border border-zinc-300 dark:border-zinc-800 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
+                            <span>Tonton Rekaman</span>
+                            <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+
+                    <!-- Card 3 (KAJIAN KEMARIN) -->
+                    <div class="snap-start min-w-[260px] sm:min-w-[280px] max-w-[290px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
+                        <div>
+                            <div class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-4 bg-zinc-100 dark:bg-zinc-800">
+                                <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=600&q=80" alt="Flyer Kajian 3" class="w-full h-full object-cover">
+                                
+                                <div class="absolute top-3 left-3 bg-zinc-800 text-zinc-300 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
+                                    Kajian Kemarin
+                                </div>
+
+                                <div class="absolute bottom-3 left-3 right-3 bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10 text-white">
+                                    <p class="text-[11px] font-mono text-zinc-300">Kamis, 03 Sep • 19.30 WIB</p>
+                                    <h4 class="text-sm font-bold leading-snug mt-1">Pemuda Berani &amp; Berilmu</h4>
+                                </div>
+                            </div>
+
+                            <p class="text-xs text-zinc-500 dark:text-zinc-400">Pengisi: <strong class="text-black dark:text-white">Ustadz Aldi Mursalat</strong></p>
+                        </div>
+
+                        <a href="https://youtube.com" target="_blank" class="mt-4 border border-zinc-300 dark:border-zinc-800 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
+                            <span>Tonton Rekaman</span>
+                            <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+
+                    <!-- Card 4 (KAJIAN KEMARIN) -->
+                    <div class="snap-start min-w-[260px] sm:min-w-[280px] max-w-[290px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
+                        <div>
+                            <div class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-4 bg-zinc-100 dark:bg-zinc-800">
+                                <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80" alt="Flyer Kajian 4" class="w-full h-full object-cover">
+                                
+                                <div class="absolute top-3 left-3 bg-zinc-800 text-zinc-300 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
+                                    Kajian Kemarin
+                                </div>
+
+                                <div class="absolute bottom-3 left-3 right-3 bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10 text-white">
+                                    <p class="text-[11px] font-mono text-zinc-300">Ahad, 30 Agu • 19.30 WIB</p>
+                                    <h4 class="text-sm font-bold leading-snug mt-1">Rahasia Surah Al-Kahfi</h4>
+                                </div>
+                            </div>
+
+                            <p class="text-xs text-zinc-500 dark:text-zinc-400">Pengisi: <strong class="text-black dark:text-white">Ustadz Anshori, Lc.</strong></p>
+                        </div>
+
+                        <a href="https://youtube.com" target="_blank" class="mt-4 border border-zinc-300 dark:border-zinc-800 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
+                            <span>Tonton Rekaman</span>
+                            <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+
+                    <!-- Card 5 (KAJIAN KEMARIN) -->
+                    <div class="snap-start min-w-[260px] sm:min-w-[280px] max-w-[290px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
+                        <div>
+                            <div class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-4 bg-zinc-100 dark:bg-zinc-800">
+                                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=600&q=80" alt="Flyer Kajian 5" class="w-full h-full object-cover">
+                                
+                                <div class="absolute top-3 left-3 bg-zinc-800 text-zinc-300 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
+                                    Kajian Kemarin
+                                </div>
+
+                                <div class="absolute bottom-3 left-3 right-3 bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10 text-white">
+                                    <p class="text-[11px] font-mono text-zinc-300">Kamis, 27 Agu • 19.30 WIB</p>
+                                    <h4 class="text-sm font-bold leading-snug mt-1">Adab Menuntut Ilmu &amp; Guru</h4>
+                                </div>
+                            </div>
+
+                            <p class="text-xs text-zinc-500 dark:text-zinc-400">Pengisi: <strong class="text-black dark:text-white">Ustadz Ihsan Abu Hafsh</strong></p>
+                        </div>
+
+                        <a href="https://youtube.com" target="_blank" class="mt-4 border border-zinc-300 dark:border-zinc-800 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black p-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
+                            <span>Tonton Rekaman</span>
+                            <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7.5 AGENDA KEGIATAN GAZEBO (WITH REPRESENTATIVE PHOTOS ADDED TO EACH CARD) -->
+    <section class="py-16 bg-zinc-50 dark:bg-zinc-950/60 border-b border-zinc-200 dark:border-zinc-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10">
+                <span class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-zinc-400">Program Komunitas</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-black dark:text-white tracking-tight mt-1">Agenda Kegiatan Gazebo</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                
+                <!-- Activity 1: Taman Baca Al-Qur'an Anak -->
+                <div class="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 sm:p-6 flex flex-col justify-between shadow-sm overflow-hidden group">
+                    <div>
+                        <!-- Activity Photo -->
+                        <div class="aspect-[16/10] rounded-2xl overflow-hidden mb-5 bg-zinc-100 dark:bg-zinc-800">
+                            <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=600&q=80" alt="Taman Baca Al-Qur'an Anak" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        </div>
+
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-[10px] font-mono font-bold uppercase bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-2.5 py-1 rounded-full">Rutin Setiap Sore</span>
+                        </div>
+                        
+                        <h3 class="text-lg sm:text-xl font-bold text-black dark:text-white">Taman Baca Al-Qur'an Anak</h3>
+                        <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-2 leading-relaxed">
+                            Bimbingan tajwid dasar dan hafalan surah pendek untuk anak-anak sekitar gazebo secara gratis setiap Senin - Jumat ba'da Ashar.
+                        </p>
+                    </div>
+                    <div class="pt-5 mt-5 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-xs font-semibold text-zinc-500">
+                        <span>Lokasi: Gazebo Utama</span>
+                        <span class="text-emerald-600 dark:text-emerald-400 font-bold">Aktif</span>
+                    </div>
+                </div>
+
+                <!-- Activity 2: Camping Ceria & Tadabbur Alam -->
+                <div class="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 sm:p-6 flex flex-col justify-between shadow-sm overflow-hidden group">
+                    <div>
+                        <!-- Activity Photo -->
+                        <div class="aspect-[16/10] rounded-2xl overflow-hidden mb-5 bg-zinc-100 dark:bg-zinc-800">
+                            <img src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=600&q=80" alt="Camping Ceria" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        </div>
+
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-[10px] font-mono font-bold uppercase bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 px-2.5 py-1 rounded-full">Program Bulanan</span>
+                        </div>
+                        
+                        <h3 class="text-lg sm:text-xl font-bold text-black dark:text-white">Camping Ceria &amp; Tadabbur Alam</h3>
+                        <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-2 leading-relaxed">
+                            Kegiatan kemah pemuda di perbukitan, diisi dengan sholat malam berjamaah, api unggun keakraban, dan tausiyah alam terbuka.
+                        </p>
+                    </div>
+                    <div class="pt-5 mt-5 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-xs font-semibold text-zinc-500">
+                        <span>Kuota: 40 Peserta</span>
+                        <span class="text-amber-600 dark:text-amber-400 font-bold">Pendaftaran Buka</span>
+                    </div>
+                </div>
+
+                <!-- Activity 3: Berbagi Sedekah & Makanan -->
+                <div class="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 sm:p-6 flex flex-col justify-between shadow-sm overflow-hidden group">
+                    <div>
+                        <!-- Activity Photo -->
+                        <div class="aspect-[16/10] rounded-2xl overflow-hidden mb-5 bg-zinc-100 dark:bg-zinc-800">
+                            <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80" alt="Berbagi Sedekah" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        </div>
+
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-[10px] font-mono font-bold uppercase bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 px-2.5 py-1 rounded-full">Jumat Berkah</span>
+                        </div>
+                        
+                        <h3 class="text-lg sm:text-xl font-bold text-black dark:text-white">Berbagi Sedekah &amp; Makanan</h3>
+                        <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-2 leading-relaxed">
+                            Penyaluran paket makanan dan nasi bungkus untuk pejuang jalanan, kuli, dan dhuafa di seputaran Kota Yogyakarta setiap Jumat pagi.
+                        </p>
+                    </div>
+                    <div class="pt-5 mt-5 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-xs font-semibold text-zinc-500">
+                        <span>Penyaluran Rutin</span>
+                        <span class="text-sky-600 dark:text-sky-400 font-bold">Jumat Pagi</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. KARYA TULIS & E-BOOK USTADZ (WITH FA-SOLID FA-FILE-PDF ICON ONLY AND GRATIS LABEL) -->
+    <section id="karya-tulis" class="py-16 sm:py-20 border-b border-zinc-200 dark:border-zinc-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10">
+                <span class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-zinc-400">Literasi Islam</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-black dark:text-white tracking-tight mt-1">E-Book Gratis Karya Ustadz</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Ebook 1 -->
+                <div class="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <!-- RED PDF ICON ONLY (fa-solid fa-file-pdf) -->
+                            <div class="w-10 h-10 rounded-xl bg-red-100 text-red-600 dark:bg-red-950/80 dark:text-red-400 flex items-center justify-center text-lg border border-red-200/60 dark:border-red-800/60">
+                                <i class="fa-solid fa-file-pdf"></i>
+                            </div>
+                            <span class="text-[11px] font-mono text-zinc-400 font-semibold">2.4 MB</span>
+                        </div>
+
+                        <h3 class="text-lg font-bold text-black dark:text-white">Panduan Adab Pemuda Muslim</h3>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Karya: Ustadz Anshori, Lc.</p>
+                        <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-3 leading-relaxed">Risalah praktis menata adab bermajelis, berinteraksi dengan orang tua, dan adab di media sosial.</p>
+                    </div>
+                    <button onclick="downloadEbook('Panduan Adab Pemuda Muslim')" class="mt-6 w-full bg-black text-white dark:bg-white dark:text-black py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Download E-Book (Gratis)</span>
+                    </button>
+                </div>
+
+                <!-- Ebook 2 -->
+                <div class="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <!-- RED PDF ICON ONLY (fa-solid fa-file-pdf) -->
+                            <div class="w-10 h-10 rounded-xl bg-red-100 text-red-600 dark:bg-red-950/80 dark:text-red-400 flex items-center justify-center text-lg border border-red-200/60 dark:border-red-800/60">
+                                <i class="fa-solid fa-file-pdf"></i>
+                            </div>
+                            <span class="text-[11px] font-mono text-zinc-400 font-semibold">1.8 MB</span>
+                        </div>
+
+                        <h3 class="text-lg font-bold text-black dark:text-white">Ringkasan Fiqih Sholat</h3>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Karya: Ustadz Ihsan Abu Hafsh</p>
+                        <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-3 leading-relaxed">Panduan ringkas tata cara bersuci dan sholat sesuai kaidah sunnah yang mudah dipahami.</p>
+                    </div>
+                    <button onclick="downloadEbook('Ringkasan Fiqih Sholat')" class="mt-6 w-full bg-black text-white dark:bg-white dark:text-black py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Download E-Book (Gratis)</span>
+                    </button>
+                </div>
+
+                <!-- Ebook 3 -->
+                <div class="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <!-- RED PDF ICON ONLY (fa-solid fa-file-pdf) -->
+                            <div class="w-10 h-10 rounded-xl bg-red-100 text-red-600 dark:bg-red-950/80 dark:text-red-400 flex items-center justify-center text-lg border border-red-200/60 dark:border-red-800/60">
+                                <i class="fa-solid fa-file-pdf"></i>
+                            </div>
+                            <span class="text-[11px] font-mono text-zinc-400 font-semibold">3.1 MB</span>
+                        </div>
+
+                        <h3 class="text-lg font-bold text-black dark:text-white">Tadabbur Surah Al-Kahfi</h3>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Karya: Ustadz Aldi Mursalat</p>
+                        <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-3 leading-relaxed">Ulasan hikmah dan pelajaran 4 kisah utama di dalam Surah Al-Kahfi untuk pemuda.</p>
+                    </div>
+                    <button onclick="downloadEbook('Tadabbur Surah Al-Kahfi')" class="mt-6 w-full bg-black text-white dark:bg-white dark:text-black py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Download E-Book (Gratis)</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. REKAMAN PEMBELAJARAN (VIDEO EMBED & AUDIO DENGAN FILTER) -->
+    <section id="rekaman" class="py-16 sm:py-20 border-b border-zinc-200 dark:border-zinc-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                <div>
+                    <span class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-zinc-400">Arsip Keilmuan</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-black dark:text-white tracking-tight mt-1">Rekaman Pembelajaran</h2>
+                </div>
+
+                <!-- Interactive Filter Switcher -->
+                <div class="inline-flex p-1 rounded-full border border-zinc-300 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 text-xs font-bold">
+                    <button onclick="filterMedia('all')" id="btn-filter-all" class="media-btn px-4 py-2 rounded-full bg-black text-white dark:bg-white dark:text-black transition-all">
+                        Semua
+                    </button>
+                    <button onclick="filterMedia('video')" id="btn-filter-video" class="media-btn px-4 py-2 rounded-full text-zinc-500 hover:text-black dark:hover:text-white transition-all">
+                        Video Rekaman
+                    </button>
+                    <button onclick="filterMedia('audio')" id="btn-filter-audio" class="media-btn px-4 py-2 rounded-full text-zinc-500 hover:text-black dark:hover:text-white transition-all">
+                        Audio Rekaman
+                    </button>
+                </div>
+            </div>
+
+            <!-- Media Items Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8" id="media-grid-container">
+                
+                <!-- Video Embed 1 -->
+                <div class="media-item video rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 space-y-3 shadow-sm">
+                    <div class="aspect-video rounded-2xl overflow-hidden bg-black">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video Kajian Gazebo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <span class="text-[10px] font-mono font-semibold uppercase bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 px-2.5 py-1 rounded">Video Embed YouTube</span>
+                        <h3 class="text-base font-bold mt-2 text-black dark:text-white">Video: Menata Hati Sebelum Menuntut Ilmu</h3>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Pemateri: Ustadz Aldi Mursalat, M.Ag.</p>
+                    </div>
+                </div>
+
+                <!-- Video Embed 2 -->
+                <div class="media-item video rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 space-y-3 shadow-sm">
+                    <div class="aspect-video rounded-2xl overflow-hidden bg-black">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video Kajian Gazebo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <span class="text-[10px] font-mono font-semibold uppercase bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 px-2.5 py-1 rounded">Video Embed YouTube</span>
+                        <h3 class="text-base font-bold mt-2 text-black dark:text-white">Video: Prinsip Fiqih Muamalah Pemuda</h3>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Pemateri: Ustadz Anshori, Lc.</p>
+                    </div>
+                </div>
+
+                <!-- Audio Player 1 -->
+                <div class="media-item audio rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 flex flex-col justify-between shadow-sm">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-mono font-semibold uppercase bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 px-2.5 py-1 rounded-full">Audio Podcast</span>
+                            <i data-lucide="headphones" class="w-4 h-4 text-zinc-400"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-black dark:text-white pt-2">Audio: Istiqomah di Tengah Fitnah Zaman</h3>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400">Pemateri: Ustadz Ihsan Abu Hafsh (Durasi: 35 Menit)</p>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+                        <audio id="audio-1" class="w-full" controls>
+                            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+                            Browser Anda tidak mendukung player audio.
+                        </audio>
+                    </div>
+                </div>
+
+                <!-- Audio Player 2 -->
+                <div class="media-item audio rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 flex flex-col justify-between shadow-sm">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-mono font-semibold uppercase bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 px-2.5 py-1 rounded-full">Audio Podcast</span>
+                            <i data-lucide="headphones" class="w-4 h-4 text-zinc-400"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-black dark:text-white pt-2">Audio: Adab Bermajelis &amp; Berteman</h3>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400">Pemateri: Ustadz Anshori, Lc. (Durasi: 42 Menit)</p>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+                        <audio id="audio-2" class="w-full" controls>
+                            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+                            Browser Anda tidak mendukung player audio.
+                        </audio>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. SECTION KUTIPAN HADITS (BEBAS TEKS ARAB & RIWAYAT) -->
+    <section class="py-16 sm:py-20 bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 transition-colors">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5 sm:space-y-6">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black text-white dark:bg-white dark:text-black flex items-center justify-center mx-auto text-xl sm:text-2xl font-serif shadow-sm">
+                “
+            </div>
+            <h2 class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-black dark:text-white tracking-tight leading-snug">
+                Barangsiapa menempuh suatu jalan untuk menuntut ilmu, maka Allah akan memudahkan baginya jalan menuju surga.
+            </h2>
+            <div class="w-16 h-0.5 bg-zinc-300 dark:bg-zinc-700 mx-auto"></div>
+        </div>
+    </section>
+
+    <!-- 11. GALERI KEGIATAN (SLIDE CAROUSEL WITH FADE MASK) -->
+    <section id="galeri" class="py-16 sm:py-20 border-b border-zinc-200 dark:border-zinc-800 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="flex items-end justify-between mb-8">
+                <div>
+                    <span class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-zinc-400">Dokumentasi</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-black dark:text-white tracking-tight mt-1">Galeri Kegiatan Gazebo</h2>
+                </div>
+                <!-- Gallery Slider Controls -->
+                <div class="flex items-center gap-2">
+                    <button onclick="scrollGallerySlider(-320)" class="p-2.5 sm:p-3 rounded-full border border-zinc-300 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors active:scale-95" aria-label="Galeri Kiri">
+                        <i data-lucide="chevron-left" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    </button>
+                    <button onclick="scrollGallerySlider(320)" class="p-2.5 sm:p-3 rounded-full border border-zinc-300 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors active:scale-95" aria-label="Galeri Kanan">
+                        <i data-lucide="chevron-right" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Gallery Slide Container With Gallery Edge Mask -->
+            <div class="relative gallery-mask">
+                <div id="gallery-slider" class="flex gap-5 sm:gap-6 overflow-x-auto pb-4 pt-1 no-scrollbar scroll-smooth snap-x snap-mandatory">
+                    
+                    <div class="snap-start min-w-[260px] sm:min-w-[360px] h-64 sm:h-72 rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-900 relative group shrink-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=800&q=80" alt="Galeri 1" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-5">
+                            <span class="text-xs font-semibold text-white">Suasana Mengaji Malam Hari</span>
+                        </div>
+                    </div>
+
+                    <div class="snap-start min-w-[260px] sm:min-w-[360px] h-64 sm:h-72 rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-900 relative group shrink-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80" alt="Galeri 2" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-5">
+                            <span class="text-xs font-semibold text-white">Diskusi Kopi &amp; Pemuda</span>
+                        </div>
+                    </div>
+
+                    <div class="snap-start min-w-[260px] sm:min-w-[360px] h-64 sm:h-72 rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-900 relative group shrink-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80" alt="Galeri 3" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-5">
+                            <span class="text-xs font-semibold text-white">Kebersamaan Santap Makan</span>
+                        </div>
+                    </div>
+
+                    <div class="snap-start min-w-[260px] sm:min-w-[360px] h-64 sm:h-72 rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-900 relative group shrink-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80" alt="Galeri 4" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-5">
+                            <span class="text-xs font-semibold text-white">Kajian Subuh Berjamaah</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 12. DONASI DAKWAH & SPONSOR -->
+    <section class="py-16 sm:py-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 sm:p-12 space-y-8 shadow-sm">
+            <div class="space-y-4">
+                <span class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-zinc-400">Amal Jariyah</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-black dark:text-white tracking-tight">Dukung Keberlanjutan Dakwah Ini</h2>
+                <p class="text-zinc-600 dark:text-zinc-400 text-xs sm:text-base leading-relaxed italic border-l-2 border-black dark:border-white pl-3.5">
+                    "Dakwah ini tidak bisa berjalan sendiri. Kami bukan siapa-siapa tanpa pertolongan Allah dan uluran tangan dari Abang, Kakak, serta Sahabat sekalian. Gazebo Mengaji hanyalah jembatan—jika ada harta yang ingin dijadikan amal jariyah, izinkan kami mengelolanya untuk kelancaran operasional dan kegiatan dakwah umat."
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
+                <!-- Option 1 -->
+                <div class="p-5 sm:p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 flex flex-col justify-between space-y-4">
+                    <div>
+                        <h3 class="text-base sm:text-lg font-bold text-black dark:text-white">Donasi Operasional</h3>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed">Dukungan infak operasional kajian, konsumsi jamaah, dan fasilitas dakwah gratis.</p>
+                    </div>
+                    <button onclick="openDonateModal()" class="w-full bg-black text-white dark:bg-white dark:text-black py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 active:scale-95 transition-all">
+                        <i data-lucide="qr-code" class="w-4 h-4"></i>
+                        <span>Infaq via QRIS</span>
+                    </button>
+                </div>
+
+                <!-- Option 2 -->
+                <div class="p-5 sm:p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 flex flex-col justify-between space-y-4">
+                    <div>
+                        <h3 class="text-base sm:text-lg font-bold text-black dark:text-white">Sponsorship &amp; Kemitraan</h3>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-2 leading-relaxed">Terbuka bagi UMKM dan brand muslim yang ingin berkolaborasi dalam dakwah.</p>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Bismillah,%20saya%20tertarik%20menjadi%20sponsor/mitra%20Gazebo%20Mengaji" target="_blank" class="w-full border border-zinc-300 dark:border-zinc-800 hover:border-black dark:hover:border-white py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 active:scale-95 transition-all">
+                        <i data-lucide="message-square" class="w-4 h-4"></i>
+                        <span>Hubungi Sponsorship (WA)</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 12.5 AJAKAN DISKUSI IDE KEGIATAN DAKWAH -->
+    <section class="py-16 sm:py-20 border-t border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 transition-colors">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-zinc-300 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-xs font-semibold text-zinc-700 dark:text-zinc-300 shadow-sm">
+                <i data-lucide="coffee" class="w-3.5 h-3.5"></i>
+                <span>Ruang Kolaborasi &amp; Ide Umat</span>
+            </div>
+
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-black dark:text-white tracking-tight leading-snug max-w-2xl mx-auto">
+                Punya Ide Kegiatan Dakwah untuk Kemaslahatan Umat?
+            </h2>
+
+            <p class="text-zinc-600 dark:text-zinc-400 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
+                Yuk diskusi bareng sambil ngopi! Pintu gazebo selalu terbuka untuk setiap gagasan kebaikan yang ingin kita wujudkan bersama.
+            </p>
+
+            <div class="pt-3">
+                <a href="https://wa.me/6281234567890?text=Bismillah,%20saya%20punya%20ide%20kegiatan%20dakwah%20untuk%20kemaslahatan%20umat%20dan%20ingin%20diskusi%20bareng%20tim%20Gazebo%20Mengaji." target="_blank" class="inline-flex items-center justify-center gap-2.5 bg-black text-white dark:bg-white dark:text-black font-bold text-xs sm:text-sm px-7 py-3.5 rounded-full hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all active:scale-95 shadow-sm">
+                    <i data-lucide="coffee" class="w-4 h-4"></i>
+                    <span>Diskusi Sambil Ngopi (WhatsApp)</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="mt-auto border-t border-zinc-200 dark:border-zinc-800 py-10 sm:py-12 text-xs text-zinc-500 dark:text-zinc-400 bg-white dark:bg-black transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-5 text-center sm:text-left">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-black text-white dark:bg-white dark:text-black font-extrabold flex items-center justify-center text-sm">GM</div>
+                <span class="font-bold text-black dark:text-white text-sm">Gazebo Mengaji</span>
+            </div>
+            <p>© 2026 Gazebo Mengaji. Berawal dari Nongkrong, Tumbuh Menjadi Kebaikan.</p>
+            <div class="flex items-center gap-4">
+                <a href="#" class="hover:text-black dark:hover:text-white p-1" aria-label="Instagram"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                <a href="#" class="hover:text-black dark:hover:text-white p-1" aria-label="YouTube"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL POP-UP QRIS DONASI WITH CUSTOM AMOUNT FIELD -->
+    <div id="qris-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl max-w-md w-full p-6 relative shadow-2xl my-auto max-h-[90vh] overflow-y-auto no-scrollbar">
+            <!-- Close Button -->
+            <button onclick="closeDonateModal()" class="absolute top-4 right-4 p-2 text-zinc-400 hover:text-black dark:hover:text-white rounded-xl" aria-label="Tutup Modal">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="text-center mb-5">
+                <span class="text-[11px] font-mono uppercase text-zinc-400">Infaq Dakwah</span>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-black dark:text-white mt-0.5">Scan QRIS Gazebo</h3>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Dapat di-scan dengan semua Bank &amp; E-Wallet</p>
+            </div>
+
+            <!-- Form Data Muhsinin -->
+            <form onsubmit="submitDonation(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">Nama / Hamba Allah</label>
+                    <input type="text" id="donor-name" placeholder="Nama Anda..." required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black dark:focus:border-white">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">Nomor WhatsApp</label>
+                    <input type="tel" id="donor-phone" placeholder="08123456789..." required class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-black dark:focus:border-white">
+                </div>
+
+                <!-- Nominal Quick Buttons & Custom Input Field -->
+                <div>
+                    <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">Pilih Nominal Infaq</label>
+                    <div class="grid grid-cols-3 gap-2 mb-2">
+                        <button type="button" onclick="selectNominal(20000)" class="py-2 rounded-lg border border-zinc-200 dark:border-zinc-700 text-xs font-semibold hover:border-black dark:hover:border-white transition-all text-zinc-800 dark:text-zinc-200">Rp 20.000</button>
+                        <button type="button" onclick="selectNominal(50000)" class="py-2 rounded-lg border border-zinc-200 dark:border-zinc-700 text-xs font-semibold hover:border-black dark:hover:border-white transition-all text-zinc-800 dark:text-zinc-200">Rp 50.000</button>
+                        <button type="button" onclick="selectNominal(100000)" class="py-2 rounded-lg border border-zinc-200 dark:border-zinc-700 text-xs font-semibold hover:border-black dark:hover:border-white transition-all text-zinc-800 dark:text-zinc-200">Rp 100.000</button>
+                    </div>
+
+                    <div class="relative mt-2">
+                        <label class="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 mb-1">Atau Isi Nominal Sesuai Keinginan (Rp):</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-2.5 text-xs font-bold text-zinc-400">Rp</span>
+                            <input 
+                                type="number" 
+                                id="custom-donor-amount" 
+                                placeholder="Masukkan nominal (misal: 150000)" 
+                                min="1000"
+                                class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:border-black dark:focus:border-white font-mono"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QRIS Preview -->
+                <div class="bg-white p-4 rounded-2xl border border-zinc-200 flex flex-col items-center justify-center my-3">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=GazeboMengajiInfaq" alt="QRIS Gazebo Mengaji" class="w-36 h-36 object-contain">
+                    <span class="text-black text-[10px] font-bold mt-2">NMAS: GAZEBO MENGAJI DAKWAH</span>
+                </div>
+
+                <button type="submit" class="w-full bg-black text-white dark:bg-white dark:text-black py-3 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 active:scale-95">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+                    <span>Konfirmasi Transfer via WhatsApp</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // --- 1. DARK / LIGHT MODE TOGGLE (DEFAULT LIGHT THEME) ---
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Apply saved theme preference or default to clean light theme
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        // Mobile Menu Drawer Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        // --- 2. HIJRI DATE & PRAYER TIME DISPLAY ---
+        function updateHijriAndPrayerTimes() {
+            const today = new Date();
+            
+            // Format Hijri Date
+            let hijriText = "15 Safar 1448 H";
+            try {
+                const hijriFormatter = new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+                hijriText = hijriFormatter.format(today) + " H";
+            } catch (e) {
+                hijriText = "15 Safar 1448 H";
+            }
+
+            const largeHijriEl = document.getElementById('large-hijri-date');
+            if (largeHijriEl) largeHijriEl.innerText = hijriText;
+
+            // Determine upcoming prayer
+            const hours = today.getHours();
+            let pName = "Ashar";
+            let pTime = "15:12";
+
+            if (hours >= 4 && hours < 11) {
+                pName = "Dzuhur";
+                pTime = "11:52";
+            } else if (hours >= 11 && hours < 15) {
+                pName = "Ashar";
+                pTime = "15:12";
+            } else if (hours >= 15 && hours < 17) {
+                pName = "Maghrib";
+                pTime = "17:49";
+            } else if (hours >= 17 && hours < 18) {
+                pName = "Isya";
+                pTime = "18:59";
+            } else {
+                pName = "Subuh";
+                pTime = "04:35";
+            }
+
+            const pNameEl = document.getElementById('large-next-prayer-name');
+            const pTimeEl = document.getElementById('large-next-prayer-time');
+            const pSubEl = document.getElementById('large-next-prayer-sub');
+
+            if (pNameEl) pNameEl.innerText = pName;
+            if (pTimeEl) pTimeEl.innerText = pTime;
+            if (pSubEl) pSubEl.innerText = `Pukul ${pTime} WIB • Wilayah Yogyakarta`;
+        }
+
+        updateHijriAndPrayerTimes();
+
+        // --- 3. REKAMAN PEMBELAJARAN MEDIA FILTER ---
+        function filterMedia(type) {
+            const mediaItems = document.querySelectorAll('.media-item');
+            const btns = document.querySelectorAll('.media-btn');
+
+            btns.forEach(btn => {
+                btn.classList.remove('bg-black', 'text-white', 'dark:bg-white', 'dark:text-black');
+                btn.classList.add('text-zinc-500');
+            });
+
+            const activeBtn = document.getElementById(`btn-filter-${type}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-black', 'text-white', 'dark:bg-white', 'dark:text-black');
+                activeBtn.classList.remove('text-zinc-500');
+            }
+
+            mediaItems.forEach(item => {
+                if (type === 'all') {
+                    item.style.display = 'block';
+                } else if (item.classList.contains(type)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // --- 4. SLIDERS (AGENDA KAJIAN & GALERI) ---
+        function scrollKajianSlider(amount) {
+            const slider = document.getElementById('kajian-slider-container');
+            if (slider) slider.scrollBy({ left: amount, behavior: 'smooth' });
+        }
+
+        function scrollGallerySlider(amount) {
+            const slider = document.getElementById('gallery-slider');
+            if (slider) slider.scrollBy({ left: amount, behavior: 'smooth' });
+        }
+
+        // --- 5. DONATION MODAL LOGIC & CUSTOM NOMINAL ---
+        function openDonateModal() {
+            const modal = document.getElementById('qris-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeDonateModal() {
+            const modal = document.getElementById('qris-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function selectNominal(amount) {
+            const customInput = document.getElementById('custom-donor-amount');
+            if (customInput) customInput.value = amount;
+        }
+
+        function submitDonation(e) {
+            e.preventDefault();
+            const name = document.getElementById('donor-name').value;
+            const phone = document.getElementById('donor-phone').value;
+            const customAmount = document.getElementById('custom-donor-amount').value;
+
+            let amountText = customAmount ? `Rp ${parseInt(customAmount).toLocaleString('id-ID')}` : 'Sesuai Keinginan';
+
+            const waText = `Bismillah, Assalamu'alaikum Warahmatullah. Saya *${name}* (${phone}) telah mengkonfirmasi infak sebesar *${amountText}* via QRIS untuk Gazebo Mengaji. Mohon diterima.`;
+            const waUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(waText)}`;
+
+            window.open(waUrl, '_blank');
+            closeDonateModal();
+        }
+
+        function downloadEbook(title) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-5 right-5 z-50 bg-black text-white dark:bg-white dark:text-black px-5 py-3 rounded-2xl text-xs font-bold shadow-2xl transition-all duration-300';
+            toast.innerText = `File "${title}.pdf" siap diunduh!`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
