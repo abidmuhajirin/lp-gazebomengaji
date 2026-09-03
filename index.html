@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gazebo Mengaji</title>
+    <title>Gazebo Mengaji — Dari Tongkrongan Menjadi Wadah Kebaikan</title>
 
-    <link rel="icon" type="image/png" href="images/gazmen-white.png">
-    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -178,7 +176,7 @@
                         <!-- Badge Real-time Header -->
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[11px] font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider mb-3">
                             <i data-lucide="calendar-days" class="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400"></i>
-                            <span>Kalender Hijriah Hari Ini</span>
+                            <span>Kalender Hijriah Real-time</span>
                         </div>
 
                         <!-- Tanggal Hijriah Utama -->
@@ -191,7 +189,7 @@
                             <span class="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800/80 flex items-center justify-center shrink-0">
                                 <i data-lucide="map-pin" class="w-4 h-4 text-zinc-600 dark:text-zinc-300"></i>
                             </span>
-                            <span>Wilayah Yogyakarta &amp; Sekitarnya (Kemenag RI)</span>
+                            <span>Wilayah Yogyakarta &amp; Sekitarnya (Standar Kemenag RI)</span>
                         </div>
 
                         <!-- Social Media Links (Instagram, TikTok, Facebook, YouTube) -->
@@ -224,23 +222,23 @@
                                     <!-- Countdown Badge -->
                                     <span id="prayer-countdown-badge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 text-[10px] sm:text-[11px] font-bold border border-emerald-200/80 dark:border-emerald-800/80 shadow-sm">
                                         <i data-lucide="timer" class="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0"></i>
-                                        <span id="prayer-countdown-text">Kurang 0 min lagi</span>
+                                        <span id="prayer-countdown-text">Menghitung...</span>
                                     </span>
                                 </div>
                                 
                                 <div id="large-next-prayer-name" class="text-xl sm:text-3xl font-extrabold text-black dark:text-white tracking-tight">
-                                    Ashar
+                                    Dzuhur
                                 </div>
                                 
-                                <p id="large-next-prayer-sub" class="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-medium flex items-center gap-1.5 truncate">
-                                    <i data-lucide="clock" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-zinc-400 shrink-0"></i>
-                                    <span class="truncate">Pukul 15:12 WIB • Yogyakarta</span>
-                                </p>
+                                <div class="flex items-center gap-1.5 text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-medium pt-0.5">
+                                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-zinc-400 shrink-0"></i>
+                                    <span id="large-next-prayer-sub" class="leading-tight">Wilayah Yogyakarta (Standar Kemenag RI)</span>
+                                </div>
                             </div>
 
                             <!-- Jam Waktu Sholat (Proporsional & Ringkas di Mobile) -->
                             <div class="bg-black text-white dark:bg-white dark:text-black rounded-xl sm:rounded-2xl px-3.5 py-2.5 sm:px-5 sm:py-3 font-mono font-extrabold shadow-sm text-center shrink-0 flex flex-col items-center justify-center">
-                                <span id="large-next-prayer-time" class="text-lg sm:text-3xl leading-none">15:12</span>
+                                <span id="large-next-prayer-time" class="text-lg sm:text-3xl leading-none">11:41</span>
                                 <span class="text-[9px] sm:text-xs font-sans font-bold block opacity-80 uppercase tracking-wider mt-0.5">WIB</span>
                             </div>
 
@@ -1124,7 +1122,7 @@
             const today = new Date();
             
             // Format Hijri Date
-            let hijriText = "15 Safar 1448 H";
+            let hijriText = "21 Rabiulawal 1448 H";
             try {
                 const hijriFormatter = new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', {
                     day: 'numeric',
@@ -1134,19 +1132,19 @@
                 let formatted = hijriFormatter.format(today).replace(/\s*(AH|H)\s*$/i, '').trim();
                 hijriText = `${formatted} H`;
             } catch (e) {
-                hijriText = "15 Safar 1448 H";
+                hijriText = "21 Rabiulawal 1448 H";
             }
 
             const largeHijriEl = document.getElementById('large-hijri-date');
             if (largeHijriEl) largeHijriEl.innerText = hijriText;
 
-            // Prayer times schedule for Yogyakarta (24-hour format)
+            // Accurate prayer times schedule for Yogyakarta (Kemenag RI)
             const prayers = [
-                { name: "Subuh", time: "04:35", h: 4, m: 35 },
-                { name: "Dzuhur", time: "11:52", h: 11, m: 52 },
-                { name: "Ashar", time: "15:12", h: 15, m: 12 },
-                { name: "Maghrib", time: "17:49", h: 17, m: 49 },
-                { name: "Isya", time: "18:59", h: 18, m: 59 }
+                { name: "Subuh", time: "04:24", h: 4, m: 24 },
+                { name: "Dzuhur", time: "11:41", h: 11, m: 41 },
+                { name: "Ashar", time: "14:59", h: 14, m: 59 },
+                { name: "Maghrib", time: "17:40", h: 17, m: 40 },
+                { name: "Isya", time: "18:49", h: 18, m: 49 }
             ];
 
             const nowMinutes = today.getHours() * 60 + today.getMinutes();
@@ -1164,7 +1162,6 @@
 
             let diffMinutes = targetMinutes - nowMinutes;
             if (diffMinutes <= 0) {
-                // Target Subuh tomorrow (+24 hours)
                 diffMinutes += 24 * 60;
             }
 
@@ -1185,7 +1182,7 @@
 
             if (pNameEl) pNameEl.innerText = nextP.name;
             if (pTimeEl) pTimeEl.innerText = nextP.time;
-            if (pSubEl) pSubEl.innerText = `Pukul ${nextP.time} WIB • Wilayah Yogyakarta`;
+            if (pSubEl) pSubEl.innerText = "Wilayah Yogyakarta (Standar Kemenag RI)";
             if (pCountEl) pCountEl.innerText = diffText;
         }
 
