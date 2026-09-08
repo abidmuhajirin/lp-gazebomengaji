@@ -475,10 +475,7 @@
                 <!-- Monthly Dynamic Progress Bar -->
                 <div class="py-6 border-b border-slate-100">
                     <div class="flex justify-between items-center text-xs text-slate-700 font-bold mb-2">
-                        <span class="flex items-center gap-2">
-                            <span>Terkumpul Bulan Ini</span>
-                            <span id="live-indicator" class="hidden text-[10px] bg-emerald-50 border border-emerald-200 text-emerald-700 px-2 py-0.5 rounded-full font-bold">● UPDATE REAL TIME</span>
-                        </span>
+                        <span>Terkumpul Bulan Ini</span>
                         <span class="text-slate-900 font-black" id="collected-text">42% (Rp 3.360.000)</span>
                     </div>
                     
@@ -551,14 +548,13 @@
                 </div>
 
                 <!-- Minimalist Icon & Short Text for Financial Report -->
-                <div class="pt-4 flex items-center justify-between text-xs">
+                <div class="pt-4 flex flex-wrap items-center justify-between gap-2 text-xs">
                     <span class="text-slate-600 flex items-center gap-1.5 text-[11px] font-medium">
                         <i class="fa-solid fa-shield-halved text-emerald-600"></i> Laporan Transparan Realtime
                     </span>
                     <a href="https://gazebomengaji.com/laporandonasi" target="_blank" 
-                       class="text-slate-900 font-bold hover:underline inline-flex items-center gap-1 text-[11px]">
-                        <span>Detail Laporan Keuangan</span>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                       class="text-slate-900 font-bold hover:underline inline-flex items-center text-[11px] whitespace-nowrap">
+                        <span>Detail Laporan Keuangan</span><i class="fa-solid fa-arrow-up-right-from-square text-[9px] ml-1"></i>
                     </a>
                 </div>
 
@@ -1488,20 +1484,47 @@
             // Fetch live progress data from Google Sheets if configured
             fetchDonationDataFromSheet();
 
+            // Auto-loop Merchandise Slider
+            startMerchAutoScroll();
+
             // Periodic live popups
             setTimeout(showNextInfaqPopup, 3000);
             setInterval(showNextInfaqPopup, 14000);
         });
 
+        // Auto Infinite Smooth Loop for Merchandise Slider
+        let merchAutoScrollTimer = null;
+
+        function startMerchAutoScroll() {
+            const slider = document.getElementById('merch-slider');
+            if (!slider) return;
+
+            const scrollNext = () => {
+                const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
+                if (slider.scrollLeft >= maxScrollLeft - 10) {
+                    slider.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    slider.scrollBy({ left: 270, behavior: 'smooth' });
+                }
+            };
+
+            merchAutoScrollTimer = setInterval(scrollNext, 3500);
+
+            // Pause auto-scroll on hover or touch
+            slider.addEventListener('mouseenter', () => clearInterval(merchAutoScrollTimer));
+            slider.addEventListener('mouseleave', () => {
+                clearInterval(merchAutoScrollTimer);
+                merchAutoScrollTimer = setInterval(scrollNext, 3500);
+            });
+            slider.addEventListener('touchstart', () => clearInterval(merchAutoScrollTimer), { passive: true });
+            slider.addEventListener('touchend', () => {
+                clearInterval(merchAutoScrollTimer);
+                merchAutoScrollTimer = setInterval(scrollNext, 3500);
+            }, { passive: true });
+        }
+
         /**
          * Real-time Google Sheets Fetcher for Progress Bar Widget
-         * 
-         * CARA PENGGUNAAN:
-         * 1. Buat Google Sheets Laporan Keuangan.
-         * 2. Di sel A1 isi Target (contoh: 8000000), di sel B1 isi Terkumpul (contoh: 3360000).
-         * 3. Klik File > Share > Publish to Web (Publikasikan ke Web).
-         * 4. Pilih Sheet yang berisi angka tersebut, pilih format 'Comma-separated values (.csv)'.
-         * 5. Salin URL publikasi tersebut dan tempelkan pada variabel GOOGLE_SHEET_CSV_URL di bawah ini.
          */
         const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSVkj204aC_7wZBDfAlnsfBg9WqCa3L7iWnqbbS36F6cDOqP2oWXP31HbFzWONjN2JFktMUPBAfxvlf/pub?output=csv';
 
@@ -1519,16 +1542,13 @@
                 let target = 0;
                 let collected = 0;
 
-                // Loop setiap baris CSV untuk melewati baris header/judul
                 for (let i = 0; i < lines.length; i++) {
                     const rowStr = lines[i].replace(/"/g, '');
                     const cols = rowStr.split(/[,;\t]/);
 
                     if (cols.length >= 2) {
-                        // Helper pembersih format angka Indonesia (misal: "Rp 8.000.000" -> 8000000)
                         const parseNum = (str) => {
                             if (!str) return 0;
-                            // Hapus bagian desimal koma jika ada (misal: "8000000,00")
                             const integerPart = str.split(',')[0];
                             const digits = integerPart.replace(/[^0-9]/g, '');
                             return parseInt(digits, 10) || 0;
@@ -1540,7 +1560,7 @@
                         if (val1 > 0) {
                             target = val1;
                             collected = val2;
-                            break; // Ditemukan baris angka yang valid
+                            break;
                         }
                     }
                 }
@@ -1555,11 +1575,6 @@
                     document.getElementById('remaining-text').innerText = `Sisa Kekurangan: Rp ${new Intl.NumberFormat('id-ID').format(remaining)}`;
 
                     updateProgressBarColor(percent);
-
-                    const liveIndicator = document.getElementById('live-indicator');
-                    if (liveIndicator) {
-                        liveIndicator.classList.remove('hidden');
-                    }
                 }
             } catch (err) {
                 console.warn('Gagal mengambil data donasi dari Google Sheets:', err);
