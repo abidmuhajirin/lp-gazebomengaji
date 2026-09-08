@@ -1,1 +1,1468 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gazebo Mengaji — Kebutuhan Dana Dakwah</title>
+    
+    <!-- Fonts, Tailwind & HTML2Canvas for Invoice Download -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['Courier', 'monospace']
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            800: '#1e293b',
+                            900: '#000000',
+                            950: '#000000',
+                        }
+                    },
+                    boxShadow: {
+                        'framer-light': '0 10px 30px -10px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.08)',
+                        'glow': '0 0 30px rgba(0, 0, 0, 0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        /* Framer Cards Light Refinements */
+        .framer-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .framer-card:hover {
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Buttons */
+        .framer-button-primary {
+            background-color: #0f172a;
+            color: #ffffff;
+        }
+        .framer-button-primary:hover {
+            background-color: #1e293b;
+            box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .framer-button-secondary {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #0f172a;
+        }
+        .framer-button-secondary:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        /* Hide Scrollbars in Merchandise Slider */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Pop-up Notification Animation */
+        @keyframes popupSlideIn {
+            0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes popupSlideOut {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(15px) scale(0.95); }
+        }
+
+        .animate-popup-in {
+            animation: popupSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-popup-out {
+            animation: popupSlideOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* 9:16 Aspect Ratio container */
+        .aspect-story {
+            aspect-ratio: 9 / 16;
+        }
+
+        /* Cashier Thermal Receipt Styling */
+        .receipt-card {
+            background-color: #ffffff;
+            color: #0f172a;
+            font-family: 'Courier New', Courier, monospace;
+            border: 1px dashed #cbd5e1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            position: relative;
+        }
+
+        .receipt-divider {
+            border-bottom: 1px dashed #94a3b8;
+            margin: 8px 0;
+        }
+        .receipt-double-divider {
+            border-bottom: 2px dashed #64748b;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 selection:bg-slate-900 selection:text-white relative overflow-x-hidden">
+
+    <!-- Live Infaq Pop-up Notification with Masked Donor Name -->
+    <div id="infaq-popup" class="fixed bottom-20 md:bottom-6 left-4 md:left-6 z-50 max-w-sm hidden">
+        <div class="bg-white border border-slate-200 p-3.5 rounded-2xl shadow-xl flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 font-bold text-sm">
+                <i class="fa-solid fa-heart"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="text-[11px] font-bold text-slate-900 flex items-center justify-between">
+                    <span id="popup-donor-name" class="truncate">Alhamdulillah, Hamba Allah</span>
+                    <span id="popup-time" class="text-[9px] text-slate-500 font-medium ml-2 shrink-0">Baru saja</span>
+                </div>
+                <div class="text-[11px] text-slate-700 font-medium">
+                    Telah berinfaq <strong id="popup-amount" class="text-emerald-700 font-extrabold">Rp 100.000</strong>
+                </div>
+            </div>
+            <button onclick="dismissPopup()" class="text-slate-400 hover:text-slate-600 text-xs p-1">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 transform -translate-y-10 opacity-0 pointer-events-none bg-slate-900 text-white px-5 py-2.5 rounded-full shadow-xl font-medium text-xs flex items-center space-x-2 transition-all duration-300">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toast-message">Berhasil disalin!</span>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="relative z-10 pt-12 md:pt-20 pb-24">
+
+        <!-- Hero Section -->
+        <section class="max-w-4xl mx-auto px-4 text-center">
+            
+            <!-- Logo Gazebo Mengaji -->
+            <div class="flex flex-col items-center justify-center mb-6">
+                <div class="w-16 h-16 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-black text-xl tracking-tighter shadow-sm mb-3">
+                    GM
+                </div>
+                <span class="text-[11px] font-extrabold tracking-widest text-slate-600 uppercase">Gazebo Mengaji Indonesia</span>
+            </div>
+
+            <!-- Headline -->
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-[1.25] text-slate-900 mb-5">
+                Menyemai Kebaikan, Memanen <br class="hidden sm:inline">
+                <span class="text-slate-900">Pahala Jariyah Dakwah</span>
+            </h1>
+
+            <p class="text-slate-600 text-sm md:text-base leading-relaxed max-w-2xl mx-auto font-medium mb-8">
+                Mari berbagi peran dalam jalan kebaikan: <strong class="text-slate-900 font-extrabold">Anda siapkan dukungannya, kami jalankan programnya</strong>, dan bersama-sama kita panen aliran pahala jariyahnya.
+            </p>
+
+            <!-- Hero Action Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-sm mx-auto mb-14">
+                <a href="#rekening" class="w-full sm:w-auto framer-button-primary px-6 py-3 rounded-xl font-bold text-xs tracking-wide flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-heart text-red-500 text-xs"></i>
+                    <span>Salurkan Infaq Dakwah</span>
+                </a>
+                <a href="#anggaran" class="w-full sm:w-auto framer-button-secondary px-6 py-3 rounded-xl font-bold text-xs tracking-wide flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-calculator text-slate-700"></i>
+                    <span>Rincian Dana</span>
+                </a>
+            </div>
+
+            <!-- Stats Bar Minimalist (4 Column Grid) -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto text-center">
+                <div class="framer-card p-3.5 rounded-2xl">
+                    <div class="text-slate-500 text-[10px] uppercase tracking-wider font-bold mb-1">Program Rutin</div>
+                    <div class="text-base md:text-lg font-black text-slate-900">4 Pilar</div>
+                    <div class="text-[10px] text-slate-500 font-semibold mt-0.5">Setiap Pekan</div>
+                </div>
+                <div class="framer-card p-3.5 rounded-2xl">
+                    <div class="text-slate-500 text-[10px] uppercase tracking-wider font-bold mb-1">Jamaah & Santri</div>
+                    <div class="text-base md:text-lg font-black text-slate-900">150+ Orang</div>
+                    <div class="text-[10px] text-slate-500 font-semibold mt-0.5">Penerima Manfaat</div>
+                </div>
+                <div class="framer-card p-3.5 rounded-2xl">
+                    <div class="text-slate-500 text-[10px] uppercase tracking-wider font-bold mb-1">Sifat Program</div>
+                    <div class="text-base md:text-lg font-black text-emerald-700">100% Gratis</div>
+                    <div class="text-[10px] text-slate-500 font-semibold mt-0.5">Tanpa Biaya</div>
+                </div>
+                <div class="framer-card p-3.5 rounded-2xl">
+                    <div class="text-slate-500 text-[10px] uppercase tracking-wider font-bold mb-1">Banyak Donatur</div>
+                    <div class="text-base md:text-lg font-black text-slate-900">48+ Donatur</div>
+                    <div class="text-[10px] text-slate-500 font-semibold mt-0.5">Muhsinin Aktif</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Program Rutin Section -->
+        <section id="kegiatan" class="max-w-5xl mx-auto px-4 pt-20">
+            <div class="text-center max-w-xl mx-auto mb-10">
+                <span class="text-[11px] font-extrabold tracking-widest text-slate-500 uppercase">4 Pilar Program Rutin</span>
+                <h2 class="text-2xl md:text-3xl font-black text-slate-900 mt-1">Kegiatan Dakwah & Pembinaan</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Pilar 1: Rabu Malam -->
+                <div class="framer-card p-6 rounded-2xl flex flex-col justify-between border border-slate-200">
+                    <div>
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                            <span class="text-xs font-bold text-emerald-800 flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+                                <i class="fa-regular fa-clock text-emerald-600"></i> Rabu Malam (Bada Maghrib - Isya)
+                            </span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">01</span>
+                        </div>
+
+                        <h3 class="text-lg font-black text-slate-900 mb-1">Kajian Rutin Malam</h3>
+                        <div class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5">
+                            <i class="fa-solid fa-user-tie text-amber-600"></i>
+                            <span>Pemateri: Ustadz Abu Bakar & Tim Asatidzh</span>
+                        </div>
+                        
+                        <p class="text-xs text-slate-600 leading-relaxed font-medium mb-4">
+                            Kajian umum membahas kitab-kitab dasar keislaman, fiqih ibadah harian, adab, dan tazkiyatun nufus. Terbuka umum dan gratis lengkap dengan santapan malam jamaah.
+                        </p>
+
+                        <!-- Rincian Operasional -->
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 mb-4">
+                            <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Rincian Operasional:</div>
+                            <ul class="space-y-1.5 text-xs text-slate-700 font-semibold">
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                    <span>Konsumsi & Jamuan Malam Jamaah (±70 porsi)</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                    <span>Bisyarah & Transpor Ustadz Pemateri</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Estimasi Kebutuhan Box -->
+                        <div class="p-3.5 rounded-xl bg-slate-900 text-white mb-5 flex items-center justify-between shadow-sm">
+                            <div>
+                                <div class="text-[10px] uppercase font-bold text-slate-400">Estimasi Kebutuhan Dana</div>
+                                <div class="text-base font-black tracking-tight">Rp 2.500.000 <span class="text-[10px] font-normal opacity-80">/ bulan</span></div>
+                            </div>
+                            <a href="#rekening" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-1.5 rounded-lg transition-colors shadow-sm flex items-center gap-1">
+                                <span>Donasi</span>
+                                <i class="fa-solid fa-arrow-down text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Centered Full-Width Button -->
+                    <button onclick="openActivityVideoModal('Kajian Rutin Rabu Malam', 'Ustadz Abu Bakar', 'https://assets.mixkit.co/videos/preview/mixkit-man-reading-the-holy-quran-41662-large.mp4', 'Kajian rutin setiap Rabu malam bada Maghrib hingga Isya membahas Kitab Fiqih & Adab Islam. Fasilitas tempat nyaman dan konsumsi gratis bagi seluruh jamaah.')" 
+                            class="w-full framer-button-secondary py-2.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2 transition-all">
+                        <i class="fa-solid fa-play text-emerald-600 text-xs"></i>
+                        <span>Lihat Detail & Video Kegiatan</span>
+                    </button>
+                </div>
+
+                <!-- Pilar 2: Tahsin Ibu-Ibu -->
+                <div class="framer-card p-6 rounded-2xl flex flex-col justify-between border border-slate-200">
+                    <div>
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                            <span class="text-xs font-bold text-emerald-800 flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+                                <i class="fa-regular fa-clock text-emerald-600"></i> Selasa Malam (Bada Isya)
+                            </span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">02</span>
+                        </div>
+
+                        <h3 class="text-lg font-black text-slate-900 mb-1">Tahsin & Bimbingan Ibu-Ibu</h3>
+                        <div class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5">
+                            <i class="fa-solid fa-user-tie text-amber-600"></i>
+                            <span>Pengajar: Ustadzah Fatimah & Tim Tahsin</span>
+                        </div>
+                        
+                        <p class="text-xs text-slate-600 leading-relaxed font-medium mb-4">
+                            Bimbingan membaca Al-Qur'an dari nol hingga fasih tajwid untuk ibu-ibu dan remaja putri, agar percaya diri membaca Al-Qur'an dan mendidik anak di rumah.
+                        </p>
+
+                        <!-- Rincian Operasional -->
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 mb-4">
+                            <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Rincian Operasional:</div>
+                            <ul class="space-y-1.5 text-xs text-slate-700 font-semibold">
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                    <span>Mushaf Tajwid Berwarna & Modul Bacaan</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                    <span>Insentif Pendamping Ustadzah Tahsin</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Estimasi Kebutuhan Box -->
+                        <div class="p-3.5 rounded-xl bg-slate-900 text-white mb-5 flex items-center justify-between shadow-sm">
+                            <div>
+                                <div class="text-[10px] uppercase font-bold text-slate-400">Estimasi Kebutuhan Dana</div>
+                                <div class="text-base font-black tracking-tight">Rp 1.500.000 <span class="text-[10px] font-normal opacity-80">/ bulan</span></div>
+                            </div>
+                            <a href="#rekening" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-1.5 rounded-lg transition-colors shadow-sm flex items-center gap-1">
+                                <span>Donasi</span>
+                                <i class="fa-solid fa-arrow-down text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Centered Full-Width Button -->
+                    <button onclick="openActivityVideoModal('Tahsin Ibu-Ibu', 'Ustadzah Fatimah', 'https://assets.mixkit.co/videos/preview/mixkit-hand-holding-the-quran-and-reading-it-41663-large.mp4', 'Program bimbingan tahsin Al-Qur\'an khusus ibu-ibu setiap Selasa malam bada Isya dengan metode privat bertahap.')" 
+                            class="w-full framer-button-secondary py-2.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2 transition-all">
+                        <i class="fa-solid fa-play text-emerald-600 text-xs"></i>
+                        <span>Lihat Detail & Video Kegiatan</span>
+                    </button>
+                </div>
+
+                <!-- Pilar 3: Bahasa Arab Anak -->
+                <div class="framer-card p-6 rounded-2xl flex flex-col justify-between border border-slate-200">
+                    <div>
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                            <span class="text-xs font-bold text-emerald-800 flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+                                <i class="fa-regular fa-clock text-emerald-600"></i> Setiap Sabtu (Pagi 08:30 - 10:00)
+                            </span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">03</span>
+                        </div>
+
+                        <h3 class="text-lg font-black text-slate-900 mb-1">Bahasa Arab Anak (Ceria)</h3>
+                        <div class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5">
+                            <i class="fa-solid fa-user-tie text-amber-600"></i>
+                            <span>Pengajar: Ustadz Umar & Tim Edukasi</span>
+                        </div>
+                        
+                        <p class="text-xs text-slate-600 leading-relaxed font-medium mb-4">
+                            Mengenalkan mufrodat (kosakata) Al-Qur'an untuk anak-anak lewat metode interaktif, flashcard bergambar, lagu edukasi, dan permainan hafalan santai.
+                        </p>
+
+                        <!-- Rincian Operasional -->
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 mb-4">
+                            <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Rincian Operasional:</div>
+                            <ul class="space-y-1.5 text-xs text-slate-700 font-semibold">
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                    <span>Cetak Modul Visual & Flashcard Anak</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                    <span>Snack Sehat & Susu Pendamping Santri</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Estimasi Kebutuhan Box -->
+                        <div class="p-3.5 rounded-xl bg-slate-900 text-white mb-5 flex items-center justify-between shadow-sm">
+                            <div>
+                                <div class="text-[10px] uppercase font-bold text-slate-400">Estimasi Kebutuhan Dana</div>
+                                <div class="text-base font-black tracking-tight">Rp 1.800.000 <span class="text-[10px] font-normal opacity-80">/ bulan</span></div>
+                            </div>
+                            <a href="#rekening" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-1.5 rounded-lg transition-colors shadow-sm flex items-center gap-1">
+                                <span>Donasi</span>
+                                <i class="fa-solid fa-arrow-down text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Centered Full-Width Button -->
+                    <button onclick="openActivityVideoModal('Bahasa Arab Anak', 'Ustadz Umar', 'https://assets.mixkit.co/videos/preview/mixkit-children-sitting-in-a-classroom-41660-large.mp4', 'Kelas belajar Bahasa Arab dasar untuk anak usia 6-12 tahun. Menggunakan metode lagu dan alat peraga visual yang menyenangkan.')" 
+                            class="w-full framer-button-secondary py-2.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2 transition-all">
+                        <i class="fa-solid fa-play text-emerald-600 text-xs"></i>
+                        <span>Lihat Detail & Video Kegiatan</span>
+                    </button>
+                </div>
+
+                <!-- Pilar 4: TPA Anak Gratis -->
+                <div class="framer-card p-6 rounded-2xl flex flex-col justify-between border border-slate-200">
+                    <div>
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                            <span class="text-xs font-bold text-emerald-800 flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+                                <i class="fa-regular fa-clock text-emerald-600"></i> Senin & Kamis (Bada Ashar)
+                            </span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">04</span>
+                        </div>
+
+                        <h3 class="text-lg font-black text-slate-900 mb-1">TPA Anak Gratis</h3>
+                        <div class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5">
+                            <i class="fa-solid fa-user-tie text-amber-600"></i>
+                            <span>Tim Pengajar: Ustadz & Ustadzah TPA GM</span>
+                        </div>
+                        
+                        <p class="text-xs text-slate-600 leading-relaxed font-medium mb-4">
+                            Pembinaan rutin membaca Iqra', hafalan Surat Pendek (Juz 30), doa harian, serta kisah teladan Nabi untuk puluhan anak-anak sekitar gazebo secara gratis.
+                        </p>
+
+                        <!-- Rincian Operasional -->
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 mb-4">
+                            <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Rincian Operasional:</div>
+                            <ul class="space-y-1.5 text-xs text-slate-700 font-semibold">
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                    <span>Buku Iqro', Juz Amma & Alat Tulis Santri</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                    <span>Insentif Pengajar & Hadiah Apresiasi Hafalan</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Estimasi Kebutuhan Box -->
+                        <div class="p-3.5 rounded-xl bg-slate-900 text-white mb-5 flex items-center justify-between shadow-sm">
+                            <div>
+                                <div class="text-[10px] uppercase font-bold text-slate-400">Estimasi Kebutuhan Dana</div>
+                                <div class="text-base font-black tracking-tight">Rp 2.200.000 <span class="text-[10px] font-normal opacity-80">/ bulan</span></div>
+                            </div>
+                            <a href="#rekening" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-1.5 rounded-lg transition-colors shadow-sm flex items-center gap-1">
+                                <span>Donasi</span>
+                                <i class="fa-solid fa-arrow-down text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Centered Full-Width Button -->
+                    <button onclick="openActivityVideoModal('TPA Anak Gratis', 'Tim Pengajar TPA', 'https://assets.mixkit.co/videos/preview/mixkit-young-boy-reading-a-book-in-a-library-41661-large.mp4', 'Pembinaan TPA gratis setiap Senin & Kamis sore bada Ashar. Santri dibimbing secara telaten membaca Iqra dan menambah hafalan juz amma.')" 
+                            class="w-full framer-button-secondary py-2.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2 transition-all">
+                        <i class="fa-solid fa-play text-emerald-600 text-xs"></i>
+                        <span>Lihat Detail & Video Kegiatan</span>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Rincian Anggaran Section -->
+        <section id="anggaran" class="max-w-4xl mx-auto px-4 pt-20">
+            <div class="framer-card p-6 md:p-8 rounded-3xl relative border border-slate-200">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+                    <div>
+                        <span class="text-[11px] font-extrabold tracking-widest text-slate-500 uppercase">Transparansi Dana</span>
+                        <h2 class="text-xl md:text-2xl font-black text-slate-900 mt-0.5">Kebutuhan Operasional Bulanan</h2>
+                    </div>
+                    <div class="text-left md:text-right">
+                        <div class="text-xs text-slate-500 font-semibold">Total Kebutuhan</div>
+                        <div class="text-2xl font-black text-slate-900 tracking-tight" id="target-display">Rp 8.000.000</div>
+                    </div>
+                </div>
+
+                <!-- Monthly Dynamic Progress Bar -->
+                <div class="py-6 border-b border-slate-100">
+                    <div class="flex justify-between items-center text-xs text-slate-700 font-bold mb-2">
+                        <span class="flex items-center gap-2">
+                            <span>Terkumpul Bulan Ini</span>
+                            <span id="live-indicator" class="hidden text-[10px] bg-emerald-50 border border-emerald-200 text-emerald-700 px-2 py-0.5 rounded-full font-bold">● LIVE SHEET</span>
+                        </span>
+                        <span class="text-slate-900 font-black" id="collected-text">42% (Rp 3.360.000)</span>
+                    </div>
+                    
+                    <!-- Progress track -->
+                    <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden border border-slate-200 p-0.5">
+                        <div id="progress-bar-fill" class="h-full rounded-full transition-all duration-1000 bg-rose-500" style="width: 42%;"></div>
+                    </div>
+
+                    <div class="flex justify-between text-[11px] text-slate-600 font-medium mt-2">
+                        <span id="remaining-text">Sisa Kekurangan: Rp 4.640.000</span>
+                        <span id="target-subtext">Target: Rp 8.000.000</span>
+                    </div>
+                </div>
+
+                <!-- Alokasi Penggunaan Dana Operasional Dropdown -->
+                <div class="py-4 border-b border-slate-100">
+                    <button onclick="toggleAllocationDropdown()" class="w-full flex items-center justify-between text-left focus:outline-none py-2 group">
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-list-check text-slate-700 transition-colors"></i>
+                            <span class="text-xs font-bold text-slate-900">Rincian Alokasi Penggunaan Dana</span>
+                        </div>
+                        <i id="allocation-chevron" class="fa-solid fa-chevron-down text-xs text-slate-500 transition-transform duration-300"></i>
+                    </button>
+
+                    <div id="allocation-content" class="hidden pt-3 space-y-2">
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 text-xs border border-slate-200">
+                            <div class="flex items-center gap-2.5">
+                                <i class="fa-solid fa-mug-hot text-slate-600 text-xs"></i>
+                                <div>
+                                    <div class="font-bold text-slate-900">Konsumsi Jamaah & Santri</div>
+                                    <div class="text-[10px] text-slate-500 font-medium">Kajian Rabu & Snack Santri</div>
+                                </div>
+                            </div>
+                            <span class="font-black text-slate-900">Rp 2.800.000</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 text-xs border border-slate-200">
+                            <div class="flex items-center gap-2.5">
+                                <i class="fa-solid fa-user-graduate text-slate-600 text-xs"></i>
+                                <div>
+                                    <div class="font-bold text-slate-900">Insentif Pemateri & Pengajar</div>
+                                    <div class="text-[10px] text-slate-500 font-medium">Kajian, Tahsin, Bahasa Arab, TPA</div>
+                                </div>
+                            </div>
+                            <span class="font-black text-slate-900">Rp 3.200.000</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 text-xs border border-slate-200">
+                            <div class="flex items-center gap-2.5">
+                                <i class="fa-solid fa-book-open text-slate-600 text-xs"></i>
+                                <div>
+                                    <div class="font-bold text-slate-900">Buku, Modul & Alat Tulis</div>
+                                    <div class="text-[10px] text-slate-500 font-medium">Iqro, Modul Bahasa Arab & Kitab</div>
+                                </div>
+                            </div>
+                            <span class="font-black text-slate-900">Rp 1.200.000</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 text-xs border border-slate-200">
+                            <div class="flex items-center gap-2.5">
+                                <i class="fa-solid fa-bolt text-slate-600 text-xs"></i>
+                                <div>
+                                    <div class="font-bold text-slate-900">Operasional Tempat & Sound</div>
+                                    <div class="text-[10px] text-slate-500 font-medium">Perawatan sound system & kebersihan</div>
+                                </div>
+                            </div>
+                            <span class="font-black text-slate-900">Rp 800.000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Minimalist Icon & Short Text for Financial Report -->
+                <div class="pt-4 flex items-center justify-between text-xs">
+                    <span class="text-slate-600 flex items-center gap-1.5 text-[11px] font-medium">
+                        <i class="fa-solid fa-shield-halved text-emerald-600"></i> Laporan Transparan Realtime
+                    </span>
+                    <a href="https://gazebomengaji.com/laporandonasi" target="_blank" 
+                       class="text-slate-900 font-bold hover:underline inline-flex items-center gap-1 text-[11px]">
+                        <span>Detail Laporan Keuangan</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Rekening & Form Donasi Section -->
+        <section id="rekening" class="max-w-3xl mx-auto px-4 pt-20">
+            <div class="text-center max-w-xl mx-auto mb-8">
+                <span class="text-[11px] font-extrabold tracking-widest text-slate-500 uppercase">Salurkan Infaq</span>
+                <h2 class="text-2xl md:text-3xl font-black text-slate-900 mt-0.5 mb-2">Formulir Transfer Infaq</h2>
+                <p class="text-slate-600 text-xs font-medium">
+                    Lengkapi formulir di bawah ini untuk mendapatkan petunjuk transfer dan menerbitkan bukti donasi otomatis.
+                </p>
+            </div>
+
+            <!-- Integrated Donor Form -->
+            <div class="framer-card p-6 rounded-2xl mb-6 border border-slate-200">
+                
+                <form id="donor-form" onsubmit="event.preventDefault();" class="space-y-4">
+                    
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Nama Lengkap / Hamba Allah <span class="text-red-500">*</span></label>
+                        <input type="text" id="donor-name" required placeholder="Contoh: Abdullah / Hamba Allah" oninput="validateDonorForm()"
+                               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 font-bold placeholder-slate-400 focus:outline-none focus:border-slate-400 transition-colors">
+                    </div>
+
+                    <!-- Strictly Numbers-Only WhatsApp Input -->
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Nomor WhatsApp / HP (Angka saja) <span class="text-red-500">*</span></label>
+                        <input type="tel" id="donor-phone" required placeholder="Contoh: 081234567890" 
+                               oninput="this.value = this.value.replace(/[^0-9]/g, ''); validateDonorForm();"
+                               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 font-bold placeholder-slate-400 focus:outline-none focus:border-slate-400 transition-colors">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 uppercase mb-2">Pilih Nominal Infaq <span class="text-red-500">*</span></label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-2.5">
+                            <button type="button" onclick="selectAmount(50000, this)" class="amount-btn p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 font-bold text-xs hover:border-slate-300 transition-all text-center">
+                                Rp 50.000
+                            </button>
+                            <button type="button" onclick="selectAmount(100000, this)" class="amount-btn p-2.5 rounded-xl bg-slate-900 text-white border-slate-900 font-bold text-xs hover:border-slate-900 transition-all text-center">
+                                Rp 100.000
+                            </button>
+                            <button type="button" onclick="selectAmount(250000, this)" class="amount-btn p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 font-bold text-xs hover:border-slate-300 transition-all text-center">
+                                Rp 250.000
+                            </button>
+                            <button type="button" onclick="selectAmount(500000, this)" class="amount-btn p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 font-bold text-xs hover:border-slate-300 transition-all text-center">
+                                Rp 500.000
+                            </button>
+                        </div>
+                        
+                        <div class="relative">
+                            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-xs">Rp</span>
+                            <input type="number" id="custom-amount" placeholder="Atau ketik nominal kustom..." oninput="updateCustomImpact(); validateDonorForm();"
+                                   class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-9 pr-3 text-xs text-slate-900 font-bold placeholder-slate-400 focus:outline-none focus:border-slate-400">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Catatan / Titip Doa (Opsional)</label>
+                        <textarea id="donor-notes" rows="2" placeholder="Tuliskan doa atau niat hajat Anda..."
+                                  class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:border-slate-400"></textarea>
+                    </div>
+
+                    <!-- Impact Indicator -->
+                    <div id="impact-box" class="p-3 rounded-xl bg-amber-50/60 border border-amber-200 text-xs text-slate-700 font-semibold flex items-center gap-2.5">
+                        <i class="fa-solid fa-sparkles text-amber-600 text-sm shrink-0"></i>
+                        <span id="impact-text" class="text-[11px]">Infaq sebesar <strong>Rp 100.000</strong> insyaAllah bisa menyediakan modul belajar Iqra' & Bahasa Arab untuk santri.</span>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <!-- QRIS & Bank Switcher Container -->
+            <div class="framer-card rounded-2xl p-5 mb-6 border border-slate-200">
+                
+                <!-- Display active selected amount -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-between mb-5">
+                    <span class="text-xs font-bold text-slate-600">Nominal Infaq Dipilih:</span>
+                    <span id="payment-nominal-display" class="text-sm font-black text-emerald-700">Rp 100.000</span>
+                </div>
+
+                <!-- Segmented Control Tabs -->
+                <div class="flex p-1 bg-slate-100 rounded-xl mb-5 border border-slate-200">
+                    <button type="button" onclick="switchPaymentTab('qris')" id="tab-qris" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-white text-slate-900 shadow-sm border border-slate-200/80">
+                        <i class="fa-solid fa-qrcode mr-1.5"></i> Scan QRIS
+                    </button>
+                    <button type="button" onclick="switchPaymentTab('bca')" id="tab-bca" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+                        <i class="fa-solid fa-building-columns mr-1.5"></i> Bank BCA
+                    </button>
+                </div>
+
+                <!-- Tab 1: QRIS Display -->
+                <div id="payment-qris" class="text-center py-2">
+                    <div class="bg-white p-3 rounded-2xl inline-block border border-slate-200 shadow-sm mb-3">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=GAZEBO-MENGAJI-DONASI-DAKWAH" alt="QRIS Gazebo Mengaji" class="w-40 h-40 mx-auto">
+                    </div>
+                    <div class="text-xs font-bold text-slate-800">NMID: ID1029384756201</div>
+                    <div class="text-[11px] text-slate-600 font-medium mb-2">a.n. <strong class="text-slate-900 font-bold">GAZEBO MENGAJI INDONESIA</strong></div>
+                    <p class="text-[10px] text-slate-500 font-medium">Scan QRIS melalui BCA Mobile, GoPay, OVO, Dana, LinkAja, ShopeePay, m-Banking dll.</p>
+                </div>
+
+                <!-- Tab 2: BCA Display -->
+                <div id="payment-bca" class="hidden text-center py-4">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 border border-blue-100 flex items-center justify-center mx-auto mb-3 font-black text-lg">
+                        BCA
+                    </div>
+                    <div class="text-[11px] text-slate-500 font-medium mb-0.5">Nomor Rekening BCA:</div>
+                    <div class="text-2xl font-mono font-black text-slate-900 tracking-widest mb-1" id="rekening-bca">8830 1234 56</div>
+                    <div class="text-xs text-slate-600 font-medium mb-4">a.n. <strong class="text-slate-900 font-bold">Gazebo Mengaji Indonesia</strong></div>
+
+                    <button type="button" onclick="copyToClipboard('8830123456', 'Rekening BCA')" class="framer-button-secondary px-6 py-2.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2">
+                        <i class="fa-regular fa-copy"></i>
+                        <span>Salin No. Rekening BCA</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- "Saya Sudah Transfer" Button (Triggers Digital Invoice Modal) -->
+            <div class="mb-8 text-center">
+                <button type="button" id="btn-already-transferred" onclick="generateInvoiceModal()" disabled
+                        class="w-full framer-button-primary py-3.5 rounded-xl font-bold text-xs tracking-wide opacity-50 cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow-md">
+                    <i class="fa-solid fa-file-invoice text-sm"></i>
+                    <span>Saya Sudah Transfer (Terbitkan Bukti Donasi)</span>
+                </button>
+                <div id="form-warning-msg" class="text-[11px] text-red-500 font-semibold mt-2">
+                    *Harap isi Nama, Nomor WhatsApp & Nominal Infaq di atas terlebih dahulu untuk mengeklik tombol ini.
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Merchandise Section Slider -->
+        <section id="merchandise" class="max-w-5xl mx-auto px-4 pt-12">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <span class="text-[11px] font-extrabold tracking-widest text-slate-500 uppercase">Souvenir & Infaq</span>
+                    <h2 class="text-xl md:text-2xl font-black text-slate-900 mt-0.5">Merchandise Gazebo Mengaji</h2>
+                </div>
+                <!-- Slider Controls -->
+                <div class="flex items-center gap-2">
+                    <button onclick="scrollMerch('left')" aria-label="Slide left" class="p-2 rounded-full border border-slate-200 text-slate-700 hover:bg-slate-100 transition-colors">
+                        <i class="fa-solid fa-chevron-left text-xs"></i>
+                    </button>
+                    <button onclick="scrollMerch('right')" aria-label="Slide right" class="p-2 rounded-full border border-slate-200 text-slate-700 hover:bg-slate-100 transition-colors">
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Horizontal Scroll Container -->
+            <div id="merch-slider" class="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-4">
+                
+                <!-- Product 1 -->
+                <div class="framer-card p-4 rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200">
+                    <div>
+                        <div class="h-40 w-full rounded-xl bg-slate-100 border border-slate-200 overflow-hidden mb-3 relative flex items-center justify-center">
+                            <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=500&q=80" alt="Kaos Dakwah GM" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-sm font-bold text-slate-900 mb-1">Kaos Minimalis GM</h3>
+                        <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Bahan Cotton Combed 30s premium, adem & nyaman dipakai kajian.</p>
+                    </div>
+                    <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                        <span class="font-black text-slate-900 text-xs">Rp 120.000</span>
+                        <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20saya%20tertarik%20membeli%20Kaos%20Gazebo%20Mengaji." target="_blank" 
+                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold">Pesan Product</a>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="framer-card p-4 rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200">
+                    <div>
+                        <div class="h-40 w-full rounded-xl bg-slate-100 border border-slate-200 overflow-hidden mb-3 relative flex items-center justify-center">
+                            <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=500&q=80" alt="Tumbler Stainless" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-sm font-bold text-slate-900 mb-1">Tumbler Stainless 500ml</h3>
+                        <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Tahan panas & dingin 12 jam dengan logo grafir Gazebo Mengaji.</p>
+                    </div>
+                    <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                        <span class="font-black text-slate-900 text-xs">Rp 85.000</span>
+                        <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20saya%20tertarik%20membeli%20Tumbler%20Gazebo%20Mengaji." target="_blank" 
+                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold">Pesan Product</a>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="framer-card p-4 rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200">
+                    <div>
+                        <div class="h-40 w-full rounded-xl bg-slate-100 border border-slate-200 overflow-hidden mb-3 relative flex items-center justify-center">
+                            <img src="https://images.unsplash.com/photo-1597484661643-2f5fef640dd1?auto=format&fit=crop&w=500&q=80" alt="Totebag Kanvas" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-sm font-bold text-slate-900 mb-1">Totebag Kanvas Kajian</h3>
+                        <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Tas kain kanvas tebal ramah lingkungan untuk membawa kitab & catatan.</p>
+                    </div>
+                    <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                        <span class="font-black text-slate-900 text-xs">Rp 45.000</span>
+                        <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20saya%20tertarik%20membeli%20Totebag%20Gazebo%20Mengaji." target="_blank" 
+                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold">Pesan Product</a>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="framer-card p-4 rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200">
+                    <div>
+                        <div class="h-40 w-full rounded-xl bg-slate-100 border border-slate-200 overflow-hidden mb-3 relative flex items-center justify-center">
+                            <img src="https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=500&q=80" alt="Topi Snapback" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-sm font-bold text-slate-900 mb-1">Topi Snapback GM</h3>
+                        <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Topi gaya simpel warna hitam dengan bordir logo huruf GM.</p>
+                    </div>
+                    <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                        <span class="font-black text-slate-900 text-xs">Rp 65.000</span>
+                        <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20saya%20tertarik%20membeli%20Topi%20Gazebo%20Mengaji." target="_blank" 
+                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold">Pesan Product</a>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="framer-card p-4 rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200">
+                    <div>
+                        <div class="h-40 w-full rounded-xl bg-slate-100 border border-slate-200 overflow-hidden mb-3 relative flex items-center justify-center">
+                            <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=500&q=80" alt="Buku Dzikir" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-sm font-bold text-slate-900 mb-1">Buku Dzikir Pagi Petang</h3>
+                        <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Buku saku lengkap doa & dzikir harian sesuai sunnah.</p>
+                    </div>
+                    <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                        <span class="font-black text-slate-900 text-xs">Rp 25.000</span>
+                        <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20saya%20tertarik%20membeli%20Buku%20Dzikir." target="_blank" 
+                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold">Pesan Product</a>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="framer-card p-4 rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200">
+                    <div>
+                        <div class="h-40 w-full rounded-xl bg-slate-100 border border-slate-200 overflow-hidden mb-3 relative flex items-center justify-center">
+                            <img src="https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=500&q=80" alt="Mushaf Saku" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-sm font-bold text-slate-900 mb-1">Mushaf Saku Terjemah</h3>
+                        <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Al-Qur'an ukuran saku mudah dibawa ke mana pun.</p>
+                    </div>
+                    <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                        <span class="font-black text-slate-900 text-xs">Rp 55.000</span>
+                        <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20saya%20tertarik%20membeli%20Mushaf%20Saku." target="_blank" 
+                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold">Pesan Product</a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Relocated Section: Tanya atau Informasi (Placed Right Below Merchandise) -->
+        <section id="admin-contact" class="max-w-3xl mx-auto px-4 pt-10 pb-6">
+            <div class="framer-card p-6 rounded-2xl text-center border border-slate-200">
+                <div class="flex items-center justify-center gap-2 mb-2">
+                    <i class="fa-brands fa-whatsapp text-emerald-600 text-xl"></i>
+                    <h3 class="text-base font-black text-slate-900">Tanya atau Informasi</h3>
+                </div>
+                <p class="text-xs text-slate-600 font-medium mb-5 max-w-md mx-auto leading-relaxed">
+                    Ada pertanyaan seputar kegiatan, penyaluran donasi, atau laporan keuangan? Silakan tanyakan langsung kepada admin kami.
+                </p>
+                <button type="button" onclick="openWaDirect()" class="framer-button-primary w-full py-3.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-emerald-400 text-base"></i>
+                    <span>Chat Admin Gazebo Mengaji</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="max-w-2xl mx-auto px-4 pt-10">
+            <div class="text-center mb-8">
+                <h2 class="text-lg md:text-xl font-black text-slate-900">Pertanyaan Umum (FAQ)</h2>
+            </div>
+
+            <div class="space-y-3">
+                <div class="framer-card rounded-2xl p-4 cursor-pointer border border-slate-200" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-center font-bold text-xs text-slate-900">
+                        <span>Apakah bisa menjadi donatur rutin bulanan?</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform duration-300"></i>
+                    </div>
+                    <p class="text-[11px] text-slate-600 font-medium mt-2.5 hidden leading-relaxed">
+                        Sangat bisa! Anda dapat melakukan transfer rutin setiap bulan atau meminta pengingat bulanan dari admin melalui kontak WhatsApp.
+                    </p>
+                </div>
+
+                <div class="framer-card rounded-2xl p-4 cursor-pointer border border-slate-200" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-center font-bold text-xs text-slate-900">
+                        <span>Apakah boleh berinfaq dalam bentuk makanan / barang?</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform duration-300"></i>
+                    </div>
+                    <p class="text-[11px] text-slate-600 font-medium mt-2.5 hidden leading-relaxed">
+                        Bisa. Kami sangat menyambut bantuan fisik seperti nasi kotak/snack untuk kajian Rabu malam, minuman/susu anak TPA, serta peralatan mengaji seperti Mushaf Tajwid dan papan tulis.
+                    </p>
+                </div>
+
+                <div class="framer-card rounded-2xl p-4 cursor-pointer border border-slate-200" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-center font-bold text-xs text-slate-900">
+                        <span>Bagaimana cara melihat laporan keuangan transparan?</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform duration-300"></i>
+                    </div>
+                    <p class="text-[11px] text-slate-600 font-medium mt-2.5 hidden leading-relaxed">
+                        Anda dapat klik tautan "Detail Laporan Keuangan" di bagian Transparansi Dana. Kami memperbarui laporan secara berkala langsung dari Google Spreadsheet publik kami.
+                    </p>
+                </div>
+
+                <div class="framer-card rounded-2xl p-4 cursor-pointer border border-slate-200" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-center font-bold text-xs text-slate-900">
+                        <span>Apakah ada nominal minimum untuk berinfaq?</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform duration-300"></i>
+                    </div>
+                    <p class="text-[11px] text-slate-600 font-medium mt-2.5 hidden leading-relaxed">
+                        Tidak ada minimum nominal. Berapa pun infaq yang Anda salurkan sangat berarti untuk kesinambungan program dakwah dan pendidikan santri TPA.
+                    </p>
+                </div>
+
+                <div class="framer-card rounded-2xl p-4 cursor-pointer border border-slate-200" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-center font-bold text-xs text-slate-900">
+                        <span>Bagaimana jika ingin menjadi relawan mengajar?</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform duration-300"></i>
+                    </div>
+                    <p class="text-[11px] text-slate-600 font-medium mt-2.5 hidden leading-relaxed">
+                        Kami sangat terbuka bagi rekan-rekan yang ingin berkhidmat menjadi musyrif/musyrikah TPA maupun Bahasa Arab Anak. Hubungi admin via WhatsApp untuk pendaftaran relawan.
+                    </p>
+                </div>
+
+                <div class="framer-card rounded-2xl p-4 cursor-pointer border border-slate-200" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-center font-bold text-xs text-slate-900">
+                        <span>Apakah belanja merchandise sudah termasuk infaq?</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform duration-300"></i>
+                    </div>
+                    <p class="text-[11px] text-slate-600 font-medium mt-2.5 hidden leading-relaxed">
+                        Ya, seluruh keuntungan dari penjualan merchandise Gazebo Mengaji dialokasikan 100% untuk mendukung operasional program dakwah.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Minimalist -->
+    <footer class="relative z-10 border-t border-slate-200 bg-white py-8 text-[11px] text-slate-600 font-medium">
+        <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            <div class="flex items-center space-x-2">
+                <div class="w-6 h-6 rounded-lg bg-slate-900 text-white flex items-center justify-center font-black text-[10px]">
+                    GM
+                </div>
+                <span class="font-bold text-slate-900">Gazebo Mengaji</span>
+                <span>&copy; 2026 Komunitas Dakwah Sosial</span>
+            </div>
+
+            <div class="flex items-center space-x-4 text-slate-700 font-medium">
+                <a href="#kegiatan" class="hover:text-slate-900 hover:underline transition-colors">Kegiatan</a>
+                <a href="#anggaran" class="hover:text-slate-900 hover:underline transition-colors">Anggaran</a>
+                <a href="#rekening" class="hover:text-slate-900 hover:underline transition-colors">Donasi</a>
+                <a href="#merchandise" class="hover:text-slate-900 hover:underline transition-colors">Merchandise</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL 1: Detail Kegiatan with 9:16 Story Video Format -->
+    <div id="activity-video-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="framer-card rounded-3xl max-w-sm w-full relative border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
+            
+            <!-- Close Button Header -->
+            <div class="p-3.5 bg-slate-900 text-white flex items-center justify-between z-10">
+                <div>
+                    <h3 id="modal-video-title" class="text-xs font-bold leading-tight">Nama Kegiatan</h3>
+                    <div id="modal-video-ustadz" class="text-[10px] text-amber-400 font-medium">Pemateri: Ustadz</div>
+                </div>
+                <button onclick="closeActivityVideoModal()" class="w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center text-sm">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- 9:16 Vertical Video Container -->
+            <div class="relative bg-black w-full aspect-story flex items-center justify-center overflow-hidden">
+                <video id="modal-video-player" controls loop playsinline class="w-full h-full object-cover">
+                    <source id="modal-video-source" src="" type="video/mp4">
+                    Browser Anda tidak mendukung pemutar video.
+                </video>
+            </div>
+
+            <!-- Description Footer -->
+            <div class="p-4 bg-white border-t border-slate-200">
+                <p id="modal-video-desc" class="text-xs text-slate-700 font-medium leading-relaxed mb-3">
+                    Deskripsi lengkap aktivitas rutin...
+                </p>
+
+                <a href="#rekening" onclick="closeActivityVideoModal()" class="w-full framer-button-primary py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-heart text-red-500 text-xs"></i>
+                    <span>Dukung Program Ini</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Bukti / Cashier Receipt Invoice Donasi Generator -->
+    <div id="invoice-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="framer-card p-5 rounded-3xl max-w-sm w-full relative border border-slate-200 bg-white my-auto">
+            <button onclick="closeInvoiceModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-base z-20">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <!-- Cashier Thermal Receipt Design for JPG Download -->
+            <div id="invoice-card-content" class="receipt-card p-4 rounded-xl text-xs text-slate-900">
+                
+                <!-- Receipt Header -->
+                <div class="text-center">
+                    <div class="font-bold text-sm tracking-wider uppercase">GAZEBO MENGAJI INDONESIA</div>
+                    <div class="text-[9px] text-slate-600 font-medium">Komunitas Dakwah & Sosial</div>
+                    <div class="text-[8px] text-slate-500">Jl. Gazebo Mengaji No. 102, Indonesia</div>
+                </div>
+
+                <div class="receipt-double-divider"></div>
+
+                <!-- Receipt Title -->
+                <div class="text-center font-bold text-xs uppercase tracking-tight py-0.5">
+                    *** BUKTI INFAQ DIGITAL ***
+                </div>
+
+                <div class="receipt-divider"></div>
+
+                <!-- Receipt Metadata -->
+                <div class="space-y-1 text-[11px] font-mono">
+                    <div class="flex justify-between">
+                        <span>NO. STRUK:</span>
+                        <span id="inv-id" class="font-bold">#GM-20260908-102</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>TANGGAL  :</span>
+                        <span id="inv-date" class="font-bold">08/09/2026</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>DONATUR  :</span>
+                        <span id="inv-name" class="font-bold">Abdullah</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>NO. WA   :</span>
+                        <span id="inv-phone" class="font-bold">081234567890</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>METODE   :</span>
+                        <span id="inv-method" class="font-bold">QRIS</span>
+                    </div>
+                </div>
+
+                <div class="receipt-divider"></div>
+
+                <!-- Itemized Breakdown -->
+                <div class="font-mono text-[11px] space-y-1">
+                    <div class="flex justify-between font-bold">
+                        <span>DESKRIPSI</span>
+                        <span>JUMLAH</span>
+                    </div>
+                    <div class="receipt-divider"></div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold">Infaq Dakwah & Operasional</span>
+                        <span id="inv-item-amount" class="font-bold">Rp 100.000</span>
+                    </div>
+                    <div class="text-[9px] text-slate-500">
+                        • Dukungan Program Dakwah Gazebo Mengaji
+                    </div>
+                </div>
+
+                <div class="receipt-double-divider"></div>
+
+                <!-- Total Amount -->
+                <div class="font-mono flex justify-between items-center text-sm font-black">
+                    <span>TOTAL INFAQ :</span>
+                    <span id="inv-amount" class="text-sm font-black">Rp 100.000</span>
+                </div>
+
+                <div class="receipt-double-divider"></div>
+
+                <!-- Optional Notes / Prayer -->
+                <div id="inv-notes-container" class="font-mono text-[10px] my-2">
+                    <div class="font-bold uppercase text-[9px]">TITIP DOA / CATATAN:</div>
+                    <div id="inv-notes" class="italic text-slate-700 font-medium">"Semoga menjadi pahala jariyah."</div>
+                    <div class="receipt-divider"></div>
+                </div>
+
+                <!-- Receipt Footer -->
+                <div class="text-center font-mono text-[9px] mt-3 space-y-1">
+                    <div class="font-bold uppercase">~ JAZAKUMULLAHU KHAIRAN ~</div>
+                    <div class="text-slate-600">Semoga Allah Membalas Kebaikan Anda</div>
+                    <div class="text-[8px] text-slate-400 pt-1">*** SIMPAN BUKTI STRUK INI ***</div>
+                </div>
+
+            </div>
+
+            <!-- Modal Action Buttons -->
+            <div class="space-y-2 mt-4">
+                <button type="button" onclick="downloadInvoiceImage()" class="w-full framer-button-secondary py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-download text-emerald-600 text-sm"></i>
+                    <span>Unduh Struk Infaq (JPG)</span>
+                </button>
+                <button type="button" onclick="sendInvoiceToWa()" class="w-full framer-button-primary py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i>
+                    <span>Konfirmasi Langsung via WhatsApp</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Floating Bottom Button -->
+    <div class="md:hidden fixed bottom-4 left-4 right-4 z-40">
+        <a href="#rekening" class="framer-button-primary w-full py-3 rounded-xl font-black text-xs tracking-wide shadow-2xl flex items-center justify-center gap-2">
+            <i class="fa-solid fa-heart text-red-500 text-xs"></i>
+            <span>Salurkan Infaq Dakwah</span>
+        </a>
+    </div>
+
+    <script>
+        // Allocation Accordion Dropdown
+        function toggleAllocationDropdown() {
+            const content = document.getElementById('allocation-content');
+            const chevron = document.getElementById('allocation-chevron');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                chevron.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                chevron.classList.remove('rotate-180');
+            }
+        }
+
+        // Payment Tab Switcher
+        function switchPaymentTab(type) {
+            const qrisContent = document.getElementById('payment-qris');
+            const bcaContent = document.getElementById('payment-bca');
+            const tabQris = document.getElementById('tab-qris');
+            const tabBca = document.getElementById('tab-bca');
+
+            if (type === 'qris') {
+                qrisContent.classList.remove('hidden');
+                bcaContent.classList.add('hidden');
+                
+                tabQris.className = "flex-1 py-2 text-xs font-black rounded-lg transition-all bg-white text-black shadow-sm";
+                tabBca.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all text-black";
+            } else {
+                bcaContent.classList.remove('hidden');
+                qrisContent.classList.add('hidden');
+
+                tabBca.className = "flex-1 py-2 text-xs font-black rounded-lg transition-all bg-white text-black shadow-sm";
+                tabQris.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all text-black";
+            }
+        }
+
+        // Merchandise Slider Scroll
+        function scrollMerch(direction) {
+            const slider = document.getElementById('merch-slider');
+            const scrollAmount = 280;
+            if (direction === 'left') {
+                slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else {
+                slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        }
+
+        // Name Censoring Privacy Helper
+        function censorName(name) {
+            if (!name || name.toLowerCase().includes('hamba allah')) return 'Hamba Allah';
+            const parts = name.trim().split(' ');
+            if (parts.length === 1) {
+                const p = parts[0];
+                if (p.length <= 2) return p + '***';
+                return p.substring(0, 2) + '***';
+            }
+            const first = parts[0].substring(0, 2) + '***';
+            const last = parts[parts.length - 1].substring(0, 1) + '.';
+            return `${first} ${last}`;
+        }
+
+        // Simulated Live Infaq Popups
+        const recentDonations = [
+            { name: "Hamba Allah", amount: 50000, time: "2 menit lalu" },
+            { name: "Ahmad Fauzi", amount: 100000, time: "5 menit lalu" },
+            { name: "Hamba Allah", amount: 250000, time: "12 menit lalu" },
+            { name: "Ibu Nurul", amount: 500000, time: "18 menit lalu" },
+            { name: "Rizal Arifin", amount: 150000, time: "30 menit lalu" }
+        ];
+
+        let popupIndex = 0;
+
+        function showNextInfaqPopup() {
+            const popup = document.getElementById('infaq-popup');
+            const donorEl = document.getElementById('popup-donor-name');
+            const amountEl = document.getElementById('popup-amount');
+            const timeEl = document.getElementById('popup-time');
+
+            const item = recentDonations[popupIndex];
+            const masked = censorName(item.name);
+            donorEl.innerText = `Alhamdulillah, ${masked}`;
+            amountEl.innerText = `Rp ${new Intl.NumberFormat('id-ID').format(item.amount)}`;
+            timeEl.innerText = item.time;
+
+            popup.classList.remove('hidden', 'animate-popup-out');
+            popup.classList.add('animate-popup-in');
+
+            setTimeout(() => {
+                dismissPopup();
+            }, 5500);
+
+            popupIndex = (popupIndex + 1) % recentDonations.length;
+        }
+
+        function dismissPopup() {
+            const popup = document.getElementById('infaq-popup');
+            popup.classList.remove('animate-popup-in');
+            popup.classList.add('animate-popup-out');
+            setTimeout(() => {
+                popup.classList.add('hidden');
+            }, 300);
+        }
+
+        // Clipboard Copy Helper
+        function copyToClipboard(text, accountName) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(accountName + " disalin: " + text);
+                }).catch(() => fallbackCopy(text, accountName));
+            } else {
+                fallbackCopy(text, accountName);
+            }
+        }
+
+        function fallbackCopy(text, accountName) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast(accountName + " disalin: " + text);
+            } catch (err) {
+                showToast("Gagal menyalin nomor rekening");
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // Toast Notification System
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.innerText = message;
+            
+            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-10');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-10');
+            }, 2500);
+        }
+
+        // Donation Nominal State & Form Logic
+        let currentAmount = 100000;
+
+        function selectAmount(amount, btnElement) {
+            currentAmount = amount;
+            document.getElementById('custom-amount').value = '';
+            
+            const buttons = document.querySelectorAll('.amount-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-slate-900', 'text-white', 'border-slate-900');
+                btn.classList.add('bg-slate-50', 'text-slate-800', 'border-slate-200');
+            });
+
+            if (btnElement) {
+                btnElement.classList.remove('bg-slate-50', 'text-slate-800', 'border-slate-200');
+                btnElement.classList.add('bg-slate-900', 'text-white', 'border-slate-900');
+            }
+
+            updateImpactText(amount);
+            updatePaymentDisplayNominal(amount);
+            validateDonorForm();
+        }
+
+        function updateCustomImpact() {
+            const customVal = document.getElementById('custom-amount').value;
+            const amount = parseInt(customVal) || 0;
+            
+            const buttons = document.querySelectorAll('.amount-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-slate-900', 'text-white', 'border-slate-900');
+                btn.classList.add('bg-slate-50', 'text-slate-800', 'border-slate-200');
+            });
+
+            if (amount > 0) {
+                currentAmount = amount;
+                updateImpactText(amount);
+                updatePaymentDisplayNominal(amount);
+            } else {
+                document.getElementById('impact-text').innerHTML = "Masukkan nominal infaq untuk melihat estimasi manfaat dakwah.";
+            }
+        }
+
+        function updatePaymentDisplayNominal(amount) {
+            const formatted = new Intl.NumberFormat('id-ID').format(amount);
+            document.getElementById('payment-nominal-display').innerText = `Rp ${formatted}`;
+        }
+
+        function updateImpactText(amount) {
+            const impactText = document.getElementById('impact-text');
+            const formatted = new Intl.NumberFormat('id-ID').format(amount);
+
+            if (amount < 50000) {
+                impactText.innerHTML = `Infaq sebesar <strong>Rp ${formatted}</strong> insyaAllah membantu menyediakan konsumsi hangat jamaah kajian.`;
+            } else if (amount < 200000) {
+                impactText.innerHTML = `Infaq sebesar <strong>Rp ${formatted}</strong> insyaAllah bisa menyediakan modul belajar Iqra' & Bahasa Arab untuk santri.`;
+            } else if (amount < 500000) {
+                impactText.innerHTML = `Infaq sebesar <strong>Rp ${formatted}</strong> insyaAllah bisa mendukung operasional sound system & konsumsi kajian 1 pekan.`;
+            } else {
+                impactText.innerHTML = `Infaq sebesar <strong>Rp ${formatted}</strong> insyaAllah bisa untuk mendukung insentif pengajar TPA & Bahasa Arab setengah bulan.`;
+            }
+        }
+
+        // Validate Donor Form & Enable "Saya Sudah Transfer" Button
+        function validateDonorForm() {
+            const name = document.getElementById('donor-name').value.trim();
+            const phone = document.getElementById('donor-phone').value.trim();
+            const customAmt = parseInt(document.getElementById('custom-amount').value) || 0;
+            const amt = customAmt > 0 ? customAmt : currentAmount;
+
+            const btn = document.getElementById('btn-already-transferred');
+            const warn = document.getElementById('form-warning-msg');
+
+            if (name.length > 0 && phone.length >= 6 && amt > 0) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.classList.add('hover:scale-[1.01]', 'shadow-emerald-500/20');
+                warn.classList.add('hidden');
+            } else {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                btn.classList.remove('hover:scale-[1.01]', 'shadow-emerald-500/20');
+                warn.classList.remove('hidden');
+            }
+        }
+
+        // Progress Bar Color Controller
+        function updateProgressBarColor(percent) {
+            const bar = document.getElementById('progress-bar-fill');
+            bar.style.width = percent + '%';
+
+            bar.classList.remove('bg-rose-500', 'bg-amber-500', 'bg-emerald-600');
+
+            if (percent < 50) {
+                bar.classList.add('bg-rose-500');
+            } else if (percent < 80) {
+                bar.classList.add('bg-amber-500');
+            } else {
+                bar.classList.add('bg-emerald-600');
+            }
+        }
+
+        // 9:16 Activity Video Modal Functions
+        function openActivityVideoModal(title, ustadz, videoUrl, desc) {
+            document.getElementById('modal-video-title').innerText = title;
+            document.getElementById('modal-video-ustadz').innerText = "Pemateri / Pengajar: " + ustadz;
+            document.getElementById('modal-video-desc').innerText = desc;
+            
+            const player = document.getElementById('modal-video-player');
+            const source = document.getElementById('modal-video-source');
+            source.src = videoUrl;
+            player.load();
+            player.play().catch(() => {});
+
+            document.getElementById('activity-video-modal').classList.remove('hidden');
+        }
+
+        function closeActivityVideoModal() {
+            const player = document.getElementById('modal-video-player');
+            player.pause();
+            document.getElementById('activity-video-modal').classList.add('hidden');
+        }
+
+        // Digital Cashier Receipt Invoice Generator
+        function generateInvoiceModal() {
+            const name = document.getElementById('donor-name').value.trim();
+            const phone = document.getElementById('donor-phone').value.trim();
+            const notes = document.getElementById('donor-notes').value.trim();
+            const customAmt = parseInt(document.getElementById('custom-amount').value) || 0;
+            const amt = customAmt > 0 ? customAmt : currentAmount;
+
+            // Detect active payment method tab (QRIS or BCA)
+            const qrisHidden = document.getElementById('payment-qris').classList.contains('hidden');
+            const paymentMethod = qrisHidden ? 'BANK BCA' : 'QRIS';
+
+            const formattedAmt = new Intl.NumberFormat('id-ID').format(amt);
+            const randomId = "GM-" + new Date().toISOString().slice(0,10).replace(/-/g,"") + "-" + Math.floor(100 + Math.random() * 900);
+
+            document.getElementById('inv-id').innerText = "#" + randomId;
+            document.getElementById('inv-date').innerText = new Date().toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            document.getElementById('inv-name').innerText = name;
+            document.getElementById('inv-phone').innerText = phone;
+            document.getElementById('inv-method').innerText = paymentMethod;
+            document.getElementById('inv-amount').innerText = "Rp " + formattedAmt;
+            
+            const invItemAmt = document.getElementById('inv-item-amount');
+            if (invItemAmt) {
+                invItemAmt.innerText = "Rp " + formattedAmt;
+            }
+
+            if (notes) {
+                document.getElementById('inv-notes').innerText = `"${notes}"`;
+                document.getElementById('inv-notes-container').classList.remove('hidden');
+            } else {
+                document.getElementById('inv-notes-container').classList.add('hidden');
+            }
+
+            document.getElementById('invoice-modal').classList.remove('hidden');
+        }
+
+        function closeInvoiceModal() {
+            document.getElementById('invoice-modal').classList.add('hidden');
+        }
+
+        // Download Cashier Receipt Card as JPG Image
+        function downloadInvoiceImage() {
+            const invoiceEl = document.getElementById('invoice-card-content');
+            if (!invoiceEl) return;
+
+            html2canvas(invoiceEl, {
+                scale: 2,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                const link = document.createElement('a');
+                const invId = document.getElementById('inv-id').innerText.replace('#', '');
+                link.download = `Struk-Infaq-Gazebo-Mengaji-${invId}.jpg`;
+                link.href = canvas.toDataURL('image/jpeg', 0.95);
+                link.click();
+                showToast("Struk infaq berhasil diunduh sebagai JPG!");
+            }).catch(err => {
+                showToast("Gagal mengunduh gambar bukti donasi");
+            });
+        }
+
+        function sendInvoiceToWa() {
+            const name = document.getElementById('donor-name').value.trim();
+            const phone = document.getElementById('donor-phone').value.trim();
+            const notes = document.getElementById('donor-notes').value.trim();
+            const customAmt = parseInt(document.getElementById('custom-amount').value) || 0;
+            const amt = customAmt > 0 ? customAmt : currentAmount;
+            const invId = document.getElementById('inv-id').innerText;
+            const method = document.getElementById('inv-method').innerText;
+
+            const formattedAmt = new Intl.NumberFormat('id-ID').format(amt);
+
+            let text = `Assalamu'alaikum Admin Gazebo Mengaji,\n\n`;
+            text += `Saya telah mentransfer infaq dakwah:\n`;
+            text += `• Kode Struk: ${invId}\n`;
+            text += `• Nama Donatur: ${name}\n`;
+            text += `• No. WA/HP: ${phone}\n`;
+            text += `• Metode Pembayaran: ${method}\n`;
+            text += `• Nominal Transfer: Rp ${formattedAmt}\n`;
+            if (notes) {
+                text += `• Titip Doa/Catatan: "${notes}"\n`;
+            }
+            text += `\nMohon dicek & dicatat dalam Laporan Infaq Gazebo Mengaji. Jazakallahu khairan.`;
+
+            const waUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(text)}`;
+            window.open(waUrl, '_blank');
+            closeInvoiceModal();
+        }
+
+        function openWaDirect() {
+            const waUrl = `https://wa.me/6281234567890?text=${encodeURIComponent("Assalamu'alaikum Admin Gazebo Mengaji, saya ingin bertanya mengenai program infaq dakwah.")}`;
+            window.open(waUrl, '_blank');
+        }
+
+        // FAQ Toggle
+        function toggleFaq(element) {
+            const p = element.querySelector('p');
+            const icon = element.querySelector('i');
+            
+            if (p.classList.contains('hidden')) {
+                p.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                p.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+
+        // On DOM Loaded Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            updateImpactText(100000);
+            updatePaymentDisplayNominal(100000);
+            updateProgressBarColor(42);
+
+            // Periodic live popups
+            setTimeout(showNextInfaqPopup, 3000);
+            setInterval(showNextInfaqPopup, 14000);
+        });
+    </script>
+</body>
+</html>
