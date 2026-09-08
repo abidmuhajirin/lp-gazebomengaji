@@ -574,15 +574,15 @@
                 </p>
             </div>
 
-            <!-- Integrated Donor Form -->
-            <div class="framer-card p-6 rounded-2xl mb-6 border border-slate-200">
+            <!-- Integrated Donor Form with Transparent Green Background -->
+            <div class="framer-card p-6 rounded-2xl mb-6 border border-emerald-200/80 bg-emerald-50/40">
                 
                 <form id="donor-form" onsubmit="event.preventDefault();" class="space-y-4">
                     
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Nama Lengkap / Hamba Allah <span class="text-red-500">*</span></label>
                         <input type="text" id="donor-name" required placeholder="Contoh: Abdullah / Hamba Allah" oninput="validateDonorForm()"
-                               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 font-bold placeholder-slate-400 focus:outline-none focus:border-slate-400 transition-colors">
+                               class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 font-bold placeholder-slate-400 focus:outline-none focus:border-slate-900 transition-colors">
                     </div>
 
                     <!-- Strictly Numbers-Only WhatsApp Input -->
@@ -590,22 +590,22 @@
                         <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Nomor WhatsApp / HP (Angka saja) <span class="text-red-500">*</span></label>
                         <input type="tel" id="donor-phone" required placeholder="Contoh: 081234567890" 
                                oninput="this.value = this.value.replace(/[^0-9]/g, ''); validateDonorForm();"
-                               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 font-bold placeholder-slate-400 focus:outline-none focus:border-slate-400 transition-colors">
+                               class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 font-bold placeholder-slate-400 focus:outline-none focus:border-slate-900 transition-colors">
                     </div>
 
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 uppercase mb-2">Pilih Nominal Infaq <span class="text-red-500">*</span></label>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-2.5">
-                            <button type="button" onclick="selectAmount(50000, this)" class="amount-btn p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 font-bold text-xs hover:border-slate-300 transition-all text-center">
+                            <button type="button" onclick="selectAmount(50000, this)" class="amount-btn p-2.5 rounded-xl bg-white border border-slate-200 text-slate-800 font-bold text-xs hover:border-slate-400 transition-all text-center">
                                 Rp 50.000
                             </button>
-                            <button type="button" onclick="selectAmount(100000, this)" class="amount-btn p-2.5 rounded-xl bg-slate-900 text-white border-slate-900 font-bold text-xs hover:border-slate-900 transition-all text-center">
+                            <button type="button" onclick="selectAmount(100000, this)" class="amount-btn p-2.5 rounded-xl bg-slate-900 text-white border border-slate-900 font-bold text-xs hover:border-slate-900 transition-all text-center">
                                 Rp 100.000
                             </button>
-                            <button type="button" onclick="selectAmount(250000, this)" class="amount-btn p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 font-bold text-xs hover:border-slate-300 transition-all text-center">
+                            <button type="button" onclick="selectAmount(250000, this)" class="amount-btn p-2.5 rounded-xl bg-white border border-slate-200 text-slate-800 font-bold text-xs hover:border-slate-400 transition-all text-center">
                                 Rp 250.000
                             </button>
-                            <button type="button" onclick="selectAmount(500000, this)" class="amount-btn p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 font-bold text-xs hover:border-slate-300 transition-all text-center">
+                            <button type="button" onclick="selectAmount(500000, this)" class="amount-btn p-2.5 rounded-xl bg-white border border-slate-200 text-slate-800 font-bold text-xs hover:border-slate-400 transition-all text-center">
                                 Rp 500.000
                             </button>
                         </div>
@@ -613,18 +613,18 @@
                         <div class="relative">
                             <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-xs">Rp</span>
                             <input type="number" id="custom-amount" placeholder="Atau ketik nominal kustom..." oninput="updateCustomImpact(); validateDonorForm();"
-                                   class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-9 pr-3 text-xs text-slate-900 font-bold placeholder-slate-400 focus:outline-none focus:border-slate-400">
+                                   class="w-full bg-white border border-slate-200 rounded-xl py-2.5 pl-9 pr-3 text-xs text-slate-900 font-bold placeholder-slate-400 focus:outline-none focus:border-slate-900">
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Catatan / Titip Doa (Opsional)</label>
                         <textarea id="donor-notes" rows="2" placeholder="Tuliskan doa atau niat hajat Anda..."
-                                  class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:border-slate-400"></textarea>
+                                  class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:border-slate-900"></textarea>
                     </div>
 
-                    <!-- Impact Indicator -->
-                    <div id="impact-box" class="p-3 rounded-xl bg-amber-50/60 border border-amber-200 text-xs text-slate-700 font-semibold flex items-center gap-2.5">
+                    <!-- Impact Indicator (Restored Original Amber/Yellow Highlight Box Styling) -->
+                    <div id="impact-box" class="p-3 rounded-xl bg-amber-50 border border-amber-200/80 text-xs text-slate-800 font-semibold flex items-center gap-2.5">
                         <i class="fa-solid fa-sparkles text-amber-600 text-sm shrink-0"></i>
                         <span id="impact-text" class="text-[11px]">Infaq sebesar <strong>Rp 100.000</strong> insyaAllah bisa menyediakan modul belajar Iqra' & Bahasa Arab untuk santri.</span>
                     </div>
@@ -634,11 +634,11 @@
             </div>
 
             <!-- QRIS & Bank Switcher Container -->
-            <div class="framer-card rounded-2xl p-5 mb-6 border border-slate-200">
+            <div class="framer-card rounded-2xl p-5 mb-6 border border-emerald-200/80 bg-emerald-50/40">
                 
-                <!-- Display active selected amount -->
-                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-between mb-5">
-                    <span class="text-xs font-bold text-slate-600">Nominal Infaq Dipilih:</span>
+                <!-- Display active selected amount with White Container -->
+                <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-between mb-5">
+                    <span class="text-xs font-bold text-slate-700">Nominal Infaq Dipilih:</span>
                     <span id="payment-nominal-display" class="text-sm font-black text-emerald-700">Rp 100.000</span>
                 </div>
 
@@ -648,7 +648,7 @@
                         <i class="fa-solid fa-qrcode mr-1.5"></i> Scan QRIS
                     </button>
                     <button type="button" onclick="switchPaymentTab('bca')" id="tab-bca" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
-                        <i class="fa-solid fa-building-columns mr-1.5"></i> Bank BCA
+                        <i class="fa-solid fa-building-columns mr-1.5"></i> Bank BCA Syariah
                     </button>
                 </div>
 
@@ -662,18 +662,18 @@
                     <p class="text-[10px] text-slate-500 font-medium">Scan QRIS melalui BCA Mobile, GoPay, OVO, Dana, LinkAja, ShopeePay, m-Banking dll.</p>
                 </div>
 
-                <!-- Tab 2: BCA Display -->
+                <!-- Tab 2: BCA Syariah Display -->
                 <div id="payment-bca" class="hidden text-center py-4">
-                    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 border border-blue-100 flex items-center justify-center mx-auto mb-3 font-black text-lg">
-                        BCA
+                    <div class="px-3.5 py-1.5 rounded-xl bg-teal-50 text-teal-800 border border-teal-200 inline-flex items-center justify-center mx-auto mb-3 font-black text-xs tracking-wider uppercase">
+                        BCA SYARIAH
                     </div>
-                    <div class="text-[11px] text-slate-500 font-medium mb-0.5">Nomor Rekening BCA:</div>
+                    <div class="text-[11px] text-slate-500 font-medium mb-0.5">Nomor Rekening BCA Syariah:</div>
                     <div class="text-2xl font-mono font-black text-slate-900 tracking-widest mb-1" id="rekening-bca">8830 1234 56</div>
                     <div class="text-xs text-slate-600 font-medium mb-4">a.n. <strong class="text-slate-900 font-bold">Gazebo Mengaji Indonesia</strong></div>
 
-                    <button type="button" onclick="copyToClipboard('8830123456', 'Rekening BCA')" class="framer-button-secondary px-6 py-2.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2">
+                    <button type="button" onclick="copyToClipboard('8830123456', 'Rekening BCA Syariah')" class="framer-button-secondary px-6 py-2.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2">
                         <i class="fa-regular fa-copy"></i>
-                        <span>Salin No. Rekening BCA</span>
+                        <span>Salin No. Rekening BCA Syariah</span>
                     </button>
                 </div>
             </div>
@@ -858,8 +858,8 @@
                 <p class="text-xs text-slate-600 font-medium mb-5 max-w-md mx-auto leading-relaxed">
                     Ada pertanyaan seputar kegiatan, penyaluran donasi, atau laporan keuangan? Silakan tanyakan langsung kepada admin kami.
                 </p>
-                <button type="button" onclick="openWaDirect()" class="framer-button-primary w-full py-3.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-whatsapp text-emerald-400 text-base"></i>
+                <button type="button" onclick="openWaDirect()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-md py-3.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5">
+                    <i class="fa-brands fa-whatsapp text-white text-base"></i>
                     <span>Chat Admin Gazebo Mengaji</span>
                 </button>
             </div>
@@ -1251,16 +1251,17 @@
 
         function selectAmount(amount, btnElement) {
             currentAmount = amount;
-            document.getElementById('custom-amount').value = '';
+            const customInput = document.getElementById('custom-amount');
+            if (customInput) customInput.value = '';
             
             const buttons = document.querySelectorAll('.amount-btn');
             buttons.forEach(btn => {
                 btn.classList.remove('bg-slate-900', 'text-white', 'border-slate-900');
-                btn.classList.add('bg-slate-50', 'text-slate-800', 'border-slate-200');
+                btn.classList.add('bg-white', 'text-slate-800', 'border-slate-200');
             });
 
             if (btnElement) {
-                btnElement.classList.remove('bg-slate-50', 'text-slate-800', 'border-slate-200');
+                btnElement.classList.remove('bg-white', 'text-slate-800', 'border-slate-200');
                 btnElement.classList.add('bg-slate-900', 'text-white', 'border-slate-900');
             }
 
@@ -1276,7 +1277,7 @@
             const buttons = document.querySelectorAll('.amount-btn');
             buttons.forEach(btn => {
                 btn.classList.remove('bg-slate-900', 'text-white', 'border-slate-900');
-                btn.classList.add('bg-slate-50', 'text-slate-800', 'border-slate-200');
+                btn.classList.add('bg-white', 'text-slate-800', 'border-slate-200');
             });
 
             if (amount > 0) {
@@ -1286,6 +1287,7 @@
             } else {
                 document.getElementById('impact-text').innerHTML = "Masukkan nominal infaq untuk melihat estimasi manfaat dakwah.";
             }
+            validateDonorForm();
         }
 
         function updatePaymentDisplayNominal(amount) {
