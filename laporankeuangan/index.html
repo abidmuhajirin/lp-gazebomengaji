@@ -371,14 +371,20 @@
 
                 <!-- Date Start -->
                 <div>
-                    <label class="text-[10px] uppercase font-black tracking-wider text-slate-500 block mb-1">Tanggal Awal</label>
+                    <label class="text-[10px] uppercase font-black tracking-wider text-slate-500 flex items-center gap-1 mb-1">
+                        <i class="fa-regular fa-calendar-minus text-emerald-600 text-[11px]"></i>
+                        <span>Tanggal Awal</span>
+                    </label>
                     <input type="date" id="startDateInput" onchange="applyFilters()"
                         class="glass-input w-full px-2.5 py-2 text-xs">
                 </div>
 
                 <!-- Date End -->
                 <div>
-                    <label class="text-[10px] uppercase font-black tracking-wider text-slate-500 block mb-1">Tanggal Akhir</label>
+                    <label class="text-[10px] uppercase font-black tracking-wider text-slate-500 flex items-center gap-1 mb-1">
+                        <i class="fa-regular fa-calendar-check text-emerald-600 text-[11px]"></i>
+                        <span>Tanggal Akhir</span>
+                    </label>
                     <input type="date" id="endDateInput" onchange="applyFilters()"
                         class="glass-input w-full px-2.5 py-2 text-xs">
                 </div>
@@ -453,22 +459,26 @@
             </div>
         </div>
 
+        <!-- Section Informasi / Tanya Admin Keuangan -->
         <div class="glass-panel p-6 sm:p-7 flex flex-col md:flex-row items-center justify-between gap-6 border-emerald-500/20">
             <div class="space-y-1.5 text-center md:text-left max-w-2xl">
                 <h3 class="text-base font-black text-slate-900 flex items-center justify-center md:justify-start gap-2">
-                    <i class="fa-solid fa-shield-halved text-emerald-600"></i>
-                    Komitmen Transparansi Amanah Dakwah
+                    <i class="fa-solid fa-headset text-emerald-600"></i>
+                    Informasi & Tanya Admin Keuangan
                 </h3>
                 <p class="text-xs text-slate-600 leading-relaxed">
-                    Setiap donasi infak, sedekah, dan wakaf dicatat secara transparan sehingga dapat diverifikasi oleh donatur kapan saja. Laporan keuangan diperbarui secara berkala sebagai bentuk akuntabilitas publik.
+                    Punya pertanyaan seputar konfirmasi donasi, rincian penggunaan dana, atau ingin mengajukan pertanyaan ke panitia? Hubungi bendahara & admin keuangan dakwah secara langsung melalui WhatsApp.
                 </p>
             </div>
 
-            <!-- Refined 'Cek Donasi Anda' Light Glass Button -->
-            <div class="flex-shrink-0">
-                <button onclick="scrollToSearchAndFilter('INFLOW')" class="glass-btn px-5 py-3 text-xs font-black text-emerald-700 border-emerald-500/30 hover:bg-emerald-500/10 flex items-center justify-center gap-2 transition-all">
-                    <i class="fa-solid fa-magnifying-glass-dollar text-emerald-600 text-sm"></i>
-                    <span>Cek Donasi Anda</span>
+            <div class="flex flex-col sm:flex-row items-center gap-2.5 flex-shrink-0 w-full sm:w-auto">
+                <button onclick="openAdminContact()" class="glass-btn-primary w-full sm:w-auto px-5 py-3 text-xs font-black flex items-center justify-center gap-2 transition-all">
+                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                    <span>Tanya Admin Keuangan</span>
+                </button>
+                <button onclick="scrollToSearchAndFilter('INFLOW')" class="glass-btn w-full sm:w-auto px-4 py-3 text-xs font-bold text-slate-700 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-magnifying-glass-dollar text-emerald-600"></i>
+                    <span>Cek Donasi</span>
                 </button>
             </div>
         </div>
@@ -1183,6 +1193,12 @@
                 searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 searchInput.focus();
             }
+        }
+
+        function openAdminContact() {
+            const phone = "6281234567890"; // Ganti dengan nomor WhatsApp Admin Keuangan
+            const text = encodeURIComponent("Assalamu'alaikum Admin Keuangan Dakwah, saya ingin bertanya mengenai laporan keuangan / donasi.");
+            window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
         }
 
         // Modal Handlers
