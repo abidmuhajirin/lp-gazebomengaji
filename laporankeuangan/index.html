@@ -108,6 +108,23 @@
             border-radius: 14px;
         }
 
+        /* Hide native browser gray calendar icon inside date inputs */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            display: none !important;
+            -webkit-appearance: none;
+        }
+        input[type="date"] {
+            min-width: 0 !important;
+            box-sizing: border-box;
+        }
+        @media (max-width: 639px) {
+            input[type="date"] {
+                font-size: 10px !important;
+                padding-left: 5px !important;
+                padding-right: 2px !important;
+            }
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
@@ -140,9 +157,9 @@
                 <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-sm sm:text-base tracking-wider flex-shrink-0 shadow-md">
                     GM
                 </div>
-                <div class="min-w-0 text-left">
-                    <span class="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider block leading-none mb-1">Laporan Keuangan</span>
-                    <h1 class="text-base sm:text-lg md:text-xl font-black text-slate-900 tracking-tight leading-tight">
+                <div class="min-w-0 text-left flex flex-col justify-center">
+                    <span class="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-[0.18em] block leading-none mb-0.5 select-none">Laporan Keuangan</span>
+                    <h1 class="text-base sm:text-lg md:text-xl font-black text-slate-900 tracking-tight leading-none">
                         Gazebo Mengaji
                     </h1>
                 </div>
@@ -333,24 +350,25 @@
                     </div>
                 </div>
 
-                <!-- Date Start -->
-                <div class="col-span-1 min-w-0">
-                    <label class="text-[9px] sm:text-[10px] uppercase font-black tracking-wider text-slate-500 flex items-center gap-1 mb-1 whitespace-nowrap overflow-hidden">
-                        <i class="fa-regular fa-calendar-minus text-emerald-600 text-[10px]"></i>
-                        <span>Tgl Awal</span>
+                <!-- Unified Date Range Filter Box (No More Colliding Boxes on Mobile) -->
+                <div class="col-span-2 sm:col-span-3 lg:col-span-2 min-w-0">
+                    <label class="text-[10px] uppercase font-black tracking-wider text-slate-500 flex items-center gap-1 mb-1">
+                        <i class="fa-regular fa-calendar-days text-emerald-600 text-[11px]"></i>
+                        <span>Filter Periode Tanggal</span>
                     </label>
-                    <input type="date" id="startDateInput" onchange="applyFilters()"
-                        class="glass-input w-full min-w-0 px-1.5 py-1 text-[11px] sm:text-xs h-8 sm:h-9">
-                </div>
-
-                <!-- Date End -->
-                <div class="col-span-1 min-w-0">
-                    <label class="text-[9px] sm:text-[10px] uppercase font-black tracking-wider text-slate-500 flex items-center gap-1 mb-1 whitespace-nowrap overflow-hidden">
-                        <i class="fa-regular fa-calendar-check text-emerald-600 text-[10px]"></i>
-                        <span>Tgl Akhir</span>
-                    </label>
-                    <input type="date" id="endDateInput" onchange="applyFilters()"
-                        class="glass-input w-full min-w-0 px-1.5 py-1 text-[11px] sm:text-xs h-8 sm:h-9">
+                    <div class="glass-input flex items-center gap-1 px-2 py-0.5 h-8 sm:h-9 w-full min-w-0">
+                        <div class="flex items-center gap-1 w-full min-w-0 justify-center">
+                            <i class="fa-regular fa-calendar-minus text-emerald-600 text-[10px] flex-shrink-0"></i>
+                            <input type="date" id="startDateInput" onchange="applyFilters()" onclick="this.showPicker?.()" title="Tanggal Awal" placeholder="dd/mm/yyyy"
+                                class="w-full text-[10px] sm:text-xs bg-transparent border-0 font-semibold text-slate-800 focus:outline-none p-0 cursor-pointer min-w-0 text-center">
+                        </div>
+                        <span class="text-slate-400 font-extrabold text-[9px] uppercase px-0.5 flex-shrink-0">s/d</span>
+                        <div class="flex items-center gap-1 w-full min-w-0 justify-center">
+                            <i class="fa-regular fa-calendar-check text-emerald-600 text-[10px] flex-shrink-0"></i>
+                            <input type="date" id="endDateInput" onchange="applyFilters()" onclick="this.showPicker?.()" title="Tanggal Akhir" placeholder="dd/mm/yyyy"
+                                class="w-full text-[10px] sm:text-xs bg-transparent border-0 font-semibold text-slate-800 focus:outline-none p-0 cursor-pointer min-w-0 text-center">
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Type Filter -->
