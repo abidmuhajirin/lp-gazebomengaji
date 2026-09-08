@@ -26,8 +26,8 @@
                             50: '#f8fafc',
                             100: '#f1f5f9',
                             800: '#1e293b',
-                            900: '#000000',
-                            950: '#000000',
+                            900: '#0f172a',
+                            950: '#0f172a',
                         }
                     },
                     boxShadow: {
@@ -189,10 +189,10 @@
 
             <!-- Hero Action Buttons -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-sm mx-auto mb-14">
-                <a href="#rekening" class="w-full sm:w-auto framer-button-primary px-6 py-3 rounded-xl font-bold text-xs tracking-wide flex items-center justify-center gap-2">
+                <a href="#rekening" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-6 py-3 rounded-xl font-bold text-xs tracking-wide flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5">
                     <span>Salurkan Infaq Dakwah</span>
                 </a>
-                <a href="#anggaran" class="w-full sm:w-auto framer-button-secondary px-6 py-3 rounded-xl font-bold text-xs tracking-wide flex items-center justify-center gap-2">
+                <a href="#anggaran" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white shadow-md px-6 py-3 rounded-xl font-bold text-xs tracking-wide flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5">
                     <span>Rincian Dana</span>
                 </a>
             </div>
@@ -477,7 +477,7 @@
                     <div class="flex justify-between items-center text-xs text-slate-700 font-bold mb-2">
                         <span class="flex items-center gap-2">
                             <span>Terkumpul Bulan Ini</span>
-                            <span id="live-indicator" class="hidden text-[10px] bg-emerald-50 border border-emerald-200 text-emerald-700 px-2 py-0.5 rounded-full font-bold">● LIVE SHEET</span>
+                            <span id="live-indicator" class="hidden text-[10px] bg-emerald-50 border border-emerald-200 text-emerald-700 px-2 py-0.5 rounded-full font-bold">● UPDATE REAL TIME</span>
                         </span>
                         <span class="text-slate-900 font-black" id="collected-text">42% (Rp 3.360.000)</span>
                     </div>
@@ -658,7 +658,7 @@
                     <div class="bg-white p-3 rounded-2xl inline-block border border-slate-200 shadow-sm mb-3">
                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=GAZEBO-MENGAJI-DONASI-DAKWAH" alt="QRIS Gazebo Mengaji" class="w-40 h-40 mx-auto">
                     </div>
-                    <div class="text-xs font-bold text-slate-800">NMID: ID1029384756201</div>
+                    <div class="text-xs font-bold text-slate-900">NMID: ID1029384756201</div>
                     <div class="text-[11px] text-slate-600 font-medium mb-2">a.n. <strong class="text-slate-900 font-bold">GAZEBO MENGAJI INDONESIA</strong></div>
                     <p class="text-[10px] text-slate-500 font-medium">Scan QRIS melalui BCA Mobile, GoPay, OVO, Dana, LinkAja, ShopeePay, m-Banking dll.</p>
                 </div>
@@ -711,102 +711,138 @@
                 </div>
             </div>
 
-            <!-- Horizontal Scroll Container -->
+            <!-- Horizontal Scroll Container (E-Commerce Showcase Style) -->
             <div id="merch-slider" class="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-4">
                 
                 <!-- Product 1 -->
-                <div class="framer-card p-4 rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200">
+                <div class="framer-card rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200 overflow-hidden bg-white group">
                     <div>
-                        <div class="h-40 w-full rounded-xl bg-slate-100 border border-slate-200 overflow-hidden mb-3 relative flex items-center justify-center">
-                            <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=500&q=80" alt="Kaos Dakwah GM" class="w-full h-full object-cover">
+                        <!-- Full Width Image Frame -->
+                        <div class="h-44 w-full bg-slate-100 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=500&q=80" alt="Kaos Dakwah GM" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         </div>
-                        <h3 class="text-sm font-bold text-slate-900 mb-1">Kaos Minimalis GM</h3>
-                        <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Bahan Cotton Combed 30s premium, adem & nyaman dipakai kajian.</p>
+                        <div class="p-4">
+                            <h3 class="text-sm font-bold text-slate-900 mb-1">Kaos Minimalis GM</h3>
+                            <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Bahan Cotton Combed 30s premium, adem & nyaman dipakai kajian.</p>
+                        </div>
                     </div>
-                    <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                    <div class="p-4 pt-0 flex items-center justify-between mt-auto">
                         <span class="font-black text-slate-900 text-xs">Rp 120.000</span>
                         <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20saya%20tertarik%20membeli%20Kaos%20Gazebo%20Mengaji." target="_blank" 
-                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold">Pesan Product</a>
+                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5">
+                            <i class="fa-solid fa-cart-shopping text-[11px]"></i>
+                            <span>Pesan Product</span>
+                        </a>
                     </div>
                 </div>
 
                 <!-- Product 2 -->
-                <div class="framer-card p-4 rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200">
+                <div class="framer-card rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200 overflow-hidden bg-white group">
                     <div>
-                        <div class="h-40 w-full rounded-xl bg-slate-100 border border-slate-200 overflow-hidden mb-3 relative flex items-center justify-center">
-                            <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=500&q=80" alt="Tumbler Stainless" class="w-full h-full object-cover">
+                        <!-- Full Width Image Frame -->
+                        <div class="h-44 w-full bg-slate-100 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=500&q=80" alt="Tumbler Stainless" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         </div>
-                        <h3 class="text-sm font-bold text-slate-900 mb-1">Tumbler Stainless 500ml</h3>
-                        <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Tahan panas & dingin 12 jam dengan logo grafir Gazebo Mengaji.</p>
+                        <div class="p-4">
+                            <h3 class="text-sm font-bold text-slate-900 mb-1">Tumbler Stainless 500ml</h3>
+                            <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Tahan panas & dingin 12 jam dengan logo grafir Gazebo Mengaji.</p>
+                        </div>
                     </div>
-                    <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                    <div class="p-4 pt-0 flex items-center justify-between mt-auto">
                         <span class="font-black text-slate-900 text-xs">Rp 85.000</span>
                         <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20saya%20tertarik%20membeli%20Tumbler%20Gazebo%20Mengaji." target="_blank" 
-                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold">Pesan Product</a>
+                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5">
+                            <i class="fa-solid fa-cart-shopping text-[11px]"></i>
+                            <span>Pesan Product</span>
+                        </a>
                     </div>
                 </div>
 
                 <!-- Product 3 -->
-                <div class="framer-card p-4 rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200">
+                <div class="framer-card rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200 overflow-hidden bg-white group">
                     <div>
-                        <div class="h-40 w-full rounded-xl bg-slate-100 border border-slate-200 overflow-hidden mb-3 relative flex items-center justify-center">
-                            <img src="https://images.unsplash.com/photo-1597484661643-2f5fef640dd1?auto=format&fit=crop&w=500&q=80" alt="Totebag Kanvas" class="w-full h-full object-cover">
+                        <!-- Full Width Image Frame -->
+                        <div class="h-44 w-full bg-slate-100 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1597484661643-2f5fef640dd1?auto=format&fit=crop&w=500&q=80" alt="Totebag Kanvas" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         </div>
-                        <h3 class="text-sm font-bold text-slate-900 mb-1">Totebag Kanvas Kajian</h3>
-                        <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Tas kain kanvas tebal ramah lingkungan untuk membawa kitab & catatan.</p>
+                        <div class="p-4">
+                            <h3 class="text-sm font-bold text-slate-900 mb-1">Totebag Kanvas Kajian</h3>
+                            <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Tas kain kanvas tebal ramah lingkungan untuk membawa kitab & catatan.</p>
+                        </div>
                     </div>
-                    <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                    <div class="p-4 pt-0 flex items-center justify-between mt-auto">
                         <span class="font-black text-slate-900 text-xs">Rp 45.000</span>
                         <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20saya%20tertarik%20membeli%20Totebag%20Gazebo%20Mengaji." target="_blank" 
-                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold">Pesan Product</a>
+                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5">
+                            <i class="fa-solid fa-cart-shopping text-[11px]"></i>
+                            <span>Pesan Product</span>
+                        </a>
                     </div>
                 </div>
 
                 <!-- Product 4 -->
-                <div class="framer-card p-4 rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200">
+                <div class="framer-card rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200 overflow-hidden bg-white group">
                     <div>
-                        <div class="h-40 w-full rounded-xl bg-slate-100 border border-slate-200 overflow-hidden mb-3 relative flex items-center justify-center">
-                            <img src="https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=500&q=80" alt="Topi Snapback" class="w-full h-full object-cover">
+                        <!-- Full Width Image Frame -->
+                        <div class="h-44 w-full bg-slate-100 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=500&q=80" alt="Topi Snapback" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         </div>
-                        <h3 class="text-sm font-bold text-slate-900 mb-1">Topi Snapback GM</h3>
-                        <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Topi gaya simpel warna hitam dengan bordir logo huruf GM.</p>
+                        <div class="p-4">
+                            <h3 class="text-sm font-bold text-slate-900 mb-1">Topi Snapback GM</h3>
+                            <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Topi gaya simpel warna hitam dengan bordir logo huruf GM.</p>
+                        </div>
                     </div>
-                    <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                    <div class="p-4 pt-0 flex items-center justify-between mt-auto">
                         <span class="font-black text-slate-900 text-xs">Rp 65.000</span>
                         <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20saya%20tertarik%20membeli%20Topi%20Gazebo%20Mengaji." target="_blank" 
-                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold">Pesan Product</a>
+                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5">
+                            <i class="fa-solid fa-cart-shopping text-[11px]"></i>
+                            <span>Pesan Product</span>
+                        </a>
                     </div>
                 </div>
 
                 <!-- Product 5 -->
-                <div class="framer-card p-4 rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200">
+                <div class="framer-card rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200 overflow-hidden bg-white group">
                     <div>
-                        <div class="h-40 w-full rounded-xl bg-slate-100 border border-slate-200 overflow-hidden mb-3 relative flex items-center justify-center">
-                            <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=500&q=80" alt="Buku Dzikir" class="w-full h-full object-cover">
+                        <!-- Full Width Image Frame -->
+                        <div class="h-44 w-full bg-slate-100 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=500&q=80" alt="Buku Dzikir" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         </div>
-                        <h3 class="text-sm font-bold text-slate-900 mb-1">Buku Dzikir Pagi Petang</h3>
-                        <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Buku saku lengkap doa & dzikir harian sesuai sunnah.</p>
+                        <div class="p-4">
+                            <h3 class="text-sm font-bold text-slate-900 mb-1">Buku Dzikir Pagi Petang</h3>
+                            <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Buku saku lengkap doa & dzikir harian sesuai sunnah.</p>
+                        </div>
                     </div>
-                    <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                    <div class="p-4 pt-0 flex items-center justify-between mt-auto">
                         <span class="font-black text-slate-900 text-xs">Rp 25.000</span>
                         <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20saya%20tertarik%20membeli%20Buku%20Dzikir." target="_blank" 
-                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold">Pesan Product</a>
+                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5">
+                            <i class="fa-solid fa-cart-shopping text-[11px]"></i>
+                            <span>Pesan Product</span>
+                        </a>
                     </div>
                 </div>
 
                 <!-- Product 6 -->
-                <div class="framer-card p-4 rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200">
+                <div class="framer-card rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200 overflow-hidden bg-white group">
                     <div>
-                        <div class="h-40 w-full rounded-xl bg-slate-100 border border-slate-200 overflow-hidden mb-3 relative flex items-center justify-center">
-                            <img src="https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=500&q=80" alt="Mushaf Saku" class="w-full h-full object-cover">
+                        <!-- Full Width Image Frame -->
+                        <div class="h-44 w-full bg-slate-100 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=500&q=80" alt="Mushaf Saku" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         </div>
-                        <h3 class="text-sm font-bold text-slate-900 mb-1">Mushaf Saku Terjemah</h3>
-                        <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Al-Qur'an ukuran saku mudah dibawa ke mana pun.</p>
+                        <div class="p-4">
+                            <h3 class="text-sm font-bold text-slate-900 mb-1">Mushaf Saku Terjemah</h3>
+                            <p class="text-slate-600 text-[11px] font-medium mb-3 line-clamp-2">Al-Qur'an ukuran saku mudah dibawa ke mana pun.</p>
+                        </div>
                     </div>
-                    <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                    <div class="p-4 pt-0 flex items-center justify-between mt-auto">
                         <span class="font-black text-slate-900 text-xs">Rp 55.000</span>
                         <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20saya%20tertarik%20membeli%20Mushaf%20Saku." target="_blank" 
-                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold">Pesan Product</a>
+                           class="framer-button-secondary px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5">
+                            <i class="fa-solid fa-cart-shopping text-[11px]"></i>
+                            <span>Pesan Product</span>
+                        </a>
                     </div>
                 </div>
 
@@ -1092,14 +1128,14 @@
                 qrisContent.classList.remove('hidden');
                 bcaContent.classList.add('hidden');
                 
-                tabQris.className = "flex-1 py-2 text-xs font-black rounded-lg transition-all bg-white text-black shadow-sm";
-                tabBca.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all text-black";
+                tabQris.className = "flex-1 py-2 text-xs font-black rounded-lg transition-all bg-white text-slate-900 shadow-sm border border-slate-200/80";
+                tabBca.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900";
             } else {
                 bcaContent.classList.remove('hidden');
                 qrisContent.classList.add('hidden');
 
-                tabBca.className = "flex-1 py-2 text-xs font-black rounded-lg transition-all bg-white text-black shadow-sm";
-                tabQris.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all text-black";
+                tabBca.className = "flex-1 py-2 text-xs font-black rounded-lg transition-all bg-white text-slate-900 shadow-sm border border-slate-200/80";
+                tabQris.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900";
             }
         }
 
@@ -1449,10 +1485,86 @@
             updatePaymentDisplayNominal(100000);
             updateProgressBarColor(42);
 
+            // Fetch live progress data from Google Sheets if configured
+            fetchDonationDataFromSheet();
+
             // Periodic live popups
             setTimeout(showNextInfaqPopup, 3000);
             setInterval(showNextInfaqPopup, 14000);
         });
+
+        /**
+         * Real-time Google Sheets Fetcher for Progress Bar Widget
+         * 
+         * CARA PENGGUNAAN:
+         * 1. Buat Google Sheets Laporan Keuangan.
+         * 2. Di sel A1 isi Target (contoh: 8000000), di sel B1 isi Terkumpul (contoh: 3360000).
+         * 3. Klik File > Share > Publish to Web (Publikasikan ke Web).
+         * 4. Pilih Sheet yang berisi angka tersebut, pilih format 'Comma-separated values (.csv)'.
+         * 5. Salin URL publikasi tersebut dan tempelkan pada variabel GOOGLE_SHEET_CSV_URL di bawah ini.
+         */
+        const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSVkj204aC_7wZBDfAlnsfBg9WqCa3L7iWnqbbS36F6cDOqP2oWXP31HbFzWONjN2JFktMUPBAfxvlf/pub?output=csv';
+
+        async function fetchDonationDataFromSheet() {
+            if (!GOOGLE_SHEET_CSV_URL) return;
+
+            try {
+                const response = await fetch(GOOGLE_SHEET_CSV_URL);
+                if (!response.ok) return;
+
+                const csvText = await response.text();
+                const lines = csvText.trim().split('\n');
+                if (lines.length === 0) return;
+
+                let target = 0;
+                let collected = 0;
+
+                // Loop setiap baris CSV untuk melewati baris header/judul
+                for (let i = 0; i < lines.length; i++) {
+                    const rowStr = lines[i].replace(/"/g, '');
+                    const cols = rowStr.split(/[,;\t]/);
+
+                    if (cols.length >= 2) {
+                        // Helper pembersih format angka Indonesia (misal: "Rp 8.000.000" -> 8000000)
+                        const parseNum = (str) => {
+                            if (!str) return 0;
+                            // Hapus bagian desimal koma jika ada (misal: "8000000,00")
+                            const integerPart = str.split(',')[0];
+                            const digits = integerPart.replace(/[^0-9]/g, '');
+                            return parseInt(digits, 10) || 0;
+                        };
+
+                        const val1 = parseNum(cols[0]);
+                        const val2 = parseNum(cols[1]);
+
+                        if (val1 > 0) {
+                            target = val1;
+                            collected = val2;
+                            break; // Ditemukan baris angka yang valid
+                        }
+                    }
+                }
+
+                if (target > 0) {
+                    const percent = Math.min(100, Math.round((collected / target) * 100));
+                    const remaining = Math.max(0, target - collected);
+
+                    document.getElementById('target-display').innerText = `Rp ${new Intl.NumberFormat('id-ID').format(target)}`;
+                    document.getElementById('target-subtext').innerText = `Target: Rp ${new Intl.NumberFormat('id-ID').format(target)}`;
+                    document.getElementById('collected-text').innerText = `${percent}% (Rp ${new Intl.NumberFormat('id-ID').format(collected)})`;
+                    document.getElementById('remaining-text').innerText = `Sisa Kekurangan: Rp ${new Intl.NumberFormat('id-ID').format(remaining)}`;
+
+                    updateProgressBarColor(percent);
+
+                    const liveIndicator = document.getElementById('live-indicator');
+                    if (liveIndicator) {
+                        liveIndicator.classList.remove('hidden');
+                    }
+                }
+            } catch (err) {
+                console.warn('Gagal mengambil data donasi dari Google Sheets:', err);
+            }
+        }
     </script>
 </body>
 </html>
