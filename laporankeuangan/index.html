@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Transparansi Keuangan Dakwah</title>
+    <title>LAPKEU GAZEBO MENGAJI</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts Inter -->
@@ -14,6 +14,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- PapaParse for robust CSV parsing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- SheetJS for Native Excel (.xlsx) Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     
     <style>
         body { 
@@ -1155,42 +1157,148 @@
 
         function exportToExcel() {
             if (state.filteredTransactions.length === 0) {
-                showToast('Tidak ada data untuk diekspor', 'error');
+                showToast('Tidak ada data rincian transaksi untuk diekspor', 'error');
                 return;
             }
 
             const dataToExport = state.filteredTransactions.map(t => ({
-                Tanggal: t.tanggal,
-                Jenis: t.jenis,
-                Nama: t.nama,
-                Kategori: t.kategori,
-                Keterangan: t.keterangan,
-                Nominal: t.nominal,
-                Bukti: t.bukti
+                'Tanggal': t.tanggal,
+                'Jenis Kas': t.jenis === 'INFLOW' ? 'Donasi Masuk (+)' : 'Pengeluaran (-)',
+                'Nama / Donatur / Penerima': t.nama || 'Hamba Allah',
+                'Kategori': t.kategori || '-',
+                'Keterangan / Peruntukan': t.keterangan || '-',
+                'Nominal (Rp)': t.nominal,
+                'Link Bukti Nota': t.bukti || '-'
             }));
 
-            // Generate UTF-8 CSV compatible with Microsoft Excel (.csv/.xls)
-            const csv = Papa.unparse(dataToExport);
-            const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.setAttribute('href', url);
-            link.setAttribute('download', `Laporan_Keuangan_Gazebo_Mengaji_${new Date().toISOString().split('T')[0]}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast('Laporan Excel (.csv) berhasil diunduh', 'success');
+            try {
+                // Generate native Excel workbook (.xlsx) using SheetJS
+                const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Rincian Transaksi");
+
+                // Set column widths for optimal reading in Excel / Google Sheets
+                worksheet['!cols'] = [
+                    { wch: 14 }, // Tanggal
+                    { wch: 18 }, // Jenis Kas
+                    { wch: 28 }, // Nama / Donatur / Penerima
+                    { wch: 22 }, // Kategori
+                    { wch: 40 }, // Keterangan / Peruntukan
+                    { wch: 18 }, // Nominal
+                    { wch: 32 }  // Link Bukti Nota
+                ];
+
+                const filename = `Rincian_Transaksi_Gazebo_Mengaji_${new Date().toISOString().split('T')[0]}.xlsx`;
+                XLSX.writeFile(workbook, filename);
+                showToast('Rincian Transaksi (.xlsx) berhasil diunduh', 'success');
+            } catch (err) {
+                console.error('Gagal mengekspor file Excel:', err);
+                showToast('Terjadi kesalahan saat mengunduh file Excel', 'error');
+            }
         }
 
         function exportToPDF() {
             if (state.filteredTransactions.length === 0) {
-                showToast('Tidak ada data untuk dicetak/diekspor', 'error');
+                showToast('Tidak ada data rincian transaksi untuk dicetak/diekspor', 'error');
                 return;
             }
-            showToast('Membuka tampilan cetak PDF...', 'info');
-            setTimeout(() => {
+            showToast('Menyiapkan Laporan PDF Rincian Transaksi...', 'info');
+            
+            // Create a clean print frame specifically for Transaction Details Report
+            const printWindow = window.open('', '_blank');
+            if (!printWindow) {
                 window.print();
-            }, 300);
+                return;
+            }
+
+            let totalIn = 0;
+            let totalOut = 0;
+            state.filteredTransactions.forEach(t => {
+                if (t.jenis === 'INFLOW') totalIn += t.nominal;
+                else if (t.jenis === 'OUTFLOW') totalOut += t.nominal;
+            });
+
+            const rowsHtml = state.filteredTransactions.map((t, idx) => `
+                <tr>
+                    <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; text-align: center;">${idx + 1}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; white-space: nowrap;">${formatDate(t.tanggal)}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: ${t.jenis === 'INFLOW' ? '#047857' : '#be123c'}; white-space: nowrap;">
+                        ${t.jenis === 'INFLOW' ? 'Donasi Masuk' : 'Pengeluaran'}
+                    </td>
+                    <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">${escapeHtml(t.nama || 'Hamba Allah')}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${escapeHtml(t.kategori || '-')}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${escapeHtml(t.keterangan || '-')}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; text-align: right; font-family: monospace; font-weight: bold; white-space: nowrap;">${formatRupiah(t.nominal)}</td>
+                </tr>
+            `).join('');
+
+            const nowStr = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="id">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Laporan Rincian Transaksi - Gazebo Mengaji</title>
+                    <style>
+                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 24px; color: #0f172a; line-height: 1.4; }
+                        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #0f172a; padding-bottom: 12px; }
+                        .header h1 { margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 800; }
+                        .header p { margin: 4px 0 0; font-size: 12px; color: #475569; font-weight: 500; }
+                        .summary-box { display: flex; justify-content: space-between; margin-bottom: 20px; background: #f8fafc; padding: 12px 16px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 11px; }
+                        .summary-item { font-weight: 700; }
+                        table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 10px; }
+                        th { background: #0f172a; color: #ffffff; padding: 10px 8px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+                        .footer { margin-top: 28px; text-align: right; font-size: 10px; color: #64748b; border-t: 1px solid #e2e8f0; padding-top: 10px; }
+                        @media print {
+                            body { padding: 0; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>Laporan Rincian Transaksi Keuangan</h1>
+                        <p>Gazebo Mengaji &bull; Dicetak Pada: ${nowStr}</p>
+                    </div>
+
+                    <div class="summary-box">
+                        <span class="summary-item">Total Record: ${state.filteredTransactions.length} Transaksi</span>
+                        <span class="summary-item" style="color: #047857;">Total Donasi Masuk: ${formatRupiah(totalIn)}</span>
+                        <span class="summary-item" style="color: #be123c;">Total Pengeluaran: ${formatRupiah(totalOut)}</span>
+                        <span class="summary-item" style="color: #0f172a;">Saldo Bersih: ${formatRupiah(totalIn - totalOut)}</span>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 30px; text-align: center;">No</th>
+                                <th style="width: 80px;">Tanggal</th>
+                                <th style="width: 85px;">Jenis</th>
+                                <th style="width: 120px;">Nama / Donatur</th>
+                                <th style="width: 110px;">Kategori</th>
+                                <th>Keterangan / Peruntukan</th>
+                                <th style="width: 110px; text-align: right;">Nominal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rowsHtml}
+                        </tbody>
+                    </table>
+
+                    <div class="footer">
+                        <p>Dokumen ini dipublikasikan secara resmi melalui Portal Transparansi Keuangan Gazebo Mengaji</p>
+                    </div>
+
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                            setTimeout(function() { window.close(); }, 500);
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
         }
 
         function showToast(msg, type = 'info') {
