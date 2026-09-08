@@ -141,11 +141,10 @@
 </head>
 <body class="h-full antialiased flex flex-col min-h-screen relative overflow-x-hidden bg-slate-100 text-slate-800">
 
-    <!-- Glowing Background Ambient Orbs -->
-    <div class="fixed inset-0 pointer-events-none overflow-hidden -z-10 bg-gradient-to-br from-slate-100 via-emerald-50/40 to-teal-50/50">
-        <div class="absolute -top-40 -left-40 w-[550px] h-[550px] bg-emerald-300/30 rounded-full blur-[130px]"></div>
-        <div class="absolute top-1/3 -right-40 w-[550px] h-[550px] bg-teal-300/25 rounded-full blur-[130px]"></div>
-        <div class="absolute -bottom-40 left-1/3 w-[650px] h-[650px] bg-cyan-300/25 rounded-full blur-[140px]"></div>
+    <!-- Seamless Radial Ambient Background Glow (No Side Bands or Cropping Lines) -->
+    <div class="fixed inset-0 pointer-events-none -z-10 bg-slate-100" style="background-image: 
+        radial-gradient(ellipse at 50% -10%, rgba(16, 185, 129, 0.12) 0%, transparent 65%),
+        radial-gradient(ellipse at 50% 110%, rgba(16, 185, 129, 0.08) 0%, transparent 65%);">
     </div>
 
     <!-- Header Component -->
