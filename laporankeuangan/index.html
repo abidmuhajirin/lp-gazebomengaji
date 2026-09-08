@@ -358,9 +358,9 @@
             </div>
 
             <!-- Glass Compact Filter Toolbar -->
-            <div class="flex flex-wrap items-end gap-3 text-xs">
-                <!-- Search Input (Compact Glass) -->
-                <div class="w-full sm:w-48">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 text-xs">
+                <!-- Search Input -->
+                <div class="col-span-2 sm:col-span-3 lg:col-span-1">
                     <label class="text-[10px] uppercase font-black tracking-wider text-slate-500 block mb-1">Cari Transaksi</label>
                     <div class="relative">
                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
@@ -370,21 +370,21 @@
                 </div>
 
                 <!-- Date Start -->
-                <div class="w-1/2 sm:w-36">
+                <div>
                     <label class="text-[10px] uppercase font-black tracking-wider text-slate-500 block mb-1">Tanggal Awal</label>
                     <input type="date" id="startDateInput" onchange="applyFilters()"
                         class="glass-input w-full px-2.5 py-2 text-xs">
                 </div>
 
                 <!-- Date End -->
-                <div class="w-1/2 sm:w-36">
+                <div>
                     <label class="text-[10px] uppercase font-black tracking-wider text-slate-500 block mb-1">Tanggal Akhir</label>
                     <input type="date" id="endDateInput" onchange="applyFilters()"
                         class="glass-input w-full px-2.5 py-2 text-xs">
                 </div>
 
                 <!-- Type Filter -->
-                <div class="w-1/2 sm:w-36">
+                <div>
                     <label class="text-[10px] uppercase font-black tracking-wider text-slate-500 block mb-1">Jenis Kas</label>
                     <select id="typeFilter" onchange="applyFilters()"
                         class="glass-input w-full px-2.5 py-2 text-xs">
@@ -395,9 +395,9 @@
                 </div>
 
                 <!-- Category Filter & Reset -->
-                <div class="flex-1 min-w-[160px] flex gap-1.5">
+                <div class="flex gap-1.5 col-span-2 sm:col-span-1">
                     <div class="w-full">
-                        <label class="text-[10px] uppercase font-black tracking-wider text-slate-500 block mb-1">Kategori Pos</label>
+                        <label class="text-[10px] uppercase font-black tracking-wider text-slate-500 block mb-1">Kategori</label>
                         <select id="categoryFilter" onchange="applyFilters()"
                             class="glass-input w-full px-2.5 py-2 text-xs">
                             <option value="ALL">Semua Kategori</option>
@@ -405,7 +405,7 @@
                     </div>
 
                     <div class="self-end">
-                        <button onclick="resetFilters()" title="Reset Filter" class="glass-btn p-2 text-xs flex items-center justify-center">
+                        <button onclick="resetFilters()" title="Reset Filter" class="glass-btn h-[34px] w-[34px] text-xs flex items-center justify-center" aria-label="Reset Filter">
                             <i class="fa-solid fa-rotate-left"></i>
                         </button>
                     </div>
@@ -437,9 +437,15 @@
                 <!-- Loaded dynamically -->
             </div>
 
-            <!-- Table Record Summary -->
-            <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2 pt-2">
-                <div id="tableRecordCount" class="font-semibold">Menampilkan 0 transaksi</div>
+            <!-- Table Record Summary & Pagination Controls -->
+            <div class="flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 gap-3 pt-2">
+                <div id="tableRecordCount" class="font-semibold text-center md:text-left">Menampilkan 0 transaksi</div>
+                
+                <!-- Pagination Controls -->
+                <div id="paginationControls" class="flex items-center gap-1.5">
+                    <!-- Loaded dynamically in JS -->
+                </div>
+
                 <div class="flex items-center gap-1.5 text-emerald-700 font-semibold">
                     <i class="fa-solid fa-shield-check"></i>
                     <span>Tervalidasi Panitia Dakwah</span>
@@ -618,7 +624,7 @@
     </div>
 
     <script>
-        // Sample Simulation Data
+        // Sample Simulation Data (>8 items for testing pagination)
         const SAMPLE_DATA = [
             { id: 1, tanggal: '2026-03-01', jenis: 'INFLOW', kategori: 'Infak Harian', keterangan: 'Donasi Hamba Allah (Transfer BCA)', nominal: 2500000, bukti: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=500' },
             { id: 2, tanggal: '2026-03-02', jenis: 'OUTFLOW', kategori: 'Akomodasi & Transport', keterangan: 'Bensin & Tol Transport Ustadz Safari Dakwah', nominal: 450000, bukti: 'https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=500' },
@@ -627,7 +633,13 @@
             { id: 5, tanggal: '2026-03-05', jenis: 'OUTFLOW', kategori: 'Konsumsi Jamaah', keterangan: 'Snack & Air Mineral 150 Box Kajian Rutin Kamis Malam', nominal: 850000, bukti: 'https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=500' },
             { id: 6, tanggal: '2026-03-06', jenis: 'OUTFLOW', kategori: 'Cetak Brosur & Banner', keterangan: 'Cetak Banner Backdrop & Flysheet Jadwal Kajian Bulan Maret', nominal: 280000, bukti: '' },
             { id: 7, tanggal: '2026-03-07', jenis: 'INFLOW', kategori: 'Sponsor Kegiatan', keterangan: 'H. Ahmad - Hamba Allah', nominal: 5000000, bukti: '' },
-            { id: 8, tanggal: '2026-03-08', jenis: 'OUTFLOW', kategori: 'Kebersihan & Operasional', keterangan: 'Honor Petugas Kebersihan & Listrik Posko Dakwah', nominal: 600000, bukti: '' }
+            { id: 8, tanggal: '2026-03-08', jenis: 'OUTFLOW', kategori: 'Kebersihan & Operasional', keterangan: 'Honor Petugas Kebersihan & Listrik Posko Dakwah', nominal: 600000, bukti: '' },
+            { id: 9, tanggal: '2026-03-09', jenis: 'INFLOW', kategori: 'Infak Jumat', keterangan: 'Hasil Perolehan Kotak Infak Salat Jumat', nominal: 3200000, bukti: '' },
+            { id: 10, tanggal: '2026-03-10', jenis: 'OUTFLOW', kategori: 'Konsumsi Jamaah', keterangan: 'Pembelian Kurma & Air Mineral Kajian Maghrib', nominal: 310000, bukti: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=500' },
+            { id: 11, tanggal: '2026-03-11', jenis: 'INFLOW', kategori: 'Zakat Maal', keterangan: 'Donasi Zakat H. Usman', nominal: 4000000, bukti: '' },
+            { id: 12, tanggal: '2026-03-12', jenis: 'OUTFLOW', kategori: 'Akomodasi & Transport', keterangan: 'Bis Kunjungan Santri & Pengurus Dakwah', nominal: 1200000, bukti: '' },
+            { id: 13, tanggal: '2026-03-13', jenis: 'INFLOW', kategori: 'Infak Harian', keterangan: 'Donasi QRIS Jamaah', nominal: 850000, bukti: '' },
+            { id: 14, tanggal: '2026-03-14', jenis: 'OUTFLOW', kategori: 'Kebersihan & Operasional', keterangan: 'Pembelian Perlengkapan Kebersihan Posko', nominal: 180000, bukti: '' }
         ];
 
         // Application State
@@ -637,7 +649,9 @@
             sheetUrl: '',
             transactions: [],
             filteredTransactions: [],
-            categoryChart: null
+            categoryChart: null,
+            currentPage: 1,
+            itemsPerPage: 8
         };
 
         // DOM Ready Initializer
@@ -791,64 +805,69 @@
                 return matchesSearch && matchesType && matchesCategory && matchesStartDate && matchesEndDate;
             });
 
+            state.currentPage = 1; // Reset to first page on filter change
             renderTable();
             calculateSummaries();
             renderCharts();
         }
 
-        function resetFilters() {
-            if (document.getElementById('searchInput')) document.getElementById('searchInput').value = '';
-            if (document.getElementById('startDateInput')) document.getElementById('startDateInput').value = '';
-            if (document.getElementById('endDateInput')) document.getElementById('endDateInput').value = '';
-            if (document.getElementById('typeFilter')) document.getElementById('typeFilter').value = 'ALL';
-            if (document.getElementById('categoryFilter')) document.getElementById('categoryFilter').value = 'ALL';
-            applyFilters();
-        }
-
         function calculateSummaries() {
-            let totalIn = 0;
-            let countIn = 0;
-            let totalOut = 0;
-            let countOut = 0;
+            const list = state.filteredTransactions;
+            let inflow = 0;
+            let outflow = 0;
+            let inflowCount = 0;
+            let outflowCount = 0;
 
-            state.transactions.forEach(t => {
+            list.forEach(t => {
                 if (t.jenis === 'INFLOW') {
-                    totalIn += t.nominal;
-                    countIn++;
-                } else {
-                    totalOut += t.nominal;
-                    countOut++;
+                    inflow += t.nominal;
+                    inflowCount++;
+                } else if (t.jenis === 'OUTFLOW') {
+                    outflow += t.nominal;
+                    outflowCount++;
                 }
             });
 
-            const netBalance = totalIn - totalOut;
-            const absorption = totalIn > 0 ? Math.min(100, Math.round((totalOut / totalIn) * 100)) : 0;
+            const netBalance = inflow - outflow;
+            const rate = inflow > 0 ? Math.min(100, Math.round((outflow / inflow) * 100)) : 0;
 
-            const elemTotalIn = document.getElementById('totalInflow');
-            const elemInflowCount = document.getElementById('inflowCount');
-            const elemTotalOut = document.getElementById('totalOutflow');
-            const elemOutflowCount = document.getElementById('outflowCount');
-            const elemNetBalance = document.getElementById('netBalance');
-            const elemAbsorption = document.getElementById('absorptionRate');
-            const elemProgress = document.getElementById('progressBar');
+            const elTotalInflow = document.getElementById('totalInflow');
+            const elInflowCount = document.getElementById('inflowCount');
+            const elTotalOutflow = document.getElementById('totalOutflow');
+            const elOutflowCount = document.getElementById('outflowCount');
+            const elNetBalance = document.getElementById('netBalance');
+            const elAbsorptionRate = document.getElementById('absorptionRate');
+            const elProgressBar = document.getElementById('progressBar');
 
-            if (elemTotalIn) elemTotalIn.innerText = formatRupiah(totalIn);
-            if (elemInflowCount) elemInflowCount.innerText = `${countIn} transaksi donasi`;
-            if (elemTotalOut) elemTotalOut.innerText = formatRupiah(totalOut);
-            if (elemOutflowCount) elemOutflowCount.innerText = `${countOut} alokasi kegiatan`;
-            if (elemNetBalance) elemNetBalance.innerText = formatRupiah(netBalance);
-            if (elemAbsorption) elemAbsorption.innerText = `${absorption}%`;
-            if (elemProgress) elemProgress.style.width = `${absorption}%`;
+            if (elTotalInflow) elTotalInflow.innerText = formatRupiah(inflow);
+            if (elInflowCount) elInflowCount.innerText = `${inflowCount} transaksi donasi`;
+            if (elTotalOutflow) elTotalOutflow.innerText = formatRupiah(outflow);
+            if (elOutflowCount) elOutflowCount.innerText = `${outflowCount} alokasi kegiatan`;
+            if (elNetBalance) elNetBalance.innerText = formatRupiah(netBalance);
+            if (elAbsorptionRate) elAbsorptionRate.innerText = `${rate}%`;
+            if (elProgressBar) elProgressBar.style.width = `${rate}%`;
+        }
+
+        function changePage(newPage) {
+            const totalPages = Math.ceil(state.filteredTransactions.length / state.itemsPerPage) || 1;
+            if (newPage < 1 || newPage > totalPages) return;
+            state.currentPage = newPage;
+            renderTable();
         }
 
         function renderTable() {
             const tbody = document.getElementById('transactionTableBody');
             const mobileList = document.getElementById('transactionMobileList');
+            const paginationEl = document.getElementById('paginationControls');
             if (!tbody) return;
+            
             tbody.innerHTML = '';
             if (mobileList) mobileList.innerHTML = '';
 
-            if (state.filteredTransactions.length === 0) {
+            const totalItems = state.filteredTransactions.length;
+            const totalPages = Math.ceil(totalItems / state.itemsPerPage) || 1;
+
+            if (totalItems === 0) {
                 const emptyHtml = `
                     <div class="text-center py-10 text-slate-500">
                         <i class="fa-solid fa-folder-open text-2xl mb-2 block text-slate-400"></i>
@@ -860,10 +879,16 @@
 
                 const recordCount = document.getElementById('tableRecordCount');
                 if (recordCount) recordCount.innerText = 'Menampilkan 0 transaksi';
+                if (paginationEl) paginationEl.innerHTML = '';
                 return;
             }
 
-            state.filteredTransactions.forEach(item => {
+            // Slice data for pagination
+            const startIdx = (state.currentPage - 1) * state.itemsPerPage;
+            const endIdx = Math.min(startIdx + state.itemsPerPage, totalItems);
+            const pageItems = state.filteredTransactions.slice(startIdx, endIdx);
+
+            pageItems.forEach(item => {
                 const isInflow = item.jenis === 'INFLOW';
                 const typeBadge = isInflow 
                     ? `<span class="glass-badge-in px-2.5 py-1 text-[11px] font-bold inline-flex items-center gap-1"><i class="fa-solid fa-arrow-down text-[10px]"></i> Donasi</span>`
@@ -898,7 +923,7 @@
                 `;
                 tbody.appendChild(tr);
 
-                // Mobile Card View (No horizontal scroll required)
+                // Mobile Card View
                 if (mobileList) {
                     const mobileProofBtn = item.bukti 
                         ? `<button onclick="openImageModal(${item.id})" class="glass-btn px-2 py-1 text-[10px] font-bold text-emerald-700 flex items-center gap-1 border-emerald-500/30 hover:bg-emerald-50"><i class="fa-solid fa-receipt"></i> Nota</button>`
@@ -930,9 +955,50 @@
                 }
             });
 
+            // Update record status string
             const recordCount = document.getElementById('tableRecordCount');
             if (recordCount) {
-                recordCount.innerText = `Menampilkan ${state.filteredTransactions.length} dari ${state.transactions.length} transaksi`;
+                recordCount.innerText = `Menampilkan ${startIdx + 1}–${endIdx} dari ${totalItems} transaksi`;
+            }
+
+            // Render Pagination Buttons
+            if (paginationEl) {
+                let pButtons = '';
+                
+                // Prev button
+                const prevDisabled = state.currentPage === 1;
+                pButtons += `
+                    <button onclick="changePage(${state.currentPage - 1})" ${prevDisabled ? 'disabled' : ''} 
+                        class="glass-btn px-2.5 py-1 text-xs font-bold ${prevDisabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-slate-100'}">
+                        <i class="fa-solid fa-chevron-left text-[10px]"></i>
+                    </button>
+                `;
+
+                // Page numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    if (i === state.currentPage) {
+                        pButtons += `
+                            <button class="glass-btn-primary px-3 py-1 text-xs font-black">${i}</button>
+                        `;
+                    } else if (i === 1 || i === totalPages || Math.abs(i - state.currentPage) <= 1) {
+                        pButtons += `
+                            <button onclick="changePage(${i})" class="glass-btn px-3 py-1 text-xs font-bold text-slate-700 hover:text-emerald-700">${i}</button>
+                        `;
+                    } else if (Math.abs(i - state.currentPage) === 2) {
+                        pButtons += `<span class="text-slate-400 font-bold px-0.5">...</span>`;
+                    }
+                }
+
+                // Next button
+                const nextDisabled = state.currentPage === totalPages;
+                pButtons += `
+                    <button onclick="changePage(${state.currentPage + 1})" ${nextDisabled ? 'disabled' : ''} 
+                        class="glass-btn px-2.5 py-1 text-xs font-bold ${nextDisabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-slate-100'}">
+                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </button>
+                `;
+
+                paginationEl.innerHTML = pButtons;
             }
         }
 
