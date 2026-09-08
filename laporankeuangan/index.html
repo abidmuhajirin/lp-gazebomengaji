@@ -634,15 +634,32 @@
     </div>
 
     <script>
-        // Gantilah URL di bawah ini dengan Link Publish CSV Google Sheets kamu:
-        const DEFAULT_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQy5mvPI6UTy2Z4YS4otiGstAV-4F01eP1C71Fvk8pj0Ctx_Ws261QWtqFyXVeT0JGXAGtyhzaBE79N/pub?output=csv';
+        // Sample Simulation Data (>8 items for testing pagination)
+        const SAMPLE_DATA = [
+            { id: 1, tanggal: '2026-03-01', jenis: 'INFLOW', kategori: 'Infak Harian', keterangan: 'Donasi Hamba Allah (Transfer BCA)', nominal: 2500000, bukti: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=500' },
+            { id: 2, tanggal: '2026-03-02', jenis: 'OUTFLOW', kategori: 'Akomodasi & Transport', keterangan: 'Bensin & Tol Transport Ustadz Safari Dakwah', nominal: 450000, bukti: 'https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=500' },
+            { id: 3, tanggal: '2026-03-03', jenis: 'INFLOW', kategori: 'Sedekah Subuh', keterangan: 'Hamba Allah - Kotak Infaq Masjid', nominal: 1750000, bukti: '' },
+            { id: 4, tanggal: '2026-03-04', jenis: 'OUTFLOW', kategori: 'Sound System', keterangan: 'Sewa Wireless Microphone & Clip-on Tambahan untuk Pengajian Agung', nominal: 350000, bukti: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=500' },
+            { id: 5, tanggal: '2026-03-05', jenis: 'OUTFLOW', kategori: 'Konsumsi Jamaah', keterangan: 'Snack & Air Mineral 150 Box Kajian Rutin Kamis Malam', nominal: 850000, bukti: 'https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=500' },
+            { id: 6, tanggal: '2026-03-06', jenis: 'OUTFLOW', kategori: 'Cetak Brosur & Banner', keterangan: 'Cetak Banner Backdrop & Flysheet Jadwal Kajian Bulan Maret', nominal: 280000, bukti: '' },
+            { id: 7, tanggal: '2026-03-07', jenis: 'INFLOW', kategori: 'Sponsor Kegiatan', keterangan: 'H. Ahmad - Hamba Allah', nominal: 5000000, bukti: '' },
+            { id: 8, tanggal: '2026-03-08', jenis: 'OUTFLOW', kategori: 'Kebersihan & Operasional', keterangan: 'Honor Petugas Kebersihan & Listrik Posko Dakwah', nominal: 600000, bukti: '' },
+            { id: 9, tanggal: '2026-03-09', jenis: 'INFLOW', kategori: 'Infak Jumat', keterangan: 'Hasil Perolehan Kotak Infak Salat Jumat', nominal: 3200000, bukti: '' },
+            { id: 10, tanggal: '2026-03-10', jenis: 'OUTFLOW', kategori: 'Konsumsi Jamaah', keterangan: 'Pembelian Kurma & Air Mineral Kajian Maghrib', nominal: 310000, bukti: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=500' },
+            { id: 11, tanggal: '2026-03-11', jenis: 'INFLOW', kategori: 'Zakat Maal', keterangan: 'Donasi Zakat H. Usman', nominal: 4000000, bukti: '' },
+            { id: 12, tanggal: '2026-03-12', jenis: 'OUTFLOW', kategori: 'Akomodasi & Transport', keterangan: 'Bis Kunjungan Santri & Pengurus Dakwah', nominal: 1200000, bukti: '' },
+            { id: 13, tanggal: '2026-03-13', jenis: 'INFLOW', kategori: 'Infak Harian', keterangan: 'Donasi QRIS Jamaah', nominal: 850000, bukti: '' },
+            { id: 14, tanggal: '2026-03-14', jenis: 'OUTFLOW', kategori: 'Kebersihan & Operasional', keterangan: 'Pembelian Perlengkapan Kebersihan Posko', nominal: 180000, bukti: '' }
         ];
+
+        // Masukkan link CSV Google Sheets kamu di dalam tanda petik di bawah ini:
+        const DEFAULT_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQy5mvPI6UTy2Z4YS4otiGstAV-4F01eP1C71Fvk8pj0Ctx_Ws261QWtqFyXVeT0JGXAGtyhzaBE79N/pub?output=csv';
 
         // Application State
         const state = {
             isAdmin: false,
-            isDemo: true,
-            sheetUrl: '',
+            isDemo: false, // Ubah jadi false agar tidak dianggap demo lagi
+            sheetUrl: localStorage.getItem('dakwah_sheet_url') || DEFAULT_SHEET_URL, // Mengambil link spreadsheet kamu
             transactions: [],
             filteredTransactions: [],
             categoryChart: null,
