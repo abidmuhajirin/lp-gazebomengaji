@@ -137,7 +137,7 @@
 <body class="min-h-screen bg-slate-50 text-slate-900 selection:bg-slate-900 selection:text-white relative overflow-x-hidden">
 
     <!-- Live Infaq Pop-up Notification with Masked Donor Name -->
-    <div id="infaq-popup" class="fixed bottom-20 md:bottom-6 left-4 md:left-6 z-50 max-w-sm hidden">
+    <div id="infaq-popup" onclick="dismissPopup()" class="fixed bottom-4 left-4 md:bottom-6 md:left-6 z-50 max-w-sm hidden cursor-pointer select-none">
         <div class="bg-white border border-slate-200 p-3.5 rounded-2xl shadow-xl flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 font-bold text-sm">
                 <i class="fa-solid fa-heart"></i>
@@ -145,13 +145,12 @@
             <div class="flex-1 min-w-0">
                 <div class="text-[11px] font-bold text-slate-900 flex items-center justify-between">
                     <span id="popup-donor-name" class="truncate">Alhamdulillah, Hamba Allah</span>
-                    <span id="popup-time" class="text-[9px] text-slate-500 font-medium ml-2 shrink-0">Baru saja</span>
                 </div>
                 <div class="text-[11px] text-slate-700 font-medium">
                     Telah berinfaq <strong id="popup-amount" class="text-emerald-700 font-extrabold">Rp 100.000</strong>
                 </div>
             </div>
-            <button onclick="dismissPopup()" class="text-slate-400 hover:text-slate-600 text-xs p-1">
+            <button class="text-slate-400 hover:text-slate-600 text-xs p-1">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
@@ -1162,11 +1161,11 @@
 
         // Simulated Live Infaq Popups
         const recentDonations = [
-            { name: "Hamba Allah", amount: 50000, time: "2 menit lalu" },
-            { name: "Ahmad Fauzi", amount: 100000, time: "5 menit lalu" },
-            { name: "Hamba Allah", amount: 250000, time: "12 menit lalu" },
-            { name: "Ibu Nurul", amount: 500000, time: "18 menit lalu" },
-            { name: "Rizal Arifin", amount: 150000, time: "30 menit lalu" }
+            { name: "Hamba Allah", amount: 50000 },
+            { name: "Ahmad Fauzi", amount: 100000 },
+            { name: "Hamba Allah", amount: 250000 },
+            { name: "Ibu Nurul", amount: 500000 },
+            { name: "Rizal Arifin", amount: 150000 }
         ];
 
         let popupIndex = 0;
@@ -1175,13 +1174,11 @@
             const popup = document.getElementById('infaq-popup');
             const donorEl = document.getElementById('popup-donor-name');
             const amountEl = document.getElementById('popup-amount');
-            const timeEl = document.getElementById('popup-time');
 
             const item = recentDonations[popupIndex];
             const masked = censorName(item.name);
             donorEl.innerText = `Alhamdulillah, ${masked}`;
             amountEl.innerText = `Rp ${new Intl.NumberFormat('id-ID').format(item.amount)}`;
-            timeEl.innerText = item.time;
 
             popup.classList.remove('hidden', 'animate-popup-out');
             popup.classList.add('animate-popup-in');
