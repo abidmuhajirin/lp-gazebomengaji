@@ -413,7 +413,8 @@
             </div>
 
             <!-- Glass Transaction Table Container -->
-            <div class="glass-panel-subtle rounded-2xl overflow-x-auto p-1">
+            <!-- Desktop Table View -->
+            <div class="hidden sm:block glass-panel-subtle rounded-2xl overflow-x-auto p-1">
                 <table class="w-full text-left border-collapse text-xs">
                     <thead>
                         <tr class="text-slate-500 font-black uppercase text-[10px] tracking-wider border-b border-slate-200/80">
@@ -429,6 +430,11 @@
                         <!-- Loaded dynamically -->
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Mobile Card View (No horizontal scroll needed) -->
+            <div id="transactionMobileList" class="sm:hidden space-y-3">
+                <!-- Loaded dynamically -->
             </div>
 
             <!-- Table Record Summary -->
@@ -837,27 +843,27 @@
 
         function renderTable() {
             const tbody = document.getElementById('transactionTableBody');
+            const mobileList = document.getElementById('transactionMobileList');
             if (!tbody) return;
             tbody.innerHTML = '';
+            if (mobileList) mobileList.innerHTML = '';
 
             if (state.filteredTransactions.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="text-center py-10 text-slate-500">
-                            <i class="fa-solid fa-folder-open text-2xl mb-2 block text-slate-400"></i>
-                            Tidak ada transaksi yang cocok dengan pencarian / filter.
-                        </td>
-                    </tr>
+                const emptyHtml = `
+                    <div class="text-center py-10 text-slate-500">
+                        <i class="fa-solid fa-folder-open text-2xl mb-2 block text-slate-400"></i>
+                        Tidak ada transaksi yang cocok dengan pencarian / filter.
+                    </div>
                 `;
+                tbody.innerHTML = `<tr><td colspan="6">${emptyHtml}</td></tr>`;
+                if (mobileList) mobileList.innerHTML = emptyHtml;
+
                 const recordCount = document.getElementById('tableRecordCount');
                 if (recordCount) recordCount.innerText = 'Menampilkan 0 transaksi';
                 return;
             }
 
             state.filteredTransactions.forEach(item => {
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-50/80 transition-colors border-b border-slate-200/50';
-
                 const isInflow = item.jenis === 'INFLOW';
                 const typeBadge = isInflow 
                     ? `<span class="glass-badge-in px-2.5 py-1 text-[11px] font-bold inline-flex items-center gap-1"><i class="fa-solid fa-arrow-down text-[10px]"></i> Donasi</span>`
@@ -875,6 +881,9 @@
                     ? `<button onclick="openDetailModal(${item.id})" class="text-emerald-600 hover:underline text-[11px] font-semibold ml-1.5 inline-block">Detail</button>`
                     : '';
 
+                // Desktop Table Row
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50/80 transition-colors border-b border-slate-200/50';
                 tr.innerHTML = `
                     <td class="p-3.5 pl-4 font-mono font-medium text-slate-600 whitespace-nowrap">${formatDate(item.tanggal)}</td>
                     <td class="p-3.5 whitespace-nowrap">${typeBadge}</td>
@@ -887,8 +896,38 @@
                     </td>
                     <td class="p-3.5 text-center whitespace-nowrap">${proofBtn}</td>
                 `;
-
                 tbody.appendChild(tr);
+
+                // Mobile Card View (No horizontal scroll required)
+                if (mobileList) {
+                    const mobileProofBtn = item.bukti 
+                        ? `<button onclick="openImageModal(${item.id})" class="glass-btn px-2 py-1 text-[10px] font-bold text-emerald-700 flex items-center gap-1 border-emerald-500/30 hover:bg-emerald-50"><i class="fa-solid fa-receipt"></i> Nota</button>`
+                        : '';
+
+                    const card = document.createElement('div');
+                    card.className = 'glass-panel p-4 space-y-2.5 border border-slate-200/80 bg-white/80 shadow-xs';
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between gap-2 border-b border-slate-200/60 pb-2">
+                            <div class="flex items-center gap-2">
+                                ${typeBadge}
+                                <span class="font-mono font-semibold text-slate-500 text-[11px]">${formatDate(item.tanggal)}</span>
+                            </div>
+                            ${mobileProofBtn}
+                        </div>
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-1">
+                                <span class="font-black text-slate-900 text-xs">${escapeHtml(item.kategori || '-')}</span>
+                                <span class="font-mono font-black text-sm whitespace-nowrap ${isInflow ? 'text-emerald-600' : 'text-slate-900'}">
+                                    ${isInflow ? '+' : '-'} ${formatRupiah(item.nominal)}
+                                </span>
+                            </div>
+                            <p class="text-slate-600 text-xs leading-relaxed break-words mt-1">
+                                ${shortDesc} ${showMoreBtn}
+                            </p>
+                        </div>
+                    `;
+                    mobileList.appendChild(card);
+                }
             });
 
             const recordCount = document.getElementById('tableRecordCount');
