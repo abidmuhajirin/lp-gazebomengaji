@@ -237,8 +237,8 @@
                 <!-- Pilar 1: Rabu Malam -->
                 <div class="framer-card p-6 rounded-2xl flex flex-col justify-between border border-slate-200 h-full">
                     <div class="flex flex-col flex-1">
-                        <!-- Thumbnail Image (Fixed Container Dimensions: 100% width x 160px height on all screens) -->
-                        <div class="w-full h-40 rounded-xl bg-slate-100 overflow-hidden mb-4 relative shadow-inner shrink-0">
+                        <!-- 16:9 Landscape Ratio (Compact & Ideal UI Proportion) -->
+                        <div class="w-full aspect-video rounded-xl bg-slate-100 overflow-hidden mb-4 relative shadow-inner shrink-0">
                             <img src="https://images.unsplash.com/photo-1585036156171-384164a8c675?auto=format&fit=crop&w=600&q=80" alt="Thumbnail Kajian Rutin Malam" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
                         </div>
 
@@ -306,8 +306,8 @@
                 <!-- Pilar 2: Tahsin Ibu-Ibu -->
                 <div class="framer-card p-6 rounded-2xl flex flex-col justify-between border border-slate-200 h-full">
                     <div class="flex flex-col flex-1">
-                        <!-- Thumbnail Image (Fixed Container Dimensions: 100% width x 160px height on all screens) -->
-                        <div class="w-full h-40 rounded-xl bg-slate-100 overflow-hidden mb-4 relative shadow-inner shrink-0">
+                        <!-- 16:9 Landscape Ratio (Compact & Ideal UI Proportion) -->
+                        <div class="w-full aspect-video rounded-xl bg-slate-100 overflow-hidden mb-4 relative shadow-inner shrink-0">
                             <img src="https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=600&q=80" alt="Thumbnail Tahsin Ibu-Ibu" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
                         </div>
 
@@ -375,8 +375,8 @@
                 <!-- Pilar 3: Bahasa Arab Anak -->
                 <div class="framer-card p-6 rounded-2xl flex flex-col justify-between border border-slate-200 h-full">
                     <div class="flex flex-col flex-1">
-                        <!-- Thumbnail Image (Fixed Container Dimensions: 100% width x 160px height on all screens) -->
-                        <div class="w-full h-40 rounded-xl bg-slate-100 overflow-hidden mb-4 relative shadow-inner shrink-0">
+                        <!-- 16:9 Landscape Ratio (Compact & Ideal UI Proportion) -->
+                        <div class="w-full aspect-video rounded-xl bg-slate-100 overflow-hidden mb-4 relative shadow-inner shrink-0">
                             <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=600&q=80" alt="Thumbnail Bahasa Arab Anak" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
                         </div>
 
@@ -444,8 +444,8 @@
                 <!-- Pilar 4: TPA Anak Gratis -->
                 <div class="framer-card p-6 rounded-2xl flex flex-col justify-between border border-slate-200 h-full">
                     <div class="flex flex-col flex-1">
-                        <!-- Thumbnail Image (Fixed Container Dimensions: 100% width x 160px height on all screens) -->
-                        <div class="w-full h-40 rounded-xl bg-slate-100 overflow-hidden mb-4 relative shadow-inner shrink-0">
+                        <!-- 16:9 Landscape Ratio (Compact & Ideal UI Proportion) -->
+                        <div class="w-full aspect-video rounded-xl bg-slate-100 overflow-hidden mb-4 relative shadow-inner shrink-0">
                             <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=600&q=80" alt="Thumbnail TPA Anak Gratis" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
                         </div>
 
@@ -515,33 +515,38 @@
 
         <!-- Rincian Anggaran Section -->
         <section id="anggaran" class="max-w-4xl mx-auto px-4 pt-20">
-            <div class="framer-card p-6 md:p-8 rounded-3xl relative border border-slate-200">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+            <div class="framer-card p-5 sm:p-8 rounded-3xl relative border border-slate-200">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-slate-100">
                     <div>
                         <span class="text-[11px] font-extrabold tracking-widest text-slate-500 uppercase">Transparansi Dana</span>
                         <h2 class="text-xl md:text-2xl font-black text-slate-900 mt-0.5">Kebutuhan Operasional Bulanan</h2>
                     </div>
-                    <div class="text-left md:text-right">
-                        <div class="text-xs text-slate-500 font-semibold">Dana Terkumpul Saat Ini</div>
-                        <div class="text-2xl font-black text-emerald-700 tracking-tight" id="target-display">Rp 5.575.000</div>
+                    <div class="bg-slate-50 border border-slate-200/80 p-3 rounded-2xl flex flex-row sm:flex-col justify-between items-center sm:items-end shrink-0">
+                        <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Dana Terkumpul Saat Ini</div>
+                        <div class="text-lg sm:text-2xl font-black text-emerald-700 tracking-tight" id="target-display">Rp 5.575.000</div>
                     </div>
                 </div>
 
                 <!-- Monthly Dynamic Progress Bar -->
-                <div class="py-6 border-b border-slate-100">
-                    <div class="flex justify-between items-center text-xs text-slate-700 font-bold mb-2">
-                        <span>Pencapaian Infaq</span>
-                        <span class="text-slate-900 font-black" id="collected-text">6% (Kebutuhan Bulanan: Rp 8.000.000)</span>
+                <div class="py-6 border-b border-slate-100 space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs text-slate-700 font-bold">
+                        <span class="text-slate-500 text-[10px] uppercase tracking-wider font-extrabold">Pencapaian Infaq</span>
+                        <span class="text-slate-900 font-black text-xs sm:text-sm" id="collected-text">6% (Kebutuhan Bulanan: Rp 8.000.000)</span>
                     </div>
                     
                     <!-- Progress track -->
-                    <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden border border-slate-200 p-0.5">
+                    <div class="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200/80 p-0.5">
                         <div id="progress-bar-fill" class="h-full rounded-full transition-all duration-1000 bg-rose-500" style="width: 6%;"></div>
                     </div>
 
-                    <div class="flex justify-between text-[11px] text-slate-600 font-medium mt-2">
-                        <span id="remaining-text">Sisa Kekurangan: Rp 90.425.000</span>
-                        <span id="target-subtext">Target Dana: Rp 96.000.000</span>
+                    <!-- Responsive Mobile-Friendly Sub-Stats Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] pt-1">
+                        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 font-bold text-slate-800 text-left">
+                            <span id="remaining-text">Sisa Kekurangan: Rp 90.425.000</span>
+                        </div>
+                        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 font-bold text-slate-800 text-left sm:text-right">
+                            <span id="target-subtext">Target Dana: Rp 96.000.000</span>
+                        </div>
                     </div>
                 </div>
 
@@ -768,8 +773,8 @@
                 <!-- Product 1 -->
                 <div class="framer-card rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200 overflow-hidden bg-white group">
                     <div>
-                        <!-- Full Width Image Frame -->
-                        <div class="h-44 w-full bg-slate-100 overflow-hidden relative">
+                        <!-- Full Width 1:1 Square Image Frame -->
+                        <div class="w-full aspect-square bg-slate-100 overflow-hidden relative">
                             <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=500&q=80" alt="Kaos Dakwah GM" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         </div>
                         <div class="p-4">
@@ -790,8 +795,8 @@
                 <!-- Product 2 -->
                 <div class="framer-card rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200 overflow-hidden bg-white group">
                     <div>
-                        <!-- Full Width Image Frame -->
-                        <div class="h-44 w-full bg-slate-100 overflow-hidden relative">
+                        <!-- Full Width 1:1 Square Image Frame -->
+                        <div class="w-full aspect-square bg-slate-100 overflow-hidden relative">
                             <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=500&q=80" alt="Tumbler Stainless" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         </div>
                         <div class="p-4">
@@ -812,8 +817,8 @@
                 <!-- Product 3 -->
                 <div class="framer-card rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200 overflow-hidden bg-white group">
                     <div>
-                        <!-- Full Width Image Frame -->
-                        <div class="h-44 w-full bg-slate-100 overflow-hidden relative">
+                        <!-- Full Width 1:1 Square Image Frame -->
+                        <div class="w-full aspect-square bg-slate-100 overflow-hidden relative">
                             <img src="https://images.unsplash.com/photo-1597484661643-2f5fef640dd1?auto=format&fit=crop&w=500&q=80" alt="Totebag Kanvas" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         </div>
                         <div class="p-4">
@@ -834,8 +839,8 @@
                 <!-- Product 4 -->
                 <div class="framer-card rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200 overflow-hidden bg-white group">
                     <div>
-                        <!-- Full Width Image Frame -->
-                        <div class="h-44 w-full bg-slate-100 overflow-hidden relative">
+                        <!-- Full Width 1:1 Square Image Frame -->
+                        <div class="w-full aspect-square bg-slate-100 overflow-hidden relative">
                             <img src="https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=500&q=80" alt="Topi Snapback" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         </div>
                         <div class="p-4">
@@ -856,8 +861,8 @@
                 <!-- Product 5 -->
                 <div class="framer-card rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200 overflow-hidden bg-white group">
                     <div>
-                        <!-- Full Width Image Frame -->
-                        <div class="h-44 w-full bg-slate-100 overflow-hidden relative">
+                        <!-- Full Width 1:1 Square Image Frame -->
+                        <div class="w-full aspect-square bg-slate-100 overflow-hidden relative">
                             <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=500&q=80" alt="Buku Dzikir" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         </div>
                         <div class="p-4">
@@ -878,8 +883,8 @@
                 <!-- Product 6 -->
                 <div class="framer-card rounded-2xl min-w-[250px] sm:min-w-[270px] max-w-[270px] snap-start flex flex-col justify-between shrink-0 border border-slate-200 overflow-hidden bg-white group">
                     <div>
-                        <!-- Full Width Image Frame -->
-                        <div class="h-44 w-full bg-slate-100 overflow-hidden relative">
+                        <!-- Full Width 1:1 Square Image Frame -->
+                        <div class="w-full aspect-square bg-slate-100 overflow-hidden relative">
                             <img src="https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=500&q=80" alt="Mushaf Saku" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         </div>
                         <div class="p-4">
