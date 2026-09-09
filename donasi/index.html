@@ -232,48 +232,56 @@
                 <h2 class="text-2xl md:text-3xl font-black text-slate-900 mt-1">Kegiatan Dakwah & Pembinaan</h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
 
                 <!-- Pilar 1: Rabu Malam -->
-                <div class="framer-card p-6 rounded-2xl flex flex-col justify-between border border-slate-200">
-                    <div>
-                        <!-- Thumbnail Image -->
-                        <div class="w-full h-40 rounded-xl bg-slate-100 overflow-hidden mb-4 relative shadow-inner">
+                <div class="framer-card p-6 rounded-2xl flex flex-col justify-between border border-slate-200 h-full">
+                    <div class="flex flex-col flex-1">
+                        <!-- Thumbnail Image (Fixed Container Dimensions: 100% width x 160px height on all screens) -->
+                        <div class="w-full h-40 rounded-xl bg-slate-100 overflow-hidden mb-4 relative shadow-inner shrink-0">
                             <img src="https://images.unsplash.com/photo-1585036156171-384164a8c675?auto=format&fit=crop&w=600&q=80" alt="Thumbnail Kajian Rutin Malam" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
                         </div>
 
-                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4 shrink-0">
                             <span class="text-xs font-bold text-emerald-800 flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
                                 <i class="fa-regular fa-clock text-emerald-600"></i> Rabu Malam (Bada Maghrib - Isya)
                             </span>
                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">01</span>
                         </div>
 
-                        <h3 class="text-lg font-black text-slate-900 mb-1">Kajian Rutin Rabu Malam</h3>
-                        <div class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5">
-                            <i class="fa-solid fa-microphone text-amber-600"></i>
-                            <span>Pemateri: Ustadz Ahmad Anshori, Lc., Mpd & Ustadz Muhammad Ihsan, S.UD, M.H.I.</span>
+                        <!-- Uniform Title & Pemateri Box -->
+                        <div class="min-h-[64px] mb-2 flex flex-col justify-start">
+                            <h3 class="text-lg font-black text-slate-900 mb-1 leading-snug">Kajian Rutin Rabu Malam</h3>
+                            <div class="text-xs font-bold text-slate-700 flex items-center gap-1.5 line-clamp-1">
+                                <i class="fa-solid fa-microphone text-amber-600 shrink-0"></i>
+                                <span class="truncate">Pemateri: Ustadz Ahmad Anshori, Lc., Mpd & Ustadz Muhammad Ihsan, S.UD, M.H.I.</span>
+                            </div>
                         </div>
                         
-                        <p class="text-xs text-slate-600 leading-relaxed font-medium mb-4">
-                            Kajian pekanan yang dilaksanakan setiap Rabu malam dengan pembahasan bergantian antara Tadabbur Juz ‘Amma dan Kitab Al-Kabair, sebagai sarana memahami Al-Qur’an, mengenal perkara dosa besar, serta mengambil pelajaran untuk diterapkan dalam kehidupan sehari-hari.
-                        </p>
+                        <!-- Uniform Description Box -->
+                        <div class="min-h-[58px] mb-4">
+                            <p class="text-xs text-slate-600 leading-relaxed font-medium line-clamp-3">
+                                Kajian pekanan yang dilaksanakan setiap Rabu malam dengan pembahasan bergantian antara Tadabbur Juz ‘Amma dan Kitab Al-Kabair, sebagai sarana memahami Al-Qur’an dan memperdalam adab.
+                            </p>
+                        </div>
 
-                        <!-- Rincian Operasional -->
-                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 mb-4">
+                        <!-- Uniform Rincian Operasional Box -->
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 mb-4 min-h-[96px] flex flex-col justify-center">
                             <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Rincian Operasional:</div>
                             <ul class="space-y-1.5 text-xs text-slate-700 font-semibold">
                                 <li class="flex items-center gap-2">
-                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px] shrink-0"></i>
                                     <span>Konsumsi Makan dan Minum Jamaah (±50 porsi)</span>
                                 </li>
                                 <li class="flex items-center gap-2">
-                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px] shrink-0"></i>
                                     <span>Bisyarah Ustadz Pemateri</span>
                                 </li>
                             </ul>
                         </div>
+                    </div>
 
+                    <div>
                         <!-- Estimasi Kebutuhan Box -->
                         <div class="p-3.5 rounded-xl bg-slate-900 text-white mb-5 flex items-center justify-between shadow-sm">
                             <div>
@@ -285,56 +293,64 @@
                                 <i class="fa-solid fa-arrow-down text-[10px]"></i>
                             </a>
                         </div>
-                    </div>
 
-                    <!-- Bottom Centered Full-Width Button -->
-                    <button onclick="openActivityVideoModal('Kajian Rutin Rabu Malam', 'Ustadz Abu Bakar', 'https://assets.mixkit.co/videos/preview/mixkit-man-reading-the-holy-quran-41662-large.mp4', 'Kajian rutin setiap Rabu malam bada Maghrib hingga Isya membahas Kitab Fiqih & Adab Islam. Fasilitas tempat nyaman dan konsumsi gratis bagi seluruh jamaah.')" 
-                            class="w-full framer-button-secondary py-2.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2 transition-all">
-                        <i class="fa-solid fa-play text-emerald-600 text-xs"></i>
-                        <span>Lihat Detail & Video Kegiatan</span>
-                    </button>
+                        <!-- Bottom Centered Full-Width Button -->
+                        <button onclick="openActivityVideoModal('Kajian Rutin Rabu Malam', 'Ustadz Abu Bakar', 'https://assets.mixkit.co/videos/preview/mixkit-man-reading-the-holy-quran-41662-large.mp4', 'Kajian rutin setiap Rabu malam bada Maghrib hingga Isya membahas Kitab Fiqih & Adab Islam. Fasilitas tempat nyaman dan konsumsi gratis bagi seluruh jamaah.')" 
+                                class="w-full framer-button-secondary py-2.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2 transition-all">
+                            <i class="fa-solid fa-play text-emerald-600 text-xs"></i>
+                            <span>Lihat Detail & Video Kegiatan</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Pilar 2: Tahsin Ibu-Ibu -->
-                <div class="framer-card p-6 rounded-2xl flex flex-col justify-between border border-slate-200">
-                    <div>
-                        <!-- Thumbnail Image -->
-                        <div class="w-full h-40 rounded-xl bg-slate-100 overflow-hidden mb-4 relative shadow-inner">
+                <div class="framer-card p-6 rounded-2xl flex flex-col justify-between border border-slate-200 h-full">
+                    <div class="flex flex-col flex-1">
+                        <!-- Thumbnail Image (Fixed Container Dimensions: 100% width x 160px height on all screens) -->
+                        <div class="w-full h-40 rounded-xl bg-slate-100 overflow-hidden mb-4 relative shadow-inner shrink-0">
                             <img src="https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=600&q=80" alt="Thumbnail Tahsin Ibu-Ibu" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
                         </div>
 
-                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4 shrink-0">
                             <span class="text-xs font-bold text-emerald-800 flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
                                 <i class="fa-regular fa-clock text-emerald-600"></i> Selasa Malam (Bada Isya)
                             </span>
                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">02</span>
                         </div>
 
-                        <h3 class="text-lg font-black text-slate-900 mb-1">Tahsin Ibu-Ibu</h3>
-                        <div class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5">
-                            <i class="fa-solid fa-microphone text-amber-600"></i>
-                            <span>Pengajar: Ustadzah Afifah Amani Nabila</span>
+                        <!-- Uniform Title & Pemateri Box -->
+                        <div class="min-h-[64px] mb-2 flex flex-col justify-start">
+                            <h3 class="text-lg font-black text-slate-900 mb-1 leading-snug">Tahsin Ibu-Ibu</h3>
+                            <div class="text-xs font-bold text-slate-700 flex items-center gap-1.5 line-clamp-1">
+                                <i class="fa-solid fa-microphone text-amber-600 shrink-0"></i>
+                                <span class="truncate">Pengajar: Ustadzah Afifah Amani Nabila</span>
+                            </div>
                         </div>
                         
-                        <p class="text-xs text-slate-600 leading-relaxed font-medium mb-4">
-                            Bimbingan membaca Al-Qur'an dari nol hingga fasih tajwid untuk ibu-ibu dan remaja putri, agar percaya diri membaca Al-Qur'an dan mendidik anak di rumah.
-                        </p>
+                        <!-- Uniform Description Box -->
+                        <div class="min-h-[58px] mb-4">
+                            <p class="text-xs text-slate-600 leading-relaxed font-medium line-clamp-3">
+                                Bimbingan membaca Al-Qur'an dari nol hingga fasih tajwid untuk ibu-ibu dan remaja putri, agar percaya diri membaca Al-Qur'an dan mendidik anak di rumah.
+                            </p>
+                        </div>
 
-                        <!-- Rincian Operasional -->
-                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 mb-4">
+                        <!-- Uniform Rincian Operasional Box -->
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 mb-4 min-h-[96px] flex flex-col justify-center">
                             <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Rincian Operasional:</div>
                             <ul class="space-y-1.5 text-xs text-slate-700 font-semibold">
                                 <li class="flex items-center gap-2">
-                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px] shrink-0"></i>
                                     <span>Konsumsi Jamaah & Mushaf Tajwid Berwarna</span>
                                 </li>
                                 <li class="flex items-center gap-2">
-                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px] shrink-0"></i>
                                     <span>Bisyarah Ustadzah Pemateri</span>
                                 </li>
                             </ul>
                         </div>
+                    </div>
 
+                    <div>
                         <!-- Estimasi Kebutuhan Box -->
                         <div class="p-3.5 rounded-xl bg-slate-900 text-white mb-5 flex items-center justify-between shadow-sm">
                             <div>
@@ -346,56 +362,64 @@
                                 <i class="fa-solid fa-arrow-down text-[10px]"></i>
                             </a>
                         </div>
-                    </div>
 
-                    <!-- Bottom Centered Full-Width Button -->
-                    <button onclick="openActivityVideoModal('Tahsin Ibu-Ibu', 'Ustadzah Fatimah', 'https://assets.mixkit.co/videos/preview/mixkit-hand-holding-the-quran-and-reading-it-41663-large.mp4', 'Program bimbingan tahsin Al-Qur\'an khusus ibu-ibu setiap Selasa malam bada Isya dengan metode privat bertahap.')" 
-                            class="w-full framer-button-secondary py-2.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2 transition-all">
-                        <i class="fa-solid fa-play text-emerald-600 text-xs"></i>
-                        <span>Lihat Detail & Video Kegiatan</span>
-                    </button>
+                        <!-- Bottom Centered Full-Width Button -->
+                        <button onclick="openActivityVideoModal('Tahsin Ibu-Ibu', 'Ustadzah Fatimah', 'https://assets.mixkit.co/videos/preview/mixkit-hand-holding-the-quran-and-reading-it-41663-large.mp4', 'Program bimbingan tahsin Al-Qur\'an khusus ibu-ibu setiap Selasa malam bada Isya dengan metode privat bertahap.')" 
+                                class="w-full framer-button-secondary py-2.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2 transition-all">
+                            <i class="fa-solid fa-play text-emerald-600 text-xs"></i>
+                            <span>Lihat Detail & Video Kegiatan</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Pilar 3: Bahasa Arab Anak -->
-                <div class="framer-card p-6 rounded-2xl flex flex-col justify-between border border-slate-200">
-                    <div>
-                        <!-- Thumbnail Image -->
-                        <div class="w-full h-40 rounded-xl bg-slate-100 overflow-hidden mb-4 relative shadow-inner">
+                <div class="framer-card p-6 rounded-2xl flex flex-col justify-between border border-slate-200 h-full">
+                    <div class="flex flex-col flex-1">
+                        <!-- Thumbnail Image (Fixed Container Dimensions: 100% width x 160px height on all screens) -->
+                        <div class="w-full h-40 rounded-xl bg-slate-100 overflow-hidden mb-4 relative shadow-inner shrink-0">
                             <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=600&q=80" alt="Thumbnail Bahasa Arab Anak" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
                         </div>
 
-                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4 shrink-0">
                             <span class="text-xs font-bold text-emerald-800 flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
                                 <i class="fa-regular fa-clock text-emerald-600"></i> Setiap Sabtu Pagi & Siang Bada Dzuhur
                             </span>
                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">03</span>
                         </div>
 
-                        <h3 class="text-lg font-black text-slate-900 mb-1">Bahasa Arab Anak (Ceria)</h3>
-                        <div class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5">
-                            <i class="fa-solid fa-microphone text-amber-600"></i>
-                            <span>Pengajar: Kak Aci (Katsir)</span>
+                        <!-- Uniform Title & Pemateri Box -->
+                        <div class="min-h-[64px] mb-2 flex flex-col justify-start">
+                            <h3 class="text-lg font-black text-slate-900 mb-1 leading-snug">Bahasa Arab Anak (Ceria)</h3>
+                            <div class="text-xs font-bold text-slate-700 flex items-center gap-1.5 line-clamp-1">
+                                <i class="fa-solid fa-microphone text-amber-600 shrink-0"></i>
+                                <span class="truncate">Pengajar: Kak Aci (Katsir)</span>
+                            </div>
                         </div>
                         
-                        <p class="text-xs text-slate-600 leading-relaxed font-medium mb-4">
-                            Mengenalkan mufrodat (kosakata) Al-Qur'an untuk anak-anak lewat metode interaktif dan permainan hafalan santai.
-                        </p>
+                        <!-- Uniform Description Box -->
+                        <div class="min-h-[58px] mb-4">
+                            <p class="text-xs text-slate-600 leading-relaxed font-medium line-clamp-3">
+                                Mengenalkan mufrodat (kosakata) Al-Qur'an untuk anak-anak lewat metode interaktif, lagu edukatif, dan permainan hafalan santai yang menyenangkan.
+                            </p>
+                        </div>
 
-                        <!-- Rincian Operasional -->
-                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 mb-4">
+                        <!-- Uniform Rincian Operasional Box -->
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 mb-4 min-h-[96px] flex flex-col justify-center">
                             <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Rincian Operasional:</div>
                             <ul class="space-y-1.5 text-xs text-slate-700 font-semibold">
                                 <li class="flex items-center gap-2">
-                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px] shrink-0"></i>
                                     <span>Snack Sehat & Minuman Pendamping Santri</span>
                                 </li>
                                 <li class="flex items-center gap-2">
-                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px] shrink-0"></i>
                                     <span>Bisyarah Pengajar Bahasa Arab</span>
                                 </li>
                             </ul>
                         </div>
+                    </div>
 
+                    <div>
                         <!-- Estimasi Kebutuhan Box -->
                         <div class="p-3.5 rounded-xl bg-slate-900 text-white mb-5 flex items-center justify-between shadow-sm">
                             <div>
@@ -407,56 +431,64 @@
                                 <i class="fa-solid fa-arrow-down text-[10px]"></i>
                             </a>
                         </div>
-                    </div>
 
-                    <!-- Bottom Centered Full-Width Button -->
-                    <button onclick="openActivityVideoModal('Bahasa Arab Anak', 'Ustadz Umar', 'https://assets.mixkit.co/videos/preview/mixkit-children-sitting-in-a-classroom-41660-large.mp4', 'Kelas belajar Bahasa Arab dasar untuk anak usia 6-12 tahun. Menggunakan metode lagu dan alat peraga visual yang menyenangkan.')" 
-                            class="w-full framer-button-secondary py-2.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2 transition-all">
-                        <i class="fa-solid fa-play text-emerald-600 text-xs"></i>
-                        <span>Lihat Detail & Video Kegiatan</span>
-                    </button>
+                        <!-- Bottom Centered Full-Width Button -->
+                        <button onclick="openActivityVideoModal('Bahasa Arab Anak', 'Ustadz Umar', 'https://assets.mixkit.co/videos/preview/mixkit-children-sitting-in-a-classroom-41660-large.mp4', 'Kelas belajar Bahasa Arab dasar untuk anak usia 6-12 tahun. Menggunakan metode lagu dan alat peraga visual yang menyenangkan.')" 
+                                class="w-full framer-button-secondary py-2.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2 transition-all">
+                            <i class="fa-solid fa-play text-emerald-600 text-xs"></i>
+                            <span>Lihat Detail & Video Kegiatan</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Pilar 4: TPA Anak Gratis -->
-                <div class="framer-card p-6 rounded-2xl flex flex-col justify-between border border-slate-200">
-                    <div>
-                        <!-- Thumbnail Image -->
-                        <div class="w-full h-40 rounded-xl bg-slate-100 overflow-hidden mb-4 relative shadow-inner">
+                <div class="framer-card p-6 rounded-2xl flex flex-col justify-between border border-slate-200 h-full">
+                    <div class="flex flex-col flex-1">
+                        <!-- Thumbnail Image (Fixed Container Dimensions: 100% width x 160px height on all screens) -->
+                        <div class="w-full h-40 rounded-xl bg-slate-100 overflow-hidden mb-4 relative shadow-inner shrink-0">
                             <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=600&q=80" alt="Thumbnail TPA Anak Gratis" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
                         </div>
 
-                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4 shrink-0">
                             <span class="text-xs font-bold text-emerald-800 flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
                                 <i class="fa-regular fa-clock text-emerald-600"></i> Senin & Kamis (Bada Ashar)
                             </span>
                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">04</span>
                         </div>
 
-                        <h3 class="text-lg font-black text-slate-900 mb-1">TPA Anak Gratis</h3>
-                        <div class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5">
-                            <i class="fa-solid fa-microphone text-amber-600"></i>
-                            <span>Tim Pengajar: Ustadz & Ustadzah Gazebo Mengaji</span>
+                        <!-- Uniform Title & Pemateri Box -->
+                        <div class="min-h-[64px] mb-2 flex flex-col justify-start">
+                            <h3 class="text-lg font-black text-slate-900 mb-1 leading-snug">TPA Anak Gratis</h3>
+                            <div class="text-xs font-bold text-slate-700 flex items-center gap-1.5 line-clamp-1">
+                                <i class="fa-solid fa-microphone text-amber-600 shrink-0"></i>
+                                <span class="truncate">Tim Pengajar: Ustadz & Ustadzah Gazebo Mengaji</span>
+                            </div>
                         </div>
                         
-                        <p class="text-xs text-slate-600 leading-relaxed font-medium mb-4">
-                            Pembinaan rutin membaca Iqra', hafalan Surat Pendek (Juz 30), doa harian, serta kisah teladan Nabi untuk puluhan anak-anak lingkungan sekitar secara gratis.
-                        </p>
+                        <!-- Uniform Description Box -->
+                        <div class="min-h-[58px] mb-4">
+                            <p class="text-xs text-slate-600 leading-relaxed font-medium line-clamp-3">
+                                Pembinaan rutin membaca Iqra', hafalan Surat Pendek (Juz 30), doa harian, serta kisah teladan Nabi untuk puluhan anak-anak lingkungan sekitar secara gratis.
+                            </p>
+                        </div>
 
-                        <!-- Rincian Operasional -->
-                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 mb-4">
+                        <!-- Uniform Rincian Operasional Box -->
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 mb-4 min-h-[96px] flex flex-col justify-center">
                             <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Rincian Operasional:</div>
                             <ul class="space-y-1.5 text-xs text-slate-700 font-semibold">
                                 <li class="flex items-center gap-2">
-                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px] shrink-0"></i>
                                     <span>Buku Iqro', Juz Amma, Konsumsi & Alat Tulis Santri</span>
                                 </li>
                                 <li class="flex items-center gap-2">
-                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px] shrink-0"></i>
                                     <span>Insentif Pengajar & Hadiah Apresiasi Hafalan</span>
                                 </li>
                             </ul>
                         </div>
+                    </div>
 
+                    <div>
                         <!-- Estimasi Kebutuhan Box -->
                         <div class="p-3.5 rounded-xl bg-slate-900 text-white mb-5 flex items-center justify-between shadow-sm">
                             <div>
@@ -468,14 +500,14 @@
                                 <i class="fa-solid fa-arrow-down text-[10px]"></i>
                             </a>
                         </div>
-                    </div>
 
-                    <!-- Bottom Centered Full-Width Button -->
-                    <button onclick="openActivityVideoModal('TPA Anak Gratis', 'Tim Pengajar TPA', 'https://assets.mixkit.co/videos/preview/mixkit-young-boy-reading-a-book-in-a-library-41661-large.mp4', 'Pembinaan TPA gratis setiap Senin & Kamis sore bada Ashar. Santri dibimbing secara telaten membaca Iqra dan menambah hafalan juz amma.')" 
-                            class="w-full framer-button-secondary py-2.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2 transition-all">
-                        <i class="fa-solid fa-play text-emerald-600 text-xs"></i>
-                        <span>Lihat Detail & Video Kegiatan</span>
-                    </button>
+                        <!-- Bottom Centered Full-Width Button -->
+                        <button onclick="openActivityVideoModal('TPA Anak Gratis', 'Tim Pengajar TPA', 'https://assets.mixkit.co/videos/preview/mixkit-young-boy-reading-a-book-in-a-library-41661-large.mp4', 'Pembinaan TPA gratis setiap Senin & Kamis sore bada Ashar. Santri dibimbing secara telaten membaca Iqra dan menambah hafalan juz amma.')" 
+                                class="w-full framer-button-secondary py-2.5 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-2 transition-all">
+                            <i class="fa-solid fa-play text-emerald-600 text-xs"></i>
+                            <span>Lihat Detail & Video Kegiatan</span>
+                        </button>
+                    </div>
                 </div>
 
             </div>
@@ -490,26 +522,26 @@
                         <h2 class="text-xl md:text-2xl font-black text-slate-900 mt-0.5">Kebutuhan Operasional Bulanan</h2>
                     </div>
                     <div class="text-left md:text-right">
-                        <div class="text-xs text-slate-500 font-semibold">Total Kebutuhan</div>
-                        <div class="text-2xl font-black text-slate-900 tracking-tight" id="target-display">Rp 96.000.000</div>
+                        <div class="text-xs text-slate-500 font-semibold">Dana Terkumpul Saat Ini</div>
+                        <div class="text-2xl font-black text-emerald-700 tracking-tight" id="target-display">Rp 5.575.000</div>
                     </div>
                 </div>
 
                 <!-- Monthly Dynamic Progress Bar -->
                 <div class="py-6 border-b border-slate-100">
                     <div class="flex justify-between items-center text-xs text-slate-700 font-bold mb-2">
-                        <span>Terkumpul Bulan Ini</span>
-                        <span class="text-slate-900 font-black" id="collected-text">42% (Rp 3.360.000)</span>
+                        <span>Pencapaian Infaq</span>
+                        <span class="text-slate-900 font-black" id="collected-text">6% (Kebutuhan Bulanan: Rp 8.000.000)</span>
                     </div>
                     
                     <!-- Progress track -->
                     <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden border border-slate-200 p-0.5">
-                        <div id="progress-bar-fill" class="h-full rounded-full transition-all duration-1000 bg-rose-500" style="width: 42%;"></div>
+                        <div id="progress-bar-fill" class="h-full rounded-full transition-all duration-1000 bg-rose-500" style="width: 6%;"></div>
                     </div>
 
                     <div class="flex justify-between text-[11px] text-slate-600 font-medium mt-2">
-                        <span id="remaining-text">Sisa Kekurangan: Rp 4.640.000</span>
-                        <span id="target-subtext">Target: Rp 96.000.000</span>
+                        <span id="remaining-text">Sisa Kekurangan: Rp 90.425.000</span>
+                        <span id="target-subtext">Target Dana: Rp 96.000.000</span>
                     </div>
                 </div>
 
@@ -1548,6 +1580,10 @@
 
         /**
          * Real-time Google Sheets Fetcher for Progress Bar Widget
+         * Expected Sheet Columns:
+         * A1: Total Kebutuhan Bulanan
+         * B1: Target Dana
+         * C1: Total Donasi Terkumpul
          */
         const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSVkj204aC_7wZBDfAlnsfBg9WqCa3L7iWnqbbS36F6cDOqP2oWXP31HbFzWONjN2JFktMUPBAfxvlf/pub?output=csv';
 
@@ -1562,14 +1598,15 @@
                 const lines = csvText.trim().split('\n');
                 if (lines.length === 0) return;
 
-                let target = 0;
-                let collected = 0;
+                let monthlyNeed = 0; // A1
+                let targetDana = 0;  // B1
+                let collected = 0;   // C1
 
                 for (let i = 0; i < lines.length; i++) {
                     const rowStr = lines[i].replace(/"/g, '');
                     const cols = rowStr.split(/[,;\t]/);
 
-                    if (cols.length >= 2) {
+                    if (cols.length >= 3) {
                         const parseNum = (str) => {
                             if (!str) return 0;
                             const integerPart = str.split(',')[0];
@@ -1577,25 +1614,43 @@
                             return parseInt(digits, 10) || 0;
                         };
 
-                        const val1 = parseNum(cols[0]);
-                        const val2 = parseNum(cols[1]);
+                        const valA = parseNum(cols[0]); // Kebutuhan Bulanan
+                        const valB = parseNum(cols[1]); // Target Dana
+                        const valC = parseNum(cols[2]); // Donasi Terkumpul
 
-                        if (val1 > 0) {
-                            target = val1;
-                            collected = val2;
+                        if (valB > 0 || valC > 0 || valA > 0) {
+                            monthlyNeed = valA;
+                            targetDana = valB;
+                            collected = valC;
                             break;
                         }
+                    } else if (cols.length === 2) {
+                        const parseNum = (str) => {
+                            if (!str) return 0;
+                            const integerPart = str.split(',')[0];
+                            const digits = integerPart.replace(/[^0-9]/g, '');
+                            return parseInt(digits, 10) || 0;
+                        };
+                        targetDana = parseNum(cols[0]);
+                        collected = parseNum(cols[1]);
                     }
                 }
 
-                if (target > 0) {
-                    const percent = Math.min(100, Math.round((collected / target) * 100));
-                    const remaining = Math.max(0, target - collected);
+                if (targetDana > 0 || collected > 0) {
+                    const percent = targetDana > 0 ? Math.min(100, Math.round((collected / targetDana) * 100)) : 0;
+                    const remaining = Math.max(0, targetDana - collected);
 
-                    document.getElementById('target-display').innerText = `Rp ${new Intl.NumberFormat('id-ID').format(target)}`;
-                    document.getElementById('target-subtext').innerText = `Target: Rp ${new Intl.NumberFormat('id-ID').format(target)}`;
-                    document.getElementById('collected-text').innerText = `${percent}% (Rp ${new Intl.NumberFormat('id-ID').format(collected)})`;
+                    // 1. Dana Terkumpul Saat Ini (C1) di header kanan atas
+                    document.getElementById('target-display').innerText = `Rp ${new Intl.NumberFormat('id-ID').format(collected)}`;
+                    
+                    // Progress text di atas bar
+                    document.getElementById('collected-text').innerText = `${percent}% (Kebutuhan Bulanan: Rp ${new Intl.NumberFormat('id-ID').format(monthlyNeed)})`;
+
+                    // 2. Sisa Kekurangan di kiri bawah bar
                     document.getElementById('remaining-text').innerText = `Sisa Kekurangan: Rp ${new Intl.NumberFormat('id-ID').format(remaining)}`;
+
+                    // 3. Target Dana (B1) di kanan bawah bar
+                    document.getElementById('target-subtext').innerText = `Target Dana: Rp ${new Intl.NumberFormat('id-ID').format(targetDana)}`;
 
                     updateProgressBarColor(percent);
                 }
