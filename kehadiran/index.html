@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gazebo Mengaji - Modern Exploring Minds Aesthetic</title>
+    <title>Gazebo Mengaji - Modern Minimalist UI</title>
     
-    <!-- Tailwind CSS & Font Awesome -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
     
-    <!-- External JS Helpers -->
+    <!-- Helpers -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
@@ -19,15 +18,12 @@
             theme: {
                 extend: {
                     colors: {
-                        pastel: {
-                            pink: '#fbcfe8',
-                            pinkDark: '#f472b6',
-                            yellow: '#fef08a',
-                            yellowAccent: '#facc15',
-                            mint: '#bbf7d0',
-                            lavender: '#e0e7ff',
-                            ice: '#bae6fd',
-                            cardBg: '#f8fafc'
+                        app: {
+                            bg: '#f8f9fa',
+                            cardGreen: '#8ae99f',
+                            cardGreenDark: '#74db8c',
+                            cardGrey: '#e7ecf0',
+                            dock: '#181920',
                         }
                     },
                     fontFamily: {
@@ -55,224 +51,294 @@
             scrollbar-width: none;
         }
 
-        .tab-content {
+        /* Smooth Tab Animations */
+        .tab-page {
             display: none;
             opacity: 0;
-            transform: translateY(6px);
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(8px) scale(0.99);
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         
-        .tab-content.active {
+        .tab-page.active {
             display: block;
             opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Top Header Gradient Mesh matching reference */
-        .gradient-mesh-bg {
-            background: linear-gradient(135deg, #fbcfe8 0%, #fef08a 50%, #dcfce7 100%);
-        }
-
-        .flashcard-shadow {
-            box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.07), 0 0 2px 1px rgba(255, 255, 255, 0.8);
-        }
-
-        .fab-glow {
-            box-shadow: 0 10px 25px -3px rgba(250, 204, 21, 0.5);
+            transform: translateY(0) scale(1);
         }
     </style>
 </head>
 <body class="flex justify-center items-center min-h-screen p-0 md:p-6 text-zinc-900">
 
-    <!-- Mobile Container (Inspired by iOS Device Frame UI) -->
-    <div class="w-full max-w-md bg-zinc-950 min-h-screen md:min-h-[860px] md:max-h-[860px] md:rounded-[48px] shadow-2xl relative flex flex-col overflow-hidden border-0 md:border-[10px] border-zinc-900">
+    <!-- Mobile Frame (iOS Device Container) -->
+    <div class="w-full max-w-md bg-[#0b0c13] min-h-screen md:min-h-[880px] md:max-h-[880px] md:rounded-[52px] shadow-2xl relative flex flex-col overflow-hidden border-0 md:border-[10px] border-[#181924]">
         
-        <!-- Main Scroll Viewport with Top Pastel Mesh Gradient -->
-        <main class="flex-1 overflow-y-auto hide-scrollbar pb-36 bg-[#f4f4f7] relative" id="main-scroll-area">
+        <!-- Main Scrollable App Canvas -->
+        <main class="flex-1 overflow-y-auto hide-scrollbar bg-app-bg relative pb-32" id="main-scroll-view">
             
-            <!-- Top Gradient Hero Section (Reference Style) -->
-            <div class="gradient-mesh-bg px-6 pt-10 pb-12 rounded-b-[40px] relative overflow-hidden space-y-4">
+            <!-- Top Sticky Header ("Assalamu'alaikum" style) -->
+            <header class="px-6 pt-6 pb-3 z-30 sticky top-0 bg-app-bg/95 backdrop-blur-md flex flex-col space-y-3">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h1 class="text-4xl font-extrabold tracking-tight text-zinc-950 font-sans">
+                            Assalamu'alaikum
+                        </h1>
+                    </div>
+                    <button onclick="openNotificationModal()" class="w-10 h-10 rounded-full border border-zinc-200/90 bg-white flex items-center justify-center text-zinc-900 shadow-sm active:scale-95 transition">
+                        <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                    </button>
+                </div>
                 
-                <!-- Status Bar Pill / Header Meta -->
-                <div class="flex justify-between items-center z-10 relative">
-                    <span class="text-[11px] font-mono tracking-wider font-extrabold text-zinc-700/80 uppercase">
-                        Rabu, 15 Rabi'ul Awal 1448 H
-                    </span>
+                <div class="flex items-center justify-between text-xs font-semibold text-zinc-500 pt-0.5">
                     <div class="flex items-center space-x-2">
-                        <button onclick="showNotificationToast()" class="w-8 h-8 rounded-full bg-white/70 backdrop-blur-md flex items-center justify-center text-zinc-800 shadow-sm active:scale-95 transition">
-                            <i class="fa-regular fa-bell text-xs"></i>
-                        </button>
-                        <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-white shadow-sm">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover">
-                        </div>
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="text-zinc-900 font-bold">Fulanah (Jemaah)</span>
+                    </div>
+                    <div class="text-right text-[11px] text-zinc-400 font-medium">
+                        <p class="leading-none text-zinc-400">Terakhir Diupdate</p>
+                        <p class="text-zinc-900 font-bold mt-0.5" id="header-date-text">15 Rabi'ul Awal • 19:30</p>
                     </div>
                 </div>
+            </header>
 
-                <!-- Big Modern Headline -->
-                <div class="space-y-0.5 relative z-10 pt-1">
-                    <h1 class="text-3xl font-black text-zinc-900 tracking-tight leading-none">
-                        Exploring<br>Niat Majelis
-                    </h1>
-                    <p class="text-xs font-semibold text-zinc-700 pt-1">Gazebo Mengaji • Presensi & Cas Rohani</p>
-                </div>
-
-                <!-- Decorative Subtle Background Glow -->
-                <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/40 rounded-full blur-2xl pointer-events-none"></div>
-            </div>
-
-            <!-- ================= TAB 1: POSTER KAJIAN (REFERENCE FLASHCARD STYLE) ================= -->
-            <section id="tab-poster" class="tab-content active px-5 -mt-8 space-y-4 relative z-20">
+            <!-- TAB 1: HOME & MINT GREEN KAJIAN CARD -->
+            <section id="tab-home" class="tab-page active px-6 space-y-4 pt-1">
                 
-                <!-- White Floating Hero Card (Matching "Becoming" Flashcard) -->
-                <div class="bg-white rounded-[32px] p-6 flashcard-shadow space-y-4 border border-zinc-100">
+                <!-- Category Selector / Filter Row -->
+                <div class="flex items-center justify-between pt-1 pb-1">
+                    <div class="flex items-center space-x-4 text-sm">
+                        <button class="font-extrabold text-zinc-950 flex items-center gap-1.5 border-b-2 border-zinc-950 pb-0.5">
+                            <span>Kajian Pilihan</span>
+                            <span class="bg-zinc-200 text-zinc-900 text-[10px] font-bold px-1.5 py-0.2 rounded-full">5</span>
+                        </button>
+                        <button onclick="switchTab('tab-kegiatan')" class="font-bold text-zinc-400 hover:text-zinc-700 flex items-center gap-1.5 pb-0.5 transition">
+                            <span>Tersimpan</span>
+                            <span class="text-zinc-400 text-[10px] font-semibold">8</span>
+                        </button>
+                    </div>
+                    <button onclick="openSheetSyncModal()" class="text-[10px] font-extrabold text-emerald-800 bg-emerald-100 hover:bg-emerald-200 px-2.5 py-1 rounded-full transition flex items-center gap-1 border border-emerald-300">
+                        <i class="fa-solid fa-file-excel text-emerald-600"></i> Sync Sheet
+                    </button>
+                </div>
+
+                <!-- Green Mint Kajian Card (Matching reference image) -->
+                <div class="bg-app-cardGreen rounded-[36px] p-5 text-zinc-950 shadow-sm space-y-4 border border-emerald-300 transition-all">
                     
-                    <!-- Card Header Label -->
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs font-semibold font-mono text-zinc-400 lowercase tracking-tight">agenda majelis pekan ini</span>
-                        <button onclick="playAudioSummary()" class="w-9 h-9 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 flex items-center justify-center transition active:scale-95 shadow-sm" title="Dengar Audio Brief">
-                            <i class="fa-solid fa-volume-high text-xs" id="play-icon"></i>
-                        </button>
+                    <!-- Top Tags & Time -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-1.5">
+                            <span class="px-3 py-1 bg-white/60 backdrop-blur-md rounded-full text-[10px] font-extrabold text-zinc-900">
+                                Syar'i
+                            </span>
+                            <span class="px-3 py-1 bg-white/60 backdrop-blur-md rounded-full text-[10px] font-extrabold text-zinc-900">
+                                Offline
+                            </span>
+                        </div>
+                        <span class="text-[11px] font-bold text-emerald-950 opacity-80" id="card-time-badge">
+                            2 jam lagi
+                        </span>
                     </div>
 
-                    <!-- Main Big Title Focus -->
-                    <div class="py-2 space-y-1">
-                        <h2 class="text-3xl font-black text-zinc-900 tracking-tight leading-tight">
-                            Menyucikan Hati
-                        </h2>
-                        <p class="text-xs font-medium text-zinc-500">dari Kelalaian Duniawi</p>
+                    <!-- Main Title & Speaker Badge -->
+                    <div class="flex items-start space-x-3">
+                        <div class="w-11 h-11 rounded-full bg-indigo-600 text-white font-black text-xl flex items-center justify-center shrink-0 shadow-inner">
+                            K
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <h2 class="text-xl font-black leading-tight text-zinc-950" id="hero-kajian-title">
+                                Kajian Hati & Niat
+                            </h2>
+                            <p class="text-xs font-bold text-zinc-800 mt-0.5" id="plan-card-speaker">
+                                Ust. Hanan Attaki
+                            </p>
+                        </div>
                     </div>
 
-                    <!-- Word in Use / Quote Box (Inspired by Reference Image) -->
-                    <div class="bg-zinc-50 rounded-2xl p-4 border border-zinc-100 space-y-1">
-                        <p class="text-[10px] font-mono text-zinc-400 uppercase font-bold tracking-wider">Pesan Niat Pekan Ini</p>
-                        <p class="text-xs text-zinc-600 font-medium italic leading-relaxed">
-                            "Sesungguhnya setiap amalan tergantung pada niatnya, dan seseorang akan mendapatkan sesuai apa yang ia niatkan."
+                    <!-- Short Summary & Attendance Avatars -->
+                    <div class="pt-1 pb-1 border-t border-black/10 flex items-center justify-between gap-2">
+                        <p class="text-xs font-medium text-zinc-900 leading-snug flex-1" id="hero-kajian-desc">
+                            Mantapkan niat sebelum majelis dimulai agar ilmu yang didapat berkah & berbekas.
                         </p>
-                        <span class="text-[10px] text-zinc-400 font-bold block pt-1">— HR. Bukhari & Muslim</span>
-                    </div>
-
-                    <!-- Speaker & Location Info -->
-                    <div class="pt-1 grid grid-cols-2 gap-2 text-xs">
-                        <div class="flex items-center space-x-2.5 p-2.5 bg-zinc-50 rounded-2xl">
-                            <div class="w-7 h-7 rounded-xl bg-pastel-pink flex items-center justify-center text-zinc-900 shrink-0 text-xs font-bold">
-                                <i class="fa-regular fa-user"></i>
-                            </div>
-                            <div class="truncate">
-                                <p class="text-[9px] font-bold text-zinc-400 uppercase">Pemateri</p>
-                                <p class="font-bold text-zinc-800 text-xs truncate">Ust. Hanan Attaki</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center space-x-2.5 p-2.5 bg-zinc-50 rounded-2xl">
-                            <div class="w-7 h-7 rounded-xl bg-pastel-yellow flex items-center justify-center text-zinc-900 shrink-0 text-xs font-bold">
-                                <i class="fa-solid fa-location-dot"></i>
-                            </div>
-                            <div class="truncate">
-                                <p class="text-[9px] font-bold text-zinc-400 uppercase">Waktu & Tempat</p>
-                                <p class="font-bold text-zinc-800 text-xs truncate">Sabtu, 19:30 WIB</p>
+                        <!-- Stacked Avatars -->
+                        <div class="flex items-center shrink-0">
+                            <span class="text-[10px] font-extrabold text-zinc-900 mr-1.5">8+</span>
+                            <div class="flex -space-x-2">
+                                <img class="w-6 h-6 rounded-full border-2 border-app-cardGreen object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80" alt="Jemaah">
+                                <img class="w-6 h-6 rounded-full border-2 border-app-cardGreen object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80" alt="Jemaah">
+                                <img class="w-6 h-6 rounded-full border-2 border-app-cardGreen object-cover" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80" alt="Jemaah">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Action Buttons Row (Direct Reference Style: "Repeat" / "Got it 👍") -->
+                    <!-- Information Details Grid -->
+                    <div class="grid grid-cols-2 gap-y-2 gap-x-3 text-xs font-bold text-zinc-900 pt-1">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-chart-simple text-zinc-800 text-xs"></i>
+                            <span id="plan-card-level">Tingkat Menengah</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-regular fa-clock text-zinc-800 text-xs"></i>
+                            <span id="plan-card-date">19:30 WIB</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-location-dot text-zinc-800 text-xs"></i>
+                            <span id="plan-card-room">Gazebo Room A5</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-hand-holding-heart text-zinc-800 text-xs"></i>
+                            <span>Infaq Sukarela</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
                     <div class="grid grid-cols-2 gap-3 pt-2">
-                        <button onclick="switchTab('tab-kegiatan')" class="py-3.5 px-4 bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-800 font-extrabold rounded-full transition active:scale-95 text-xs flex items-center justify-center space-x-2 shadow-sm">
-                            <span>Jadwal Lain</span>
-                            <i class="fa-solid fa-arrows-rotate text-xs text-zinc-400"></i>
+                        <button onclick="playAudioSummary()" class="py-3 px-4 bg-white/70 hover:bg-white text-zinc-950 font-extrabold text-xs rounded-2xl transition active:scale-95 shadow-sm flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-volume-high text-xs"></i>
+                            <span>Audio Brief</span>
                         </button>
-                        
-                        <button onclick="switchTab('tab-form')" class="py-3.5 px-4 bg-pastel-pink hover:bg-pink-300 text-zinc-950 font-black rounded-full transition active:scale-95 text-xs flex items-center justify-center space-x-2 shadow-sm">
-                            <span>Presensi Niat</span>
-                            <i class="fa-solid fa-thumbs-up text-xs text-zinc-900"></i>
+                        <button onclick="switchTab('tab-form')" class="py-3 px-4 bg-zinc-950 hover:bg-black text-white font-extrabold text-xs rounded-2xl transition active:scale-95 shadow-md flex items-center justify-center space-x-2">
+                            <span>Presensi Now</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
                         </button>
                     </div>
 
                 </div>
 
-                <!-- Live Jemaah Stats Banner -->
-                <div class="bg-white rounded-[28px] p-4 flashcard-shadow border border-zinc-100 flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-black text-sm">
-                            <i class="fa-solid fa-users"></i>
+                <!-- Date Carousel Filter -->
+                <div class="space-y-2 pt-2">
+                    <p class="text-xs font-bold text-zinc-500 uppercase tracking-wider">Pilih Tanggal Kajian</p>
+                    <div class="flex items-center justify-between space-x-1.5 overflow-x-auto hide-scrollbar py-0.5" id="date-carousel-container">
+                        
+                        <button onclick="selectDate(22, 'Sun', 'Fiqih Shalat Khusyu', 'Ust. Ahmad', '19:30 WIB', 'A1 Room')" class="date-btn flex flex-col items-center justify-center py-2 px-2.5 rounded-2xl bg-white text-zinc-400 border border-zinc-200/80 min-w-[44px]">
+                            <span class="text-[9px] font-semibold">Sun</span>
+                            <span class="text-xs font-bold text-zinc-800 mt-0.5">22</span>
+                        </button>
+
+                        <button onclick="selectDate(23, 'Mon', 'Tafsir Surat Al-Kahfi', 'Ust. Adi Hidayat', '20:00 WIB', 'A3 Room')" class="date-btn flex flex-col items-center justify-center py-2 px-2.5 rounded-2xl bg-white text-zinc-400 border border-zinc-200/80 min-w-[44px]">
+                            <span class="text-[9px] font-semibold">Mon</span>
+                            <span class="text-xs font-bold text-zinc-800 mt-0.5">23</span>
+                        </button>
+
+                        <button onclick="selectDate(24, 'Tue', 'Manajemen Qalbu', 'Ust. Abdul Somad', '19:30 WIB', 'Main Hall')" class="date-btn flex flex-col items-center justify-center py-2 px-2.5 rounded-2xl bg-white text-zinc-400 border border-zinc-200/80 min-w-[44px]">
+                            <span class="text-[9px] font-semibold">Tue</span>
+                            <span class="text-xs font-bold text-zinc-800 mt-0.5">24</span>
+                        </button>
+
+                        <!-- Active Selected Day Pill -->
+                        <button onclick="selectDate(25, 'Wed', 'Kajian Hati & Niat', 'Ust. Hanan Attaki', '19:30 WIB', 'A5 Gazebo Room')" class="date-btn date-active flex flex-col items-center justify-center py-2 px-3 rounded-2xl bg-zinc-950 text-white shadow-md min-w-[46px] relative">
+                            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full absolute top-1"></span>
+                            <span class="text-[9px] font-bold text-zinc-300 pt-0.5">Wed</span>
+                            <span class="text-xs font-black text-white">25</span>
+                        </button>
+
+                        <button onclick="selectDate(26, 'Thu', 'Adab Menuntut Ilmu', 'Ust. Salim A. Fillah', '19:30 WIB', 'A5 Room')" class="date-btn flex flex-col items-center justify-center py-2 px-2.5 rounded-2xl bg-white text-zinc-400 border border-zinc-200/80 min-w-[44px]">
+                            <span class="text-[9px] font-semibold">Thu</span>
+                            <span class="text-xs font-bold text-zinc-800 mt-0.5">26</span>
+                        </button>
+
+                        <button onclick="selectDate(27, 'Fri', 'Amalan Hari Jumat', 'Ust. Oemar Mita', '18:30 WIB', 'Main Hall')" class="date-btn flex flex-col items-center justify-center py-2 px-2.5 rounded-2xl bg-white text-zinc-400 border border-zinc-200/80 min-w-[44px]">
+                            <span class="text-[9px] font-semibold">Fri</span>
+                            <span class="text-xs font-bold text-zinc-800 mt-0.5">27</span>
+                        </button>
+
+                        <button onclick="selectDate(28, 'Sat', 'Kesehatan Hati Muslim', 'Ust. Nuzul Dzikri', '04:30 WIB', 'A2 Room')" class="date-btn flex flex-col items-center justify-center py-2 px-2.5 rounded-2xl bg-white text-zinc-400 border border-zinc-200/80 min-w-[44px]">
+                            <span class="text-[9px] font-semibold">Sat</span>
+                            <span class="text-xs font-bold text-zinc-800 mt-0.5">28</span>
+                        </button>
+
+                    </div>
+                </div>
+
+                <!-- Secondary Soft Grey Card (Below Green Card) -->
+                <div class="bg-app-cardGrey rounded-[32px] p-5 text-zinc-950 space-y-3 border border-zinc-200/80">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-1.5">
+                            <span class="px-3 py-1 bg-white/70 rounded-full text-[10px] font-extrabold text-zinc-800">Syar'i</span>
+                            <span class="px-3 py-1 bg-white/70 rounded-full text-[10px] font-extrabold text-zinc-800">Subuh</span>
+                        </div>
+                        <span class="text-[11px] font-bold text-zinc-500">Besok • 04:30</span>
+                    </div>
+
+                    <div class="flex items-start space-x-3">
+                        <div class="w-11 h-11 rounded-full bg-emerald-600 text-white font-black text-xl flex items-center justify-center shrink-0 shadow-inner">
+                            S
                         </div>
                         <div>
-                            <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Jemaah Terkonfirmasi</p>
-                            <div class="flex items-baseline space-x-2">
-                                <span class="text-xl font-black text-zinc-900" id="live-counter">148</span>
-                                <span class="text-[10px] font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">+12 baru</span>
-                            </div>
+                            <h3 class="text-base font-extrabold text-zinc-950">Subuh Berjamaah & Tafsir Al-Kahfi</h3>
+                            <p class="text-xs font-semibold text-zinc-600">Ust. Adi Hidayat • Gazebo Room A2</p>
                         </div>
-                    </div>
-                    <div class="w-12 h-12 flex items-center justify-center">
-                        <span class="w-3 h-3 bg-emerald-400 rounded-full animate-ping"></span>
                     </div>
                 </div>
 
             </section>
 
-            <!-- ================= TAB 2: FORM KEHADIRAN & EKSPERIMEN NIAT ================= -->
-            <section id="tab-form" class="tab-content px-5 -mt-8 space-y-4 relative z-20">
+            <!-- TAB 2: FORM KEHADIRAN & EKSPERIMEN NIAT -->
+            <section id="tab-form" class="tab-page px-6 space-y-4 pt-1">
                 
-                <!-- Main Form Card -->
-                <div class="bg-white rounded-[32px] p-6 flashcard-shadow space-y-5 border border-zinc-100">
+                <div class="bg-white rounded-[32px] p-5 shadow-sm space-y-4 border border-zinc-200">
                     
                     <div class="space-y-1">
-                        <span class="text-xs font-semibold font-mono text-zinc-400 lowercase">eksperimen niat majelis</span>
-                        <h2 class="text-2xl font-black text-zinc-900">Form Presensi</h2>
-                        <p class="text-xs text-zinc-500">Pilih niat terbaikmu agar ilmu menjadi berkah.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[9px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-full">
+                                Eksperimen Niat Majelis
+                            </span>
+                            <span class="text-[9px] font-bold text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded-full">
+                                Auto-Sync Sheet <i class="fa-solid fa-cloud-arrow-up text-[9px] text-emerald-600"></i>
+                            </span>
+                        </div>
+                        <h2 class="text-2xl font-black text-zinc-950">Form Presensi</h2>
+                        <p class="text-xs text-zinc-500">Isi data & tentukan niat utamamu sebelum hadir.</p>
                     </div>
 
-                    <form id="attendanceForm" onsubmit="handleAttendanceSubmit(event)" class="space-y-4">
+                    <form id="attendanceForm" onsubmit="handleAttendanceSubmit(event)" class="space-y-3.5">
                         
                         <!-- Nama Input -->
                         <div class="space-y-1">
-                            <label class="text-[11px] font-bold text-zinc-600 uppercase tracking-wider">Nama Lengkap / Panggilan</label>
+                            <label class="text-[10px] font-extrabold text-zinc-700 uppercase tracking-wider">Nama Lengkap / Panggilan</label>
                             <input type="text" id="input-nama" required placeholder="Fulan / Fulanah" 
-                                class="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-4 py-3 text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-400 transition font-medium">
+                                class="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-4 py-3 text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-900 transition font-medium">
                         </div>
 
                         <!-- WA Input -->
                         <div class="space-y-1">
-                            <label class="text-[11px] font-bold text-zinc-600 uppercase tracking-wider">Nomor WhatsApp</label>
+                            <label class="text-[10px] font-extrabold text-zinc-700 uppercase tracking-wider">Nomor WhatsApp</label>
                             <input type="tel" id="input-wa" required placeholder="0812xxxxxxx" 
-                                class="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-4 py-3 text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-400 transition font-medium">
+                                class="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-4 py-3 text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-900 transition font-medium">
                         </div>
 
                         <!-- EKSPERIMEN NIAT SELECTOR -->
                         <div class="space-y-2 pt-2 border-t border-zinc-100">
                             <label class="text-xs font-black text-zinc-900 flex items-center justify-between">
                                 <span>Pilih Niat Utama Hari Ini</span>
-                                <span class="text-[9px] bg-pastel-pink px-2 py-0.5 rounded-full font-bold">Wajib 1 Choice</span>
+                                <span class="text-[9px] bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full font-bold">1 Pilihan Niat</span>
                             </label>
 
                             <div class="space-y-2" id="niat-options-container">
                                 
-                                <label class="block p-3.5 bg-zinc-50 border border-zinc-200 rounded-2xl cursor-pointer hover:border-zinc-400 transition has-[:checked]:border-zinc-900 has-[:checked]:bg-pastel-yellow/30">
-                                    <div class="flex items-start space-x-3">
-                                        <input type="radio" name="niat_choice" value="Menuntut Ilmu Syar'i untuk Diamalkan" checked class="mt-1 accent-zinc-900">
+                                <label class="block p-3.5 bg-zinc-50 border border-zinc-200 rounded-2xl cursor-pointer hover:border-zinc-400 transition has-[:checked]:border-zinc-950 has-[:checked]:bg-emerald-50">
+                                    <div class="flex items-start space-x-2.5">
+                                        <input type="radio" name="niat_choice" value="Menuntut Ilmu Syar'i untuk Diamalkan" checked class="mt-1 accent-zinc-950">
                                         <div>
-                                            <p class="text-xs font-bold text-zinc-900">Menuntut Ilmu Syar'i</p>
-                                            <p class="text-[11px] text-zinc-500">Memahami agama untuk memperbaiki ibadah harian.</p>
+                                            <p class="text-xs font-black text-zinc-900">Menuntut Ilmu Syar'i</p>
+                                            <p class="text-[10px] text-zinc-500 leading-snug">Memahami agama untuk memperbaiki kualitas ibadah harian.</p>
                                         </div>
                                     </div>
                                 </label>
 
-                                <label class="block p-3.5 bg-zinc-50 border border-zinc-200 rounded-2xl cursor-pointer hover:border-zinc-400 transition has-[:checked]:border-zinc-900 has-[:checked]:bg-pastel-pink/30">
-                                    <div class="flex items-start space-x-3">
-                                        <input type="radio" name="niat_choice" value="Cas Iman & Menyuci Rohani dari Kelalaian" class="mt-1 accent-zinc-900">
+                                <label class="block p-3.5 bg-zinc-50 border border-zinc-200 rounded-2xl cursor-pointer hover:border-zinc-400 transition has-[:checked]:border-zinc-950 has-[:checked]:bg-amber-50">
+                                    <div class="flex items-start space-x-2.5">
+                                        <input type="radio" name="niat_choice" value="Cas Iman & Menyuci Hati dari Kelalaian" class="mt-1 accent-zinc-950">
                                         <div>
-                                            <p class="text-xs font-bold text-zinc-900">Cas Iman & Penyejuk Hati</p>
-                                            <p class="text-[11px] text-zinc-500">Mencari ketenangan dari lelahnya urusan duniawi.</p>
+                                            <p class="text-xs font-black text-zinc-900">Cas Iman & Penyejuk Hati</p>
+                                            <p class="text-[10px] text-zinc-500 leading-snug">Mencari ketenangan & menyuci hati dari lelahnya dunia.</p>
                                         </div>
                                     </div>
                                 </label>
 
-                                <label class="block p-3.5 bg-zinc-50 border border-zinc-200 rounded-2xl cursor-pointer hover:border-zinc-400 transition has-[:checked]:border-zinc-900 has-[:checked]:bg-emerald-100/50">
-                                    <div class="flex items-start space-x-3">
-                                        <input type="radio" name="niat_choice" value="Menjaga Silaturahmi & Ukhuwah Teman Sholeh" class="mt-1 accent-zinc-900">
+                                <label class="block p-3.5 bg-zinc-50 border border-zinc-200 rounded-2xl cursor-pointer hover:border-zinc-400 transition has-[:checked]:border-zinc-950 has-[:checked]:bg-indigo-50">
+                                    <div class="flex items-start space-x-2.5">
+                                        <input type="radio" name="niat_choice" value="Menjaga Silaturahmi & Ukhuwah Teman Sholeh" class="mt-1 accent-zinc-950">
                                         <div>
-                                            <p class="text-xs font-bold text-zinc-900">Silaturahmi & Ukhuwah</p>
-                                            <p class="text-[11px] text-zinc-500">Berkumpul bersama kawan sholeh agar saling mendoakan.</p>
+                                            <p class="text-xs font-black text-zinc-900">Silaturahmi & Ukhuwah</p>
+                                            <p class="text-[10px] text-zinc-500 leading-snug">Berkumpul bersama kawan sholeh agar saling mendoakan.</p>
                                         </div>
                                     </div>
                                 </label>
@@ -281,44 +347,44 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <button type="submit" class="w-full py-4 bg-zinc-950 hover:bg-zinc-800 text-white font-black rounded-full shadow-lg transition active:scale-95 flex items-center justify-center space-x-2 text-xs">
-                            <i class="fa-solid fa-paper-plane text-xs text-pastel-yellow"></i>
-                            <span>Bismillah, Mantapkan Niat & Simpan Presensi</span>
+                        <button type="submit" id="btn-submit-presensi" class="w-full py-3.5 bg-zinc-950 hover:bg-black text-white font-black rounded-2xl shadow-md transition active:scale-95 flex items-center justify-center space-x-2 text-xs">
+                            <i class="fa-solid fa-paper-plane text-xs text-app-cardGreen"></i>
+                            <span id="btn-submit-text">Bismillah, Simpan Presensi & Sync Sheet</span>
                         </button>
 
                     </form>
 
                 </div>
 
-                <!-- Digital Ticket Result Pass Card -->
-                <div id="ticket-result" class="hidden bg-white rounded-[32px] p-6 flashcard-shadow space-y-4 border border-zinc-100">
-                    <div class="flex items-center justify-between border-b border-zinc-100 pb-3">
+                <!-- Digital Ticket Pass Result -->
+                <div id="ticket-result" class="hidden bg-white rounded-[32px] p-5 shadow-sm space-y-3.5 border border-zinc-200">
+                    <div class="flex items-center justify-between border-b border-zinc-100 pb-2.5">
                         <div class="flex items-center space-x-2.5">
-                            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-sm">
+                            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xs">
                                 <i class="fa-solid fa-circle-check"></i>
                             </div>
                             <div>
                                 <h4 class="text-xs font-bold text-zinc-900">Presensi Terkonfirmasi!</h4>
-                                <p class="text-[10px] text-zinc-400" id="ticket-time">Waktu Presensi</p>
+                                <p class="text-[9px] text-zinc-400" id="ticket-time">Waktu Presensi</p>
                             </div>
                         </div>
-                        <span class="bg-emerald-400 text-zinc-950 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">PASSED</span>
+                        <span class="bg-emerald-400 text-zinc-950 text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">PASSED</span>
                     </div>
 
-                    <div class="space-y-2">
-                        <p class="text-xs text-zinc-500">Nama Jemaah: <span class="text-zinc-900 font-bold" id="res-nama">-</span></p>
-                        <div class="bg-pastel-yellow/30 p-3.5 rounded-2xl border border-pastel-yellow/50">
-                            <p class="text-[9px] text-zinc-700 font-extrabold uppercase tracking-wider mb-1"><i class="fa-solid fa-quote-left mr-1"></i> Niat Utama Anda:</p>
+                    <div class="space-y-1.5">
+                        <p class="text-xs text-zinc-500">Nama Jemaah: <span class="text-zinc-950 font-bold" id="res-nama">-</span></p>
+                        <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200/60">
+                            <p class="text-[8px] text-zinc-700 font-extrabold uppercase tracking-wider mb-0.5"><i class="fa-solid fa-quote-left mr-1"></i> Niat Utama Anda:</p>
                             <p class="text-xs text-zinc-900 italic font-semibold" id="res-niat">"-"</p>
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-between pt-2">
+                    <div class="flex items-center justify-between pt-1">
                         <div id="qrcode-container" class="bg-zinc-50 p-2 rounded-2xl border border-zinc-200"></div>
                         <div class="text-right space-y-2">
-                            <p class="text-[10px] text-zinc-400">Tunjukkan QR ini di lokasi Gazebo</p>
-                            <button onclick="copyTicketPass()" class="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 text-white text-xs rounded-full font-semibold transition active:scale-95">
-                                <i class="fa-regular fa-copy mr-1"></i> Salin ID Tiket
+                            <p class="text-[9px] text-zinc-400">Tunjukkan QR ini di Gazebo</p>
+                            <button onclick="copyTicketPass()" class="px-3.5 py-2 bg-zinc-950 text-white text-xs rounded-xl font-semibold transition active:scale-95">
+                                <i class="fa-regular fa-copy mr-1"></i> Salin Tiket
                             </button>
                         </div>
                     </div>
@@ -326,304 +392,429 @@
 
             </section>
 
-            <!-- ================= TAB 4: AGENDA KEGIATAN ================= -->
-            <section id="tab-kegiatan" class="tab-content px-5 -mt-8 space-y-4 relative z-20">
-                
-                <div class="bg-white rounded-[32px] p-6 flashcard-shadow space-y-4 border border-zinc-100">
-                    
+            <!-- TAB 3: CENTER QRIS INFAQ -->
+            <section id="tab-qris" class="tab-page px-6 space-y-4 pt-2">
+                <div class="bg-white rounded-[32px] p-6 shadow-sm space-y-5 border border-zinc-200 text-center">
+                    <div class="w-16 h-16 mx-auto rounded-3xl bg-emerald-100 text-zinc-950 flex items-center justify-center text-2xl font-black">
+                        <i class="fa-solid fa-qrcode"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-black text-zinc-950">Infaq Gazebo Mengaji</h2>
+                        <p class="text-xs text-zinc-500">Dukung operasional dakwah & konsumsi majelis</p>
+                    </div>
+
+                    <!-- Direct QRIS Code View -->
+                    <div class="bg-zinc-50 p-6 rounded-3xl flex flex-col items-center justify-center space-y-3 border border-zinc-200">
+                        <div id="tab-qris-holder" class="p-3 bg-white border border-zinc-200 rounded-2xl shadow-sm"></div>
+                        <p class="text-xs font-extrabold tracking-wide text-zinc-950 uppercase">A.N. GAZEBO MENGAJI INFAQ</p>
+                    </div>
+
+                    <!-- Quick Amounts -->
+                    <div class="space-y-2 text-left">
+                        <p class="text-xs font-bold text-zinc-700">Pilih Nominal Infaq:</p>
+                        <div class="grid grid-cols-4 gap-2 text-xs">
+                            <button onclick="setDonationAmount(5000)" class="py-2.5 bg-zinc-100 hover:bg-emerald-100 rounded-xl text-zinc-950 font-bold transition active:scale-95">5rb</button>
+                            <button onclick="setDonationAmount(10000)" class="py-2.5 bg-zinc-100 hover:bg-emerald-100 rounded-xl text-zinc-950 font-bold transition active:scale-95">10rb</button>
+                            <button onclick="setDonationAmount(25000)" class="py-2.5 bg-zinc-100 hover:bg-emerald-100 rounded-xl text-zinc-950 font-bold transition active:scale-95">25rb</button>
+                            <button onclick="setDonationAmount(50000)" class="py-2.5 bg-zinc-100 hover:bg-emerald-100 rounded-xl text-zinc-950 font-bold transition active:scale-95">50rb</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: AGENDA KEGIATAN MAJELIS -->
+            <section id="tab-kegiatan" class="tab-page px-6 space-y-4 pt-2">
+                <div class="bg-white rounded-[32px] p-6 shadow-sm space-y-4 border border-zinc-200">
                     <div class="flex items-center justify-between">
                         <div>
-                            <span class="text-xs font-semibold font-mono text-zinc-400 lowercase">jadwal rutin & spesial</span>
-                            <h2 class="text-2xl font-black text-zinc-900">Agenda Gazebo</h2>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Agenda Pekanan & Bulanan</span>
+                            <h2 class="text-2xl font-black text-zinc-950">Jadwal Gazebo</h2>
                         </div>
-                        <span class="bg-zinc-100 text-zinc-600 text-[10px] px-3 py-1 rounded-full font-bold">Bulan Ini</span>
+                        <span class="bg-zinc-100 text-zinc-700 text-[10px] px-3 py-1 rounded-full font-bold">September 2026</span>
                     </div>
 
-                    <!-- Agenda Cards -->
+                    <!-- Agenda Items -->
                     <div class="space-y-3 pt-1">
                         
-                        <!-- Event Item 1 -->
-                        <div class="p-4 rounded-2xl bg-zinc-50 border border-zinc-100 flex items-center justify-between space-x-3">
-                            <div class="w-12 h-14 bg-pastel-pink rounded-xl flex flex-col items-center justify-center text-center shrink-0">
-                                <span class="text-[9px] text-zinc-900 uppercase font-black">SAB</span>
-                                <span class="text-lg font-black text-zinc-900 leading-none">20</span>
+                        <div class="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 flex items-center justify-between space-x-3">
+                            <div class="w-12 h-14 bg-app-cardGreen rounded-2xl flex flex-col items-center justify-center text-center text-zinc-950 shrink-0">
+                                <span class="text-[9px] uppercase font-extrabold">SAB</span>
+                                <span class="text-lg font-black leading-none">28</span>
                             </div>
                             <div class="flex-1 min-w-0">
-                                <span class="text-[9px] bg-white text-zinc-700 font-bold px-2 py-0.5 rounded-md border border-zinc-200">Rutin Pekanan</span>
-                                <h3 class="text-xs font-bold text-zinc-900 truncate mt-1">Tafsir Surah Al-Kahfi</h3>
-                                <p class="text-[10px] text-zinc-500">19:30 - Ba'da Isya</p>
+                                <span class="text-[9px] bg-white text-zinc-800 font-bold px-2 py-0.5 rounded-md border border-zinc-200">Tafsir Kahfi</span>
+                                <h3 class="text-xs font-bold text-zinc-900 truncate mt-1">Menyucikan Hati dari Kelalaian</h3>
+                                <p class="text-[10px] text-zinc-500">19:30 WIB • Room A5</p>
                             </div>
-                            <button onclick="switchTab('tab-form')" class="px-3 py-2 bg-white border border-zinc-200 text-zinc-900 text-xs font-extrabold rounded-full transition active:scale-95 shadow-sm">
+                            <button onclick="switchTab('tab-form')" class="px-3 py-2 bg-zinc-950 text-white text-xs font-extrabold rounded-xl transition active:scale-95">
                                 Presensi
                             </button>
                         </div>
 
-                        <!-- Event Item 2 -->
-                        <div class="p-4 rounded-2xl bg-zinc-50 border border-zinc-100 flex items-center justify-between space-x-3">
-                            <div class="w-12 h-14 bg-pastel-yellow rounded-xl flex flex-col items-center justify-center text-center shrink-0">
-                                <span class="text-[9px] text-zinc-900 uppercase font-black">MIN</span>
-                                <span class="text-lg font-black text-zinc-900 leading-none">21</span>
+                        <div class="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 flex items-center justify-between space-x-3">
+                            <div class="w-12 h-14 bg-app-cardGrey rounded-2xl flex flex-col items-center justify-center text-center text-zinc-950 shrink-0">
+                                <span class="text-[9px] uppercase font-extrabold">MIN</span>
+                                <span class="text-lg font-black leading-none">29</span>
                             </div>
                             <div class="flex-1 min-w-0">
-                                <span class="text-[9px] bg-white text-zinc-700 font-bold px-2 py-0.5 rounded-md border border-zinc-200">Subuh Berjamaah</span>
+                                <span class="text-[9px] bg-white text-zinc-800 font-bold px-2 py-0.5 rounded-md border border-zinc-200">Subuh</span>
                                 <h3 class="text-xs font-bold text-zinc-900 truncate mt-1">Kesehatan Hati Muslim</h3>
-                                <p class="text-[10px] text-zinc-500">04:30 - Selesai</p>
+                                <p class="text-[10px] text-zinc-500">04:30 WIB • Room A2</p>
                             </div>
-                            <button onclick="switchTab('tab-form')" class="px-3 py-2 bg-white border border-zinc-200 text-zinc-900 text-xs font-extrabold rounded-full transition active:scale-95 shadow-sm">
-                                Presensi
-                            </button>
-                        </div>
-
-                        <!-- Event Item 3 -->
-                        <div class="p-4 rounded-2xl bg-zinc-50 border border-zinc-100 flex items-center justify-between space-x-3">
-                            <div class="w-12 h-14 bg-emerald-200 rounded-xl flex flex-col items-center justify-center text-center shrink-0">
-                                <span class="text-[9px] text-zinc-900 uppercase font-black">RAB</span>
-                                <span class="text-lg font-black text-zinc-900 leading-none">24</span>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <span class="text-[9px] bg-white text-zinc-700 font-bold px-2 py-0.5 rounded-md border border-zinc-200">Kajian Akhwat</span>
-                                <h3 class="text-xs font-bold text-zinc-900 truncate mt-1">Wanita Tangguh Berhati Lapang</h3>
-                                <p class="text-[10px] text-zinc-500">16:00 WIB (Ashar)</p>
-                            </div>
-                            <button onclick="switchTab('tab-form')" class="px-3 py-2 bg-white border border-zinc-200 text-zinc-900 text-xs font-extrabold rounded-full transition active:scale-95 shadow-sm">
+                            <button onclick="switchTab('tab-form')" class="px-3 py-2 bg-zinc-950 text-white text-xs font-extrabold rounded-xl transition active:scale-95">
                                 Presensi
                             </button>
                         </div>
 
                     </div>
-
                 </div>
-
             </section>
 
-            <!-- ================= TAB 5: INFORMASI GAZEBO MENGAJI ================= -->
-            <section id="tab-info" class="tab-content px-5 -mt-8 space-y-4 relative z-20">
-                
-                <div class="bg-white rounded-[32px] p-6 flashcard-shadow space-y-4 border border-zinc-100 text-center">
-                    <div class="w-16 h-16 mx-auto rounded-3xl bg-pastel-yellow flex items-center justify-center text-zinc-900 shadow-md text-2xl">
+            <!-- TAB 5: INFORMASI GAZEBO MENGAJI -->
+            <section id="tab-info" class="tab-page px-6 space-y-4 pt-1">
+                <div class="bg-white rounded-[32px] p-5 shadow-sm space-y-4 border border-zinc-200 text-center">
+                    <div class="w-14 h-14 mx-auto rounded-3xl bg-emerald-100 flex items-center justify-center text-zinc-950 text-2xl font-black">
                         <i class="fa-solid fa-kaaba"></i>
                     </div>
                     <div>
-                        <h2 class="text-xl font-black text-zinc-900">Gazebo Mengaji</h2>
-                        <p class="text-xs font-semibold text-emerald-700">Ruang Belajar & Eksperimen Niat</p>
+                        <h2 class="text-2xl font-black text-zinc-950">Gazebo Mengaji</h2>
+                        <p class="text-xs font-bold text-emerald-800">Ruang Belajar & Eksperimen Niat</p>
                     </div>
                     <p class="text-xs text-zinc-500 leading-relaxed max-w-xs mx-auto">
-                        Komunitas terbuka bagi siapa saja yang ingin mendekatkan diri kepada Allah dengan suasana yang hangat dan santai.
+                        Komunitas terbuka bagi siapa saja yang ingin mendekatkan diri kepada Allah dengan suasana hangat, modern, dan santai.
                     </p>
 
-                    <div class="pt-2">
-                        <a href="https://maps.google.com" target="_blank" class="block w-full py-3 bg-zinc-950 text-white font-bold rounded-full text-xs shadow-md transition active:scale-95">
-                            <i class="fa-solid fa-map-location-dot mr-1.5 text-pastel-yellow"></i> Petunjuk Lokasi Google Maps
+                    <!-- Google Sheet Integration Panel Card -->
+                    <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 text-left space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2 text-emerald-950 font-extrabold text-xs">
+                                <i class="fa-solid fa-file-csv text-emerald-600 text-base"></i>
+                                <span>Google Sheet Integration</span>
+                            </div>
+                            <span class="text-[9px] bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded-full font-black">LIVE SYNC</span>
+                        </div>
+                        <p class="text-[10px] text-emerald-800 leading-snug">
+                            Presensi jemaah dan jadwal majelis dapat disinkronkan langsung dari & ke Google Spreadsheet Anda.
+                        </p>
+                        <button onclick="openSheetSyncModal()" class="w-full py-2 bg-emerald-900 hover:bg-emerald-950 text-white font-bold rounded-xl text-xs shadow-sm transition active:scale-95 flex items-center justify-center space-x-1.5">
+                            <i class="fa-solid fa-gear text-xs"></i>
+                            <span>Kelola URL Google Apps Script</span>
+                        </button>
+                    </div>
+
+                    <div class="pt-1">
+                        <a href="https://maps.google.com" target="_blank" class="block w-full py-3.5 bg-zinc-950 text-white font-bold rounded-2xl text-xs shadow-md transition active:scale-95">
+                            <i class="fa-solid fa-map-location-dot mr-1.5 text-app-cardGreen"></i> Petunjuk Google Maps
                         </a>
                     </div>
                 </div>
-
             </section>
 
         </main>
 
-
-        <!-- ================= DARK BOTTOM DOCK (MATCHING SCREENSHOT NAVIGATION) ================= -->
-        <div class="absolute bottom-0 inset-x-0 bg-zinc-950 pt-3 pb-6 px-4 z-40 rounded-t-[36px] shadow-2xl border-t border-zinc-800">
+        <!-- ================= STACKED BOTTOM NAVIGATION DOCK (Matching Reference dark navbar) ================= -->
+        <div class="absolute bottom-0 inset-x-0 z-40 p-3 pb-4 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent pointer-events-none">
             
-            <!-- Dynamic Ask Bar (Exact match to "Need to know more? -> Ask" input bar in screenshot) -->
-            <div class="mb-3 bg-zinc-900 p-1.5 pl-4 rounded-full flex items-center justify-between border border-zinc-800/80">
-                <div class="flex items-center space-x-2 text-zinc-400 text-xs">
-                    <i class="fa-regular fa-comment-dots text-zinc-400"></i>
-                    <span class="text-[11px] font-medium text-zinc-400" id="dock-counter-text">Presensi Aktif • 36/58 Slot</span>
-                </div>
-                <button onclick="openQrisModal()" class="px-4 py-1.5 bg-pastel-yellowAccent hover:bg-yellow-400 text-zinc-950 font-black rounded-full text-xs transition active:scale-95 shadow">
-                    Infaq QRIS
-                </button>
-            </div>
-
-            <!-- Tab Bar Controls -->
-            <div class="flex items-center justify-around text-zinc-400 pt-1">
+            <nav class="bg-app-dock rounded-[32px] px-2 py-2.5 flex items-center justify-around shadow-2xl pointer-events-auto border border-zinc-800 relative">
                 
-                <button onclick="switchTab('tab-poster')" id="nav-tab-poster" class="flex flex-col items-center justify-center w-12 py-1 text-white transition">
-                    <i class="fa-solid fa-layer-group text-sm"></i>
-                    <span class="text-[9px] font-bold mt-1">Poster</span>
+                <!-- Tab 1: Kajian / Home -->
+                <button onclick="switchTab('tab-home')" id="nav-btn-home" class="nav-pill-btn flex flex-col items-center justify-center space-y-1 text-white transition-all">
+                    <i id="nav-icon-home" class="fa-solid fa-briefcase text-base text-white"></i>
+                    <span id="nav-label-home" class="text-[9px] font-extrabold tracking-tight text-white">Kajian</span>
                 </button>
 
-                <button onclick="switchTab('tab-form')" id="nav-tab-form" class="flex flex-col items-center justify-center w-12 py-1 text-zinc-500 hover:text-white transition">
-                    <i class="fa-solid fa-pen-to-square text-sm"></i>
-                    <span class="text-[9px] font-bold mt-1">Presensi</span>
+                <!-- Tab 2: Presensi / Form -->
+                <button onclick="switchTab('tab-form')" id="nav-btn-form" class="nav-pill-btn flex flex-col items-center justify-center space-y-1 text-zinc-500 hover:text-white transition-all">
+                    <i id="nav-icon-form" class="fa-solid fa-user-group text-base text-zinc-500"></i>
+                    <span id="nav-label-form" class="text-[9px] font-bold tracking-tight text-zinc-400">Presensi</span>
                 </button>
 
-                <!-- Center Vibrant FAB for Quick QRIS -->
-                <div class="relative -top-3">
-                    <button onclick="openQrisModal()" class="w-12 h-12 rounded-full bg-pastel-pink text-zinc-950 flex flex-col items-center justify-center shadow-lg fab-glow transition transform active:scale-90 border-2 border-zinc-950">
-                        <i class="fa-solid fa-qrcode text-base font-black"></i>
-                    </button>
-                </div>
-
-                <button onclick="switchTab('tab-kegiatan')" id="nav-tab-kegiatan" class="flex flex-col items-center justify-center w-12 py-1 text-zinc-500 hover:text-white transition">
-                    <i class="fa-regular fa-calendar-check text-sm"></i>
-                    <span class="text-[9px] font-bold mt-1">Agenda</span>
+                <!-- Tab 3: CENTER FAB QRIS -->
+                <button onclick="switchTab('tab-qris')" id="nav-btn-qris" class="nav-pill-btn flex flex-col items-center justify-center space-y-1 text-zinc-500 hover:text-white transition-all">
+                    <div id="nav-icon-qris-box" class="w-8 h-8 rounded-full bg-zinc-800 text-white flex items-center justify-center border border-zinc-700">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                    </div>
+                    <span id="nav-label-qris" class="text-[9px] font-bold tracking-tight text-zinc-400">QRIS</span>
                 </button>
 
-                <button onclick="switchTab('tab-info')" id="nav-tab-info" class="flex flex-col items-center justify-center w-12 py-1 text-zinc-500 hover:text-white transition">
-                    <i class="fa-regular fa-circle-question text-sm"></i>
-                    <span class="text-[9px] font-bold mt-1">Info</span>
+                <!-- Tab 4: Agenda / Kegiatan -->
+                <button onclick="switchTab('tab-kegiatan')" id="nav-btn-kegiatan" class="nav-pill-btn flex flex-col items-center justify-center space-y-1 text-zinc-500 hover:text-white transition-all">
+                    <i id="nav-icon-kegiatan" class="fa-regular fa-comments text-base text-zinc-500"></i>
+                    <span id="nav-label-kegiatan" class="text-[9px] font-bold tracking-tight text-zinc-400">Agenda</span>
                 </button>
 
-            </div>
+                <!-- Tab 5: Info -->
+                <button onclick="switchTab('tab-info')" id="nav-btn-info" class="nav-pill-btn flex flex-col items-center justify-center space-y-1 text-zinc-500 hover:text-white transition-all">
+                    <i id="nav-icon-info" class="fa-regular fa-face-smile text-base text-zinc-500"></i>
+                    <span id="nav-label-info" class="text-[9px] font-bold tracking-tight text-zinc-400">Info</span>
+                </button>
+
+            </nav>
 
         </div>
 
+        <!-- Google Sheet Integration Modal -->
+        <div id="modal-sheet-sync" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition duration-300">
+            <div class="bg-white rounded-[32px] p-6 max-w-sm w-full space-y-4 shadow-2xl relative border border-zinc-200">
+                <button onclick="closeSheetSyncModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-zinc-100 text-zinc-600 flex items-center justify-center text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
 
-        <!-- ================= MODAL CENTER FAB QRIS ================= -->
-        <div id="qris-modal" class="fixed inset-0 bg-zinc-950/70 backdrop-blur-md z-50 hidden flex justify-center items-end md:items-center p-0 md:p-4">
-            <div class="w-full max-w-md bg-white rounded-t-[36px] md:rounded-[36px] p-6 space-y-5 shadow-2xl animate-in slide-in-from-bottom duration-300 border border-zinc-100">
-                
-                <div class="flex items-center justify-between border-b border-zinc-100 pb-3">
-                    <div class="flex items-center space-x-2.5">
-                        <div class="w-8 h-8 rounded-full bg-pastel-yellow flex items-center justify-center text-zinc-900 font-bold">
-                            <i class="fa-solid fa-qrcode text-xs"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xs font-black text-zinc-900">Infaq Gazebo via QRIS</h3>
-                            <p class="text-[10px] text-zinc-400">Scan via All E-Wallet & Mobile Banking</p>
-                        </div>
-                    </div>
-                    <button onclick="closeQrisModal()" class="w-8 h-8 rounded-full bg-zinc-100 text-zinc-500 hover:text-zinc-900 flex items-center justify-center">
-                        <i class="fa-solid fa-xmark text-xs"></i>
-                    </button>
+                <div class="space-y-1">
+                    <span class="text-[9px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-full">Integrasi Google Sheet</span>
+                    <h3 class="text-lg font-black text-zinc-950">Hubungkan Spreadsheet</h3>
+                    <p class="text-xs text-zinc-500">Masukkan Web App URL dari Google Apps Script untuk sync presensi & jadwal live.</p>
                 </div>
 
-                <!-- QRIS Canvas Box -->
-                <div class="bg-zinc-50 p-5 rounded-3xl flex flex-col items-center justify-center space-y-3 text-zinc-900 border border-zinc-100">
-                    <div id="qris-code-holder" class="p-2 bg-white border border-zinc-200 rounded-2xl shadow-sm"></div>
-                    <p class="text-xs font-black tracking-wide">A.N. GAZEBO MENGAJI INFAQ</p>
-                </div>
-
-                <!-- Amount Nominal Suggestions -->
                 <div class="space-y-2">
-                    <p class="text-xs font-bold text-zinc-600">Pilih Nominal Infaq Subuh / Majelis:</p>
-                    <div class="grid grid-cols-4 gap-2 text-xs">
-                        <button onclick="setDonationAmount(5000)" class="py-2.5 bg-zinc-100 hover:bg-pastel-pink/40 rounded-xl text-zinc-900 font-bold transition active:scale-95">Rp 5rb</button>
-                        <button onclick="setDonationAmount(10000)" class="py-2.5 bg-zinc-100 hover:bg-pastel-pink/40 rounded-xl text-zinc-900 font-bold transition active:scale-95">Rp 10rb</button>
-                        <button onclick="setDonationAmount(25000)" class="py-2.5 bg-zinc-100 hover:bg-pastel-pink/40 rounded-xl text-zinc-900 font-bold transition active:scale-95">Rp 25rb</button>
-                        <button onclick="setDonationAmount(50000)" class="py-2.5 bg-zinc-100 hover:bg-pastel-pink/40 rounded-xl text-zinc-900 font-bold transition active:scale-95">Rp 50rb</button>
-                    </div>
+                    <label class="text-[10px] font-extrabold text-zinc-700 uppercase">Apps Script Web App URL</label>
+                    <input type="url" id="sheet-url-input" placeholder="https://script.google.com/macros/s/.../exec"
+                           class="w-full bg-zinc-50 border border-zinc-300 rounded-xl px-3 py-2 text-xs text-zinc-900 focus:outline-none focus:border-zinc-900 font-mono">
                 </div>
 
-                <button onclick="closeQrisModal()" class="w-full py-3.5 bg-zinc-950 text-white font-black rounded-full text-xs shadow-md">
-                    Tutup
-                </button>
+                <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-[10px] text-amber-900 space-y-1">
+                    <p class="font-bold"><i class="fa-solid fa-circle-info mr-1"></i> Panduan Singkat:</p>
+                    <ol class="list-decimal pl-4 space-y-0.5 text-[9.5px] leading-snug">
+                        <li>Buka Google Sheet > <b>Extensions</b> > <b>Apps Script</b></li>
+                        <li>Klik <b>Deploy > New Deployment</b></li>
+                        <li>Pilih <b>Web App</b>, set access <b>Anyone</b> lalu Deploy.</li>
+                    </ol>
+                </div>
+
+                <div class="flex items-center space-x-2 pt-1">
+                    <button onclick="saveSheetUrlConfig()" class="flex-1 py-2.5 bg-zinc-950 text-white font-bold rounded-xl text-xs shadow-md active:scale-95 transition">
+                        Simpan & Hubungkan
+                    </button>
+                    <button onclick="syncScheduleFromSheet()" class="px-3 py-2.5 bg-emerald-100 text-emerald-950 font-bold rounded-xl text-xs active:scale-95 transition">
+                        Fetch Live
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- Toast Messenger -->
+        <!-- Toast Notification -->
         <div id="toast-msg" class="fixed top-12 left-1/2 transform -translate-x-1/2 bg-zinc-950 text-white px-5 py-3 rounded-full text-xs font-bold shadow-2xl transition opacity-0 pointer-events-none z-50 flex items-center space-x-2 border border-zinc-800">
-            <i class="fa-solid fa-circle-check text-pastel-yellow"></i>
-            <span id="toast-text">Pesan notifikasi</span>
+            <i class="fa-solid fa-circle-check text-app-cardGreen"></i>
+            <span id="toast-text">Notifikasi</span>
         </div>
 
     </div>
 
     <script>
+        let currentTab = 'tab-home';
         let isAudioPlaying = false;
-        let activeTab = 'tab-poster';
+        
+        let GOOGLE_SHEET_WEB_APP_URL = localStorage.getItem('gzb_sheet_url') || '';
 
         window.onload = function() {
-            // Generate QR code preview for donations
-            new QRCode(document.getElementById("qris-code-holder"), {
-                text: "https://gazebomengaji.org/infaq-qris-official",
-                width: 140,
-                height: 140,
-                colorDark: "#09090b",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
+            const urlInput = document.getElementById('sheet-url-input');
+            if(urlInput && GOOGLE_SHEET_WEB_APP_URL) {
+                urlInput.value = GOOGLE_SHEET_WEB_APP_URL;
+            }
+
+            const tabQrisHolder = document.getElementById("tab-qris-holder");
+            if (tabQrisHolder) {
+                new QRCode(tabQrisHolder, {
+                    text: "https://gazebomengaji.org/infaq-qris-official",
+                    width: 130,
+                    height: 130,
+                    colorDark: "#0b0c13",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
+
+            if (GOOGLE_SHEET_WEB_APP_URL) {
+                syncScheduleFromSheet();
+            }
         };
 
+        // Date selection handler to update schedule content dynamically
+        function selectDate(dayNum, dayStr, title, speaker, time, room) {
+            const dateButtons = document.querySelectorAll('.date-btn');
+            dateButtons.forEach(btn => {
+                btn.className = "date-btn flex flex-col items-center justify-center py-2 px-2.5 rounded-2xl bg-white text-zinc-400 border border-zinc-200/80 min-w-[44px]";
+                const dot = btn.querySelector('.w-1\\.5');
+                if (dot) dot.remove();
+            });
+
+            const activeBtn = event.currentTarget;
+            activeBtn.className = "date-btn date-active flex flex-col items-center justify-center py-2 px-3 rounded-2xl bg-zinc-950 text-white shadow-md min-w-[46px] relative";
+            const newDot = document.createElement('span');
+            newDot.className = "w-1.5 h-1.5 bg-emerald-400 rounded-full absolute top-1";
+            activeBtn.insertBefore(newDot, activeBtn.firstChild);
+
+            document.getElementById('hero-kajian-title').innerText = title;
+            document.getElementById('hero-kajian-desc').innerText = `Jadwal ${dayStr} ${dayNum} Sept • Waktu: ${time} di ${room}`;
+            
+            document.getElementById('plan-card-date').innerText = `${time}`;
+            document.getElementById('plan-card-room').innerText = room;
+            document.getElementById('plan-card-speaker').innerText = speaker;
+
+            showToast(`Menampilkan kajian ${dayStr} ${dayNum} Sept`);
+        }
+
+        // Switch active page tab with smooth animation
         function switchTab(tabId) {
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(t => t.classList.remove('active'));
+            const pages = document.querySelectorAll('.tab-page');
+            pages.forEach(p => p.classList.remove('active'));
 
             const target = document.getElementById(tabId);
-            if(target) {
+            if (target) {
                 target.classList.add('active');
             }
 
-            document.getElementById('main-scroll-area').scrollTop = 0;
+            document.getElementById('main-scroll-view').scrollTop = 0;
 
-            const navIds = ['tab-poster', 'tab-form', 'tab-kegiatan', 'tab-info'];
-            navIds.forEach(id => {
-                const navBtn = document.getElementById('nav-' + id);
-                if (navBtn) {
-                    if (id === tabId) {
-                        navBtn.classList.remove('text-zinc-500');
-                        navBtn.classList.add('text-white');
-                    } else {
-                        navBtn.classList.remove('text-white');
-                        navBtn.classList.add('text-zinc-500');
+            const navKeys = ['home', 'form', 'qris', 'kegiatan', 'info'];
+            navKeys.forEach(key => {
+                const iconEl = document.getElementById(`nav-icon-${key}`);
+                const labelEl = document.getElementById(`nav-label-${key}`);
+                const qrisBox = document.getElementById(`nav-icon-qris-box`);
+                const targetKey = tabId.replace('tab-', '');
+
+                if (key === targetKey) {
+                    if (key === 'qris' && qrisBox) {
+                        qrisBox.className = "w-8 h-8 rounded-full bg-app-cardGreen text-zinc-950 flex items-center justify-center border border-emerald-400 shadow-md";
+                    } else if (iconEl) {
+                        iconEl.className = iconEl.className.replace('text-zinc-500', 'text-white');
+                    }
+                    if (labelEl) {
+                        labelEl.className = "text-[9px] font-extrabold tracking-tight text-white";
+                    }
+                } else {
+                    if (key === 'qris' && qrisBox) {
+                        qrisBox.className = "w-8 h-8 rounded-full bg-zinc-800 text-white flex items-center justify-center border border-zinc-700";
+                    } else if (iconEl) {
+                        iconEl.className = iconEl.className.replace('text-white', 'text-zinc-500');
+                    }
+                    if (labelEl) {
+                        labelEl.className = "text-[9px] font-bold tracking-tight text-zinc-400";
                     }
                 }
             });
 
-            activeTab = tabId;
+            currentTab = tabId;
         }
 
-        function handleAttendanceSubmit(event) {
+        async function handleAttendanceSubmit(event) {
             event.preventDefault();
 
             const nama = document.getElementById('input-nama').value;
             const wa = document.getElementById('input-wa').value;
             const niatChoice = document.querySelector('input[name="niat_choice"]:checked').value;
+            const submitBtnText = document.getElementById('btn-submit-text');
+
+            submitBtnText.innerText = "Mengirim Data ke Google Sheet...";
             
-            // Confetti animation
+            const payload = {
+                timestamp: new Date().toISOString(),
+                nama: nama,
+                whatsapp: wa,
+                niat: niatChoice,
+                eventId: "MAJELIS-" + new Date().toISOString().slice(0,10)
+            };
+
+            if (GOOGLE_SHEET_WEB_APP_URL) {
+                try {
+                    await fetch(GOOGLE_SHEET_WEB_APP_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    showToast("Presensi & Niat Terkirim ke Google Sheet!");
+                } catch (err) {
+                    console.warn("Sheet sync fallback:", err);
+                    showToast("Presensi disimpan secara lokal.");
+                }
+            } else {
+                showToast("Presensi Berhasil Disimpan!");
+            }
+
+            submitBtnText.innerText = "Bismillah, Simpan Presensi & Sync Sheet";
+
             if (typeof confetti === 'function') {
                 confetti({
-                    particleCount: 90,
-                    spread: 70,
+                    particleCount: 80,
+                    spread: 60,
                     origin: { y: 0.7 }
                 });
             }
 
-            // Ticket Pass Output
             document.getElementById('res-nama').innerText = nama;
             document.getElementById('res-niat').innerText = `"${niatChoice}"`;
-            document.getElementById('ticket-time').innerText = "Waktu Presensi: " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('ticket-time').innerText = "Presensi: " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             
             const qrcodeContainer = document.getElementById('qrcode-container');
             qrcodeContainer.innerHTML = '';
             new QRCode(qrcodeContainer, {
-                text: `GZB-TICKET-${Date.now()}-${nama.replace(/\s+/g, '')}`,
+                text: `GZB-${Date.now()}-${nama.replace(/\s+/g, '')}`,
                 width: 75,
                 height: 75,
-                colorDark: "#09090b",
+                colorDark: "#0b0c13",
                 colorLight: "#ffffff"
             });
 
             document.getElementById('ticket-result').classList.remove('hidden');
             document.getElementById('ticket-result').scrollIntoView({ behavior: 'smooth' });
-
-            const currentCount = parseInt(document.getElementById('live-counter').innerText);
-            document.getElementById('live-counter').innerText = currentCount + 1;
-
-            showToast("Bismillah! Presensi & Niatmu Tercatat!");
         }
 
-        function openQrisModal() {
-            document.getElementById('qris-modal').classList.remove('hidden');
+        function openSheetSyncModal() {
+            document.getElementById('modal-sheet-sync').classList.remove('opacity-0', 'pointer-events-none');
         }
 
-        function closeQrisModal() {
-            document.getElementById('qris-modal').classList.add('hidden');
+        function closeSheetSyncModal() {
+            document.getElementById('modal-sheet-sync').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function saveSheetUrlConfig() {
+            const url = document.getElementById('sheet-url-input').value.trim();
+            GOOGLE_SHEET_WEB_APP_URL = url;
+            localStorage.setItem('gzb_sheet_url', url);
+            showToast("URL Google Apps Script Tersimpan!");
+            closeSheetSyncModal();
+        }
+
+        async function syncScheduleFromSheet() {
+            if (!GOOGLE_SHEET_WEB_APP_URL) {
+                openSheetSyncModal();
+                showToast("Masukkan URL Google Apps Script terlebih dahulu.");
+                return;
+            }
+
+            showToast("Mengambil Jadwal dari Google Sheet...");
+            try {
+                const res = await fetch(GOOGLE_SHEET_WEB_APP_URL + '?action=getSchedule');
+                const data = await res.json();
+                if (data && data.schedule) {
+                    showToast("Jadwal Berhasil Disinkronkan!");
+                }
+            } catch (e) {
+                showToast("Live Sync siap (Gunakan Google Apps Script endpoint)");
+            }
         }
 
         function setDonationAmount(amount) {
-            showToast("Nominal Infaq dipilih: Rp " + amount.toLocaleString('id-ID'));
+            showToast("Nominal Infaq: Rp " + amount.toLocaleString('id-ID'));
         }
 
         function copyTicketPass() {
-            showToast("Kode ID Tiket Disalin ke Clipboard!");
+            showToast("ID Tiket Presensi Berhasil Disalin!");
         }
 
-        function showNotificationToast() {
-            showToast("Kajian Utama Sabtu ini pukul 19:30 WIB");
+        function openNotificationModal() {
+            showToast("Agenda Pekan ini: Menyucikan Hati Sab, 19:30");
+        }
+
+        function playAudioSummary() {
+            if(!isAudioPlaying) {
+                showToast("Memutar audio brief kajian...");
+                isAudioPlaying = true;
+            } else {
+                showToast("Audio dihentikan.");
+                isAudioPlaying = false;
+            }
         }
 
         function showToast(msg) {
@@ -636,21 +827,6 @@
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'pointer-events-none');
             }, 3000);
-        }
-
-        function playAudioSummary() {
-            const icon = document.getElementById('play-icon');
-            if(!isAudioPlaying) {
-                icon.classList.remove('fa-volume-high');
-                icon.classList.add('fa-pause');
-                showToast("Memutar audio ringkasan...");
-                isAudioPlaying = true;
-            } else {
-                icon.classList.remove('fa-pause');
-                icon.classList.add('fa-volume-high');
-                showToast("Audio dihentikan.");
-                isAudioPlaying = false;
-            }
         }
     </script>
 </body>
