@@ -157,7 +157,7 @@
 
                     <!-- Poster Kajian Card -->
                     <div class="bg-brand-cardBlue/95 backdrop-blur-2xl rounded-[32px] p-5 text-zinc-950 shadow-[0_14px_40px_-6px_rgba(2,132,199,0.16)] space-y-4 border border-sky-200/90">
-                        <div class="flex items-center space-x-1.5">
+                        <div class="flex items-center space-x-1.5 flex-wrap">
                             <span class="px-3 py-1 bg-white/80 backdrop-blur-md rounded-full text-[10px] font-extrabold text-zinc-900 shadow-xs border border-white/90">
                                 Terbuka Umum
                             </span>
@@ -185,28 +185,27 @@
                             </p>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-y-2.5 gap-x-2.5 text-[11px] font-bold text-zinc-950 pt-0.5">
-                            <div class="flex items-center space-x-1.5">
+                        <div class="grid grid-cols-2 gap-y-2 gap-x-2 text-[11px] font-bold text-zinc-950 pt-0.5">
+                            <div class="flex items-center space-x-1.5 min-w-0">
                                 <i class="fa-regular fa-calendar-days text-zinc-900 text-xs shrink-0"></i>
                                 <span class="truncate">Rabu, 16 Sep 2026</span>
                             </div>
-                            <div class="flex items-center space-x-1.5">
+                            <div class="flex items-center space-x-1.5 min-w-0">
                                 <i class="fa-regular fa-clock text-zinc-900 text-xs shrink-0"></i>
-                                <span>20:00 WIB</span>
+                                <span class="truncate">20:00 WIB</span>
                             </div>
-                            <div class="flex items-center space-x-1.5">
+                            <div class="flex items-center space-x-1.5 min-w-0">
                                 <i class="fa-solid fa-moon text-zinc-900 text-xs shrink-0"></i>
-                                <span class="truncate">5 Rabi'ul Awal 1448 H</span>
+                                <span class="truncate">5 Rabi'ul Awal 1448H</span>
                             </div>
-                            <div class="flex items-center space-x-1.5">
+                            <div class="flex items-center space-x-1.5 min-w-0">
                                 <i class="fa-solid fa-location-dot text-zinc-900 text-xs shrink-0"></i>
-                                <span class="truncate" title="Ruang Kelas Gazebo Mengaji (GSC)">Ruang Kelas GSC</span>
+                                <span class="truncate" title="Ruang Kelas GSC">Ruang Kelas GSC</span>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-2.5 pt-2">
-                            <button onclick="navigateTo('screen-donasi-form')" class="py-3 px-4 bg-white/80 hover:bg-white text-zinc-950 font-extrabold text-xs rounded-2xl transition active:scale-95 shadow-xs flex items-center justify-center space-x-1.5 border border-white/80">
-                                <i class="fa-solid fa-hand-holding-dollar text-xs text-sky-700"></i>
+                            <button onclick="navigateTo('screen-donasi-form')" class="py-3 px-4 bg-white/80 hover:bg-white text-zinc-950 font-extrabold text-xs rounded-2xl transition active:scale-95 shadow-xs flex items-center justify-center space-x-1 border border-white/80">
                                 <span>Donasi Kajian</span>
                             </button>
 
@@ -226,7 +225,7 @@
 
         <!-- SCREEN 2: PRESENSI FORM (CENTERED) -->
         <div id="screen-presensi-form" class="app-screen flex-1 flex-col justify-center p-6 overflow-y-auto hide-scrollbar">
-            <div class="space-y-4 pt-1">
+            <div class="space-y-4 pt-1 max-w-sm mx-auto w-full">
                 <div class="flex items-center justify-between text-zinc-900 pb-1">
                     <button onclick="navigateTo('screen-home')" class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-zinc-800 transition active:scale-90 shadow-xs">
                         <i class="fa-solid fa-chevron-left"></i>
@@ -279,7 +278,7 @@
 
         <!-- SCREEN 3: DONASI FORM (CENTERED) -->
         <div id="screen-donasi-form" class="app-screen flex-1 flex-col justify-center p-6 overflow-y-auto hide-scrollbar">
-            <div class="space-y-4 pt-1">
+            <div class="space-y-4 pt-1 max-w-sm mx-auto w-full">
                 <div class="flex items-center justify-between text-zinc-900 pb-1">
                     <button onclick="navigateTo('screen-home')" class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-zinc-800 transition active:scale-90 shadow-xs">
                         <i class="fa-solid fa-chevron-left"></i>
@@ -411,7 +410,7 @@
                                 <i class="fa-solid fa-location-dot text-blue-600 text-[10px]"></i>
                                 <span>GSC</span>
                             </span>
-                            <p class="text-[9px] font-bold text-slate-500 truncate max-w-[110px]" id="pass-kajian-loc" title="Ruang Kelas Gazebo Mengaji (GSC)">Ruang Kelas GSC</p>
+                            <p class="text-[9px] font-bold text-slate-500 truncate max-w-[110px]" id="pass-kajian-loc" title="Ruang Kelas GSC">Ruang Kelas GSC</p>
                         </div>
                     </div>
 
@@ -542,7 +541,7 @@
                             <i class="fa-solid fa-kaaba"></i>
                         </div>
                         <h2 class="font-extrabold text-sm tracking-wider uppercase font-sans text-zinc-950">GAZEBO MENGAJI</h2>
-                        <p class="text-[10px] text-zinc-500 font-sans">Ruang Kelas Gazebo Mengaji (GSC)</p>
+                        <p class="text-[10px] text-zinc-500 font-sans">Ruang Kelas GSC</p>
                     </div>
 
                     <div class="space-y-1 text-[11px] pb-3 border-b border-dashed border-zinc-300">
