@@ -92,9 +92,16 @@
                         <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                         <span class="text-zinc-900 font-bold">Fulanah (Jemaah)</span>
                     </div>
-                    <div class="text-right text-[11px] text-zinc-400 font-medium">
-                        <p class="leading-none text-zinc-400">Terakhir Diupdate</p>
-                        <p class="text-zinc-900 font-bold mt-0.5" id="header-date-text">15 Rabi'ul Awal • 19:30</p>
+                    <div class="flex items-center space-x-3">
+                        <!-- iOS Dynamic Tab Bar Toggle -->
+                        <button onclick="toggleSafariUrlBarMode()" class="text-[10px] font-bold text-zinc-600 bg-zinc-200/80 hover:bg-zinc-300 px-2 py-0.5 rounded-md transition flex items-center space-x-1" title="Toggle Bottom Safari Bar">
+                            <i class="fa-solid fa-sliders text-[9px]"></i>
+                            <span id="tab-mode-label">Dock: Stacked</span>
+                        </button>
+                        <div class="text-right text-[11px] text-zinc-400 font-medium">
+                            <p class="leading-none text-zinc-400">Terakhir Diupdate</p>
+                            <p class="text-zinc-900 font-bold mt-0.5" id="header-date-text">15 Rabi'ul Awal • 19:30</p>
+                        </div>
                     </div>
                 </div>
             </header>
@@ -122,26 +129,36 @@
                 <!-- Green Mint Kajian Card (Matching reference image) -->
                 <div class="bg-app-cardGreen rounded-[36px] p-5 text-zinc-950 shadow-sm space-y-4 border border-emerald-300 transition-all">
                     
-                    <!-- Top Tags & Time -->
+                    <!-- Top Tags (with 2 jam lagi) & Stacked Avatars (Top Right) -->
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-1.5">
+                        <!-- Category Tags & 2 Jam Lagi -->
+                        <div class="flex items-center space-x-1.5 flex-wrap gap-y-1">
                             <span class="px-3 py-1 bg-white/60 backdrop-blur-md rounded-full text-[10px] font-extrabold text-zinc-900">
                                 Syar'i
                             </span>
                             <span class="px-3 py-1 bg-white/60 backdrop-blur-md rounded-full text-[10px] font-extrabold text-zinc-900">
                                 Offline
                             </span>
+                            <span class="px-3 py-1 bg-emerald-950/15 backdrop-blur-md rounded-full text-[10px] font-extrabold text-emerald-950 flex items-center space-x-1" id="card-time-badge">
+                                <i class="fa-regular fa-clock text-[9px]"></i>
+                                <span>2 jam lagi</span>
+                            </span>
                         </div>
-                        <span class="text-[11px] font-bold text-emerald-950 opacity-80" id="card-time-badge">
-                            2 jam lagi
-                        </span>
+                        
+                        <!-- Stacked Avatars moved to top-right -->
+                        <div class="flex items-center shrink-0 bg-white/40 px-2.5 py-1 rounded-full backdrop-blur-sm border border-white/50 shadow-2xl">
+                            <span class="text-[10px] font-extrabold text-zinc-900 mr-1.5">8+</span>
+                            <div class="flex -space-x-2">
+                                <img class="w-5 h-5 rounded-full border border-app-cardGreen object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80" alt="Jemaah">
+                                <img class="w-5 h-5 rounded-full border border-app-cardGreen object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80" alt="Jemaah">
+                                <img class="w-5 h-5 rounded-full border border-app-cardGreen object-cover" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80" alt="Jemaah">
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Main Title & Speaker Badge -->
+                    <!-- Main Title & Speaker Person Avatar -->
                     <div class="flex items-start space-x-3">
-                        <div class="w-11 h-11 rounded-full bg-indigo-600 text-white font-black text-xl flex items-center justify-center shrink-0 shadow-inner">
-                            K
-                        </div>
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Pemateri" class="w-11 h-11 rounded-full object-cover border-2 border-white/80 shadow-md shrink-0">
                         <div class="min-w-0 flex-1">
                             <h2 class="text-xl font-black leading-tight text-zinc-950" id="hero-kajian-title">
                                 Kajian Hati & Niat
@@ -152,20 +169,11 @@
                         </div>
                     </div>
 
-                    <!-- Short Summary & Attendance Avatars -->
-                    <div class="pt-1 pb-1 border-t border-black/10 flex items-center justify-between gap-2">
-                        <p class="text-xs font-medium text-zinc-900 leading-snug flex-1" id="hero-kajian-desc">
+                    <!-- Short Summary -->
+                    <div class="pt-1 pb-1 border-t border-black/10">
+                        <p class="text-xs font-medium text-zinc-900 leading-snug" id="hero-kajian-desc">
                             Mantapkan niat sebelum majelis dimulai agar ilmu yang didapat berkah & berbekas.
                         </p>
-                        <!-- Stacked Avatars -->
-                        <div class="flex items-center shrink-0">
-                            <span class="text-[10px] font-extrabold text-zinc-900 mr-1.5">8+</span>
-                            <div class="flex -space-x-2">
-                                <img class="w-6 h-6 rounded-full border-2 border-app-cardGreen object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80" alt="Jemaah">
-                                <img class="w-6 h-6 rounded-full border-2 border-app-cardGreen object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80" alt="Jemaah">
-                                <img class="w-6 h-6 rounded-full border-2 border-app-cardGreen object-cover" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80" alt="Jemaah">
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Information Details Grid -->
@@ -190,9 +198,9 @@
 
                     <!-- Action Buttons -->
                     <div class="grid grid-cols-2 gap-3 pt-2">
-                        <button onclick="playAudioSummary()" class="py-3 px-4 bg-white/70 hover:bg-white text-zinc-950 font-extrabold text-xs rounded-2xl transition active:scale-95 shadow-sm flex items-center justify-center space-x-2">
-                            <i class="fa-solid fa-volume-high text-xs"></i>
-                            <span>Audio Brief</span>
+                        <button onclick="switchTab('tab-qris')" class="py-3 px-4 bg-white/70 hover:bg-white text-zinc-950 font-extrabold text-xs rounded-2xl transition active:scale-95 shadow-sm flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-hand-holding-dollar text-xs text-emerald-700"></i>
+                            <span>Donasi Kajian</span>
                         </button>
                         <button onclick="switchTab('tab-form')" class="py-3 px-4 bg-zinc-950 hover:bg-black text-white font-extrabold text-xs rounded-2xl transition active:scale-95 shadow-md flex items-center justify-center space-x-2">
                             <span>Presensi Now</span>
@@ -513,7 +521,7 @@
         </main>
 
         <!-- ================= STACKED BOTTOM NAVIGATION DOCK (Matching Reference dark navbar) ================= -->
-        <div class="absolute bottom-0 inset-x-0 z-40 p-3 pb-4 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent pointer-events-none">
+        <div id="bottom-dock-container" class="absolute bottom-0 inset-x-0 z-40 p-3 pb-4 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent pointer-events-none transition-all duration-300">
             
             <nav class="bg-app-dock rounded-[32px] px-2 py-2.5 flex items-center justify-around shadow-2xl pointer-events-auto border border-zinc-800 relative">
                 
@@ -550,6 +558,18 @@
                 </button>
 
             </nav>
+
+            <!-- Simulated iPhone Safari Bottom URL Address Bar (Toggleable Stack Inset) -->
+            <div id="simulated-bottom-urlbar" class="hidden mt-2 pointer-events-auto bg-zinc-900/90 backdrop-blur-md border border-zinc-800 rounded-2xl p-2 px-3 flex items-center justify-between text-zinc-300 shadow-lg">
+                <div class="flex items-center space-x-2 text-[10px] text-zinc-400 font-mono">
+                    <i class="fa-solid fa-lock text-[9px] text-emerald-400"></i>
+                    <span class="truncate">gazebomengaji.org</span>
+                </div>
+                <div class="flex items-center space-x-2 text-xs text-zinc-400">
+                    <i class="fa-solid fa-rotate-right text-[10px]"></i>
+                    <i class="fa-solid fa-ellipsis text-[10px]"></i>
+                </div>
+            </div>
 
         </div>
 
@@ -603,8 +623,35 @@
     <script>
         let currentTab = 'tab-home';
         let isAudioPlaying = false;
+        let isSafariBottomBarActive = false;
         
         let GOOGLE_SHEET_WEB_APP_URL = localStorage.getItem('gzb_sheet_url') || '';
+
+        function toggleSafariUrlBarMode() {
+            isSafariBottomBarActive = !isSafariBottomBarActive;
+            const urlBar = document.getElementById('simulated-bottom-urlbar');
+            const dockContainer = document.getElementById('bottom-dock-container');
+            const mainScrollView = document.getElementById('main-scroll-view');
+            const modeLabel = document.getElementById('tab-mode-label');
+
+            if (isSafariBottomBarActive) {
+                urlBar.classList.remove('hidden');
+                dockContainer.classList.remove('pb-4');
+                dockContainer.classList.add('pb-2');
+                mainScrollView.classList.remove('pb-32');
+                mainScrollView.classList.add('pb-44');
+                modeLabel.innerText = "URL: Bottom";
+                showToast("Modus Tab Bar URL di Bawah Diaktifkan");
+            } else {
+                urlBar.classList.add('hidden');
+                dockContainer.classList.remove('pb-2');
+                dockContainer.classList.add('pb-4');
+                mainScrollView.classList.remove('pb-44');
+                mainScrollView.classList.add('pb-32');
+                modeLabel.innerText = "Dock: Stacked";
+                showToast("Modus Tab Bar Normal Diaktifkan");
+            }
+        }
 
         window.onload = function() {
             const urlInput = document.getElementById('sheet-url-input');
