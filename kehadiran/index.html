@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gazebo Mengaji - Modern Exploring Minds Aesthetic</title>
+    
+    <!-- Tailwind CSS & Font Awesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- External JS Helpers -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastel: {
+                            pink: '#fbcfe8',
+                            pinkDark: '#f472b6',
+                            yellow: '#fef08a',
+                            yellowAccent: '#facc15',
+                            mint: '#bbf7d0',
+                            lavender: '#e0e7ff',
+                            ice: '#bae6fd',
+                            cardBg: '#f8fafc'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #e2e8f0;
+            color: #0f172a;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Top Header Gradient Mesh matching reference */
+        .gradient-mesh-bg {
+            background: linear-gradient(135deg, #fbcfe8 0%, #fef08a 50%, #dcfce7 100%);
+        }
+
+        .flashcard-shadow {
+            box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.07), 0 0 2px 1px rgba(255, 255, 255, 0.8);
+        }
+
+        .fab-glow {
+            box-shadow: 0 10px 25px -3px rgba(250, 204, 21, 0.5);
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen p-0 md:p-6 text-zinc-900">
+
+    <!-- Mobile Container (Inspired by iOS Device Frame UI) -->
+    <div class="w-full max-w-md bg-zinc-950 min-h-screen md:min-h-[860px] md:max-h-[860px] md:rounded-[48px] shadow-2xl relative flex flex-col overflow-hidden border-0 md:border-[10px] border-zinc-900">
+        
+        <!-- Main Scroll Viewport with Top Pastel Mesh Gradient -->
+        <main class="flex-1 overflow-y-auto hide-scrollbar pb-36 bg-[#f4f4f7] relative" id="main-scroll-area">
+            
+            <!-- Top Gradient Hero Section (Reference Style) -->
+            <div class="gradient-mesh-bg px-6 pt-10 pb-12 rounded-b-[40px] relative overflow-hidden space-y-4">
+                
+                <!-- Status Bar Pill / Header Meta -->
+                <div class="flex justify-between items-center z-10 relative">
+                    <span class="text-[11px] font-mono tracking-wider font-extrabold text-zinc-700/80 uppercase">
+                        Rabu, 15 Rabi'ul Awal 1448 H
+                    </span>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="showNotificationToast()" class="w-8 h-8 rounded-full bg-white/70 backdrop-blur-md flex items-center justify-center text-zinc-800 shadow-sm active:scale-95 transition">
+                            <i class="fa-regular fa-bell text-xs"></i>
+                        </button>
+                        <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-white shadow-sm">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Big Modern Headline -->
+                <div class="space-y-0.5 relative z-10 pt-1">
+                    <h1 class="text-3xl font-black text-zinc-900 tracking-tight leading-none">
+                        Exploring<br>Niat Majelis
+                    </h1>
+                    <p class="text-xs font-semibold text-zinc-700 pt-1">Gazebo Mengaji • Presensi & Cas Rohani</p>
+                </div>
+
+                <!-- Decorative Subtle Background Glow -->
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/40 rounded-full blur-2xl pointer-events-none"></div>
+            </div>
+
+            <!-- ================= TAB 1: POSTER KAJIAN (REFERENCE FLASHCARD STYLE) ================= -->
+            <section id="tab-poster" class="tab-content active px-5 -mt-8 space-y-4 relative z-20">
+                
+                <!-- White Floating Hero Card (Matching "Becoming" Flashcard) -->
+                <div class="bg-white rounded-[32px] p-6 flashcard-shadow space-y-4 border border-zinc-100">
+                    
+                    <!-- Card Header Label -->
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-semibold font-mono text-zinc-400 lowercase tracking-tight">agenda majelis pekan ini</span>
+                        <button onclick="playAudioSummary()" class="w-9 h-9 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 flex items-center justify-center transition active:scale-95 shadow-sm" title="Dengar Audio Brief">
+                            <i class="fa-solid fa-volume-high text-xs" id="play-icon"></i>
+                        </button>
+                    </div>
+
+                    <!-- Main Big Title Focus -->
+                    <div class="py-2 space-y-1">
+                        <h2 class="text-3xl font-black text-zinc-900 tracking-tight leading-tight">
+                            Menyucikan Hati
+                        </h2>
+                        <p class="text-xs font-medium text-zinc-500">dari Kelalaian Duniawi</p>
+                    </div>
+
+                    <!-- Word in Use / Quote Box (Inspired by Reference Image) -->
+                    <div class="bg-zinc-50 rounded-2xl p-4 border border-zinc-100 space-y-1">
+                        <p class="text-[10px] font-mono text-zinc-400 uppercase font-bold tracking-wider">Pesan Niat Pekan Ini</p>
+                        <p class="text-xs text-zinc-600 font-medium italic leading-relaxed">
+                            "Sesungguhnya setiap amalan tergantung pada niatnya, dan seseorang akan mendapatkan sesuai apa yang ia niatkan."
+                        </p>
+                        <span class="text-[10px] text-zinc-400 font-bold block pt-1">— HR. Bukhari & Muslim</span>
+                    </div>
+
+                    <!-- Speaker & Location Info -->
+                    <div class="pt-1 grid grid-cols-2 gap-2 text-xs">
+                        <div class="flex items-center space-x-2.5 p-2.5 bg-zinc-50 rounded-2xl">
+                            <div class="w-7 h-7 rounded-xl bg-pastel-pink flex items-center justify-center text-zinc-900 shrink-0 text-xs font-bold">
+                                <i class="fa-regular fa-user"></i>
+                            </div>
+                            <div class="truncate">
+                                <p class="text-[9px] font-bold text-zinc-400 uppercase">Pemateri</p>
+                                <p class="font-bold text-zinc-800 text-xs truncate">Ust. Hanan Attaki</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-2.5 p-2.5 bg-zinc-50 rounded-2xl">
+                            <div class="w-7 h-7 rounded-xl bg-pastel-yellow flex items-center justify-center text-zinc-900 shrink-0 text-xs font-bold">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div class="truncate">
+                                <p class="text-[9px] font-bold text-zinc-400 uppercase">Waktu & Tempat</p>
+                                <p class="font-bold text-zinc-800 text-xs truncate">Sabtu, 19:30 WIB</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons Row (Direct Reference Style: "Repeat" / "Got it 👍") -->
+                    <div class="grid grid-cols-2 gap-3 pt-2">
+                        <button onclick="switchTab('tab-kegiatan')" class="py-3.5 px-4 bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-800 font-extrabold rounded-full transition active:scale-95 text-xs flex items-center justify-center space-x-2 shadow-sm">
+                            <span>Jadwal Lain</span>
+                            <i class="fa-solid fa-arrows-rotate text-xs text-zinc-400"></i>
+                        </button>
+                        
+                        <button onclick="switchTab('tab-form')" class="py-3.5 px-4 bg-pastel-pink hover:bg-pink-300 text-zinc-950 font-black rounded-full transition active:scale-95 text-xs flex items-center justify-center space-x-2 shadow-sm">
+                            <span>Presensi Niat</span>
+                            <i class="fa-solid fa-thumbs-up text-xs text-zinc-900"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Live Jemaah Stats Banner -->
+                <div class="bg-white rounded-[28px] p-4 flashcard-shadow border border-zinc-100 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-black text-sm">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Jemaah Terkonfirmasi</p>
+                            <div class="flex items-baseline space-x-2">
+                                <span class="text-xl font-black text-zinc-900" id="live-counter">148</span>
+                                <span class="text-[10px] font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">+12 baru</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-12 h-12 flex items-center justify-center">
+                        <span class="w-3 h-3 bg-emerald-400 rounded-full animate-ping"></span>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ================= TAB 2: FORM KEHADIRAN & EKSPERIMEN NIAT ================= -->
+            <section id="tab-form" class="tab-content px-5 -mt-8 space-y-4 relative z-20">
+                
+                <!-- Main Form Card -->
+                <div class="bg-white rounded-[32px] p-6 flashcard-shadow space-y-5 border border-zinc-100">
+                    
+                    <div class="space-y-1">
+                        <span class="text-xs font-semibold font-mono text-zinc-400 lowercase">eksperimen niat majelis</span>
+                        <h2 class="text-2xl font-black text-zinc-900">Form Presensi</h2>
+                        <p class="text-xs text-zinc-500">Pilih niat terbaikmu agar ilmu menjadi berkah.</p>
+                    </div>
+
+                    <form id="attendanceForm" onsubmit="handleAttendanceSubmit(event)" class="space-y-4">
+                        
+                        <!-- Nama Input -->
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-zinc-600 uppercase tracking-wider">Nama Lengkap / Panggilan</label>
+                            <input type="text" id="input-nama" required placeholder="Fulan / Fulanah" 
+                                class="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-4 py-3 text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-400 transition font-medium">
+                        </div>
+
+                        <!-- WA Input -->
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-zinc-600 uppercase tracking-wider">Nomor WhatsApp</label>
+                            <input type="tel" id="input-wa" required placeholder="0812xxxxxxx" 
+                                class="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-4 py-3 text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-400 transition font-medium">
+                        </div>
+
+                        <!-- EKSPERIMEN NIAT SELECTOR -->
+                        <div class="space-y-2 pt-2 border-t border-zinc-100">
+                            <label class="text-xs font-black text-zinc-900 flex items-center justify-between">
+                                <span>Pilih Niat Utama Hari Ini</span>
+                                <span class="text-[9px] bg-pastel-pink px-2 py-0.5 rounded-full font-bold">Wajib 1 Choice</span>
+                            </label>
+
+                            <div class="space-y-2" id="niat-options-container">
+                                
+                                <label class="block p-3.5 bg-zinc-50 border border-zinc-200 rounded-2xl cursor-pointer hover:border-zinc-400 transition has-[:checked]:border-zinc-900 has-[:checked]:bg-pastel-yellow/30">
+                                    <div class="flex items-start space-x-3">
+                                        <input type="radio" name="niat_choice" value="Menuntut Ilmu Syar'i untuk Diamalkan" checked class="mt-1 accent-zinc-900">
+                                        <div>
+                                            <p class="text-xs font-bold text-zinc-900">Menuntut Ilmu Syar'i</p>
+                                            <p class="text-[11px] text-zinc-500">Memahami agama untuk memperbaiki ibadah harian.</p>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="block p-3.5 bg-zinc-50 border border-zinc-200 rounded-2xl cursor-pointer hover:border-zinc-400 transition has-[:checked]:border-zinc-900 has-[:checked]:bg-pastel-pink/30">
+                                    <div class="flex items-start space-x-3">
+                                        <input type="radio" name="niat_choice" value="Cas Iman & Menyuci Rohani dari Kelalaian" class="mt-1 accent-zinc-900">
+                                        <div>
+                                            <p class="text-xs font-bold text-zinc-900">Cas Iman & Penyejuk Hati</p>
+                                            <p class="text-[11px] text-zinc-500">Mencari ketenangan dari lelahnya urusan duniawi.</p>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="block p-3.5 bg-zinc-50 border border-zinc-200 rounded-2xl cursor-pointer hover:border-zinc-400 transition has-[:checked]:border-zinc-900 has-[:checked]:bg-emerald-100/50">
+                                    <div class="flex items-start space-x-3">
+                                        <input type="radio" name="niat_choice" value="Menjaga Silaturahmi & Ukhuwah Teman Sholeh" class="mt-1 accent-zinc-900">
+                                        <div>
+                                            <p class="text-xs font-bold text-zinc-900">Silaturahmi & Ukhuwah</p>
+                                            <p class="text-[11px] text-zinc-500">Berkumpul bersama kawan sholeh agar saling mendoakan.</p>
+                                        </div>
+                                    </div>
+                                </label>
+
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="w-full py-4 bg-zinc-950 hover:bg-zinc-800 text-white font-black rounded-full shadow-lg transition active:scale-95 flex items-center justify-center space-x-2 text-xs">
+                            <i class="fa-solid fa-paper-plane text-xs text-pastel-yellow"></i>
+                            <span>Bismillah, Mantapkan Niat & Simpan Presensi</span>
+                        </button>
+
+                    </form>
+
+                </div>
+
+                <!-- Digital Ticket Result Pass Card -->
+                <div id="ticket-result" class="hidden bg-white rounded-[32px] p-6 flashcard-shadow space-y-4 border border-zinc-100">
+                    <div class="flex items-center justify-between border-b border-zinc-100 pb-3">
+                        <div class="flex items-center space-x-2.5">
+                            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-zinc-900">Presensi Terkonfirmasi!</h4>
+                                <p class="text-[10px] text-zinc-400" id="ticket-time">Waktu Presensi</p>
+                            </div>
+                        </div>
+                        <span class="bg-emerald-400 text-zinc-950 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">PASSED</span>
+                    </div>
+
+                    <div class="space-y-2">
+                        <p class="text-xs text-zinc-500">Nama Jemaah: <span class="text-zinc-900 font-bold" id="res-nama">-</span></p>
+                        <div class="bg-pastel-yellow/30 p-3.5 rounded-2xl border border-pastel-yellow/50">
+                            <p class="text-[9px] text-zinc-700 font-extrabold uppercase tracking-wider mb-1"><i class="fa-solid fa-quote-left mr-1"></i> Niat Utama Anda:</p>
+                            <p class="text-xs text-zinc-900 italic font-semibold" id="res-niat">"-"</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2">
+                        <div id="qrcode-container" class="bg-zinc-50 p-2 rounded-2xl border border-zinc-200"></div>
+                        <div class="text-right space-y-2">
+                            <p class="text-[10px] text-zinc-400">Tunjukkan QR ini di lokasi Gazebo</p>
+                            <button onclick="copyTicketPass()" class="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 text-white text-xs rounded-full font-semibold transition active:scale-95">
+                                <i class="fa-regular fa-copy mr-1"></i> Salin ID Tiket
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ================= TAB 4: AGENDA KEGIATAN ================= -->
+            <section id="tab-kegiatan" class="tab-content px-5 -mt-8 space-y-4 relative z-20">
+                
+                <div class="bg-white rounded-[32px] p-6 flashcard-shadow space-y-4 border border-zinc-100">
+                    
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-semibold font-mono text-zinc-400 lowercase">jadwal rutin & spesial</span>
+                            <h2 class="text-2xl font-black text-zinc-900">Agenda Gazebo</h2>
+                        </div>
+                        <span class="bg-zinc-100 text-zinc-600 text-[10px] px-3 py-1 rounded-full font-bold">Bulan Ini</span>
+                    </div>
+
+                    <!-- Agenda Cards -->
+                    <div class="space-y-3 pt-1">
+                        
+                        <!-- Event Item 1 -->
+                        <div class="p-4 rounded-2xl bg-zinc-50 border border-zinc-100 flex items-center justify-between space-x-3">
+                            <div class="w-12 h-14 bg-pastel-pink rounded-xl flex flex-col items-center justify-center text-center shrink-0">
+                                <span class="text-[9px] text-zinc-900 uppercase font-black">SAB</span>
+                                <span class="text-lg font-black text-zinc-900 leading-none">20</span>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <span class="text-[9px] bg-white text-zinc-700 font-bold px-2 py-0.5 rounded-md border border-zinc-200">Rutin Pekanan</span>
+                                <h3 class="text-xs font-bold text-zinc-900 truncate mt-1">Tafsir Surah Al-Kahfi</h3>
+                                <p class="text-[10px] text-zinc-500">19:30 - Ba'da Isya</p>
+                            </div>
+                            <button onclick="switchTab('tab-form')" class="px-3 py-2 bg-white border border-zinc-200 text-zinc-900 text-xs font-extrabold rounded-full transition active:scale-95 shadow-sm">
+                                Presensi
+                            </button>
+                        </div>
+
+                        <!-- Event Item 2 -->
+                        <div class="p-4 rounded-2xl bg-zinc-50 border border-zinc-100 flex items-center justify-between space-x-3">
+                            <div class="w-12 h-14 bg-pastel-yellow rounded-xl flex flex-col items-center justify-center text-center shrink-0">
+                                <span class="text-[9px] text-zinc-900 uppercase font-black">MIN</span>
+                                <span class="text-lg font-black text-zinc-900 leading-none">21</span>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <span class="text-[9px] bg-white text-zinc-700 font-bold px-2 py-0.5 rounded-md border border-zinc-200">Subuh Berjamaah</span>
+                                <h3 class="text-xs font-bold text-zinc-900 truncate mt-1">Kesehatan Hati Muslim</h3>
+                                <p class="text-[10px] text-zinc-500">04:30 - Selesai</p>
+                            </div>
+                            <button onclick="switchTab('tab-form')" class="px-3 py-2 bg-white border border-zinc-200 text-zinc-900 text-xs font-extrabold rounded-full transition active:scale-95 shadow-sm">
+                                Presensi
+                            </button>
+                        </div>
+
+                        <!-- Event Item 3 -->
+                        <div class="p-4 rounded-2xl bg-zinc-50 border border-zinc-100 flex items-center justify-between space-x-3">
+                            <div class="w-12 h-14 bg-emerald-200 rounded-xl flex flex-col items-center justify-center text-center shrink-0">
+                                <span class="text-[9px] text-zinc-900 uppercase font-black">RAB</span>
+                                <span class="text-lg font-black text-zinc-900 leading-none">24</span>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <span class="text-[9px] bg-white text-zinc-700 font-bold px-2 py-0.5 rounded-md border border-zinc-200">Kajian Akhwat</span>
+                                <h3 class="text-xs font-bold text-zinc-900 truncate mt-1">Wanita Tangguh Berhati Lapang</h3>
+                                <p class="text-[10px] text-zinc-500">16:00 WIB (Ashar)</p>
+                            </div>
+                            <button onclick="switchTab('tab-form')" class="px-3 py-2 bg-white border border-zinc-200 text-zinc-900 text-xs font-extrabold rounded-full transition active:scale-95 shadow-sm">
+                                Presensi
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- ================= TAB 5: INFORMASI GAZEBO MENGAJI ================= -->
+            <section id="tab-info" class="tab-content px-5 -mt-8 space-y-4 relative z-20">
+                
+                <div class="bg-white rounded-[32px] p-6 flashcard-shadow space-y-4 border border-zinc-100 text-center">
+                    <div class="w-16 h-16 mx-auto rounded-3xl bg-pastel-yellow flex items-center justify-center text-zinc-900 shadow-md text-2xl">
+                        <i class="fa-solid fa-kaaba"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-black text-zinc-900">Gazebo Mengaji</h2>
+                        <p class="text-xs font-semibold text-emerald-700">Ruang Belajar & Eksperimen Niat</p>
+                    </div>
+                    <p class="text-xs text-zinc-500 leading-relaxed max-w-xs mx-auto">
+                        Komunitas terbuka bagi siapa saja yang ingin mendekatkan diri kepada Allah dengan suasana yang hangat dan santai.
+                    </p>
+
+                    <div class="pt-2">
+                        <a href="https://maps.google.com" target="_blank" class="block w-full py-3 bg-zinc-950 text-white font-bold rounded-full text-xs shadow-md transition active:scale-95">
+                            <i class="fa-solid fa-map-location-dot mr-1.5 text-pastel-yellow"></i> Petunjuk Lokasi Google Maps
+                        </a>
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- ================= DARK BOTTOM DOCK (MATCHING SCREENSHOT NAVIGATION) ================= -->
+        <div class="absolute bottom-0 inset-x-0 bg-zinc-950 pt-3 pb-6 px-4 z-40 rounded-t-[36px] shadow-2xl border-t border-zinc-800">
+            
+            <!-- Dynamic Ask Bar (Exact match to "Need to know more? -> Ask" input bar in screenshot) -->
+            <div class="mb-3 bg-zinc-900 p-1.5 pl-4 rounded-full flex items-center justify-between border border-zinc-800/80">
+                <div class="flex items-center space-x-2 text-zinc-400 text-xs">
+                    <i class="fa-regular fa-comment-dots text-zinc-400"></i>
+                    <span class="text-[11px] font-medium text-zinc-400" id="dock-counter-text">Presensi Aktif • 36/58 Slot</span>
+                </div>
+                <button onclick="openQrisModal()" class="px-4 py-1.5 bg-pastel-yellowAccent hover:bg-yellow-400 text-zinc-950 font-black rounded-full text-xs transition active:scale-95 shadow">
+                    Infaq QRIS
+                </button>
+            </div>
+
+            <!-- Tab Bar Controls -->
+            <div class="flex items-center justify-around text-zinc-400 pt-1">
+                
+                <button onclick="switchTab('tab-poster')" id="nav-tab-poster" class="flex flex-col items-center justify-center w-12 py-1 text-white transition">
+                    <i class="fa-solid fa-layer-group text-sm"></i>
+                    <span class="text-[9px] font-bold mt-1">Poster</span>
+                </button>
+
+                <button onclick="switchTab('tab-form')" id="nav-tab-form" class="flex flex-col items-center justify-center w-12 py-1 text-zinc-500 hover:text-white transition">
+                    <i class="fa-solid fa-pen-to-square text-sm"></i>
+                    <span class="text-[9px] font-bold mt-1">Presensi</span>
+                </button>
+
+                <!-- Center Vibrant FAB for Quick QRIS -->
+                <div class="relative -top-3">
+                    <button onclick="openQrisModal()" class="w-12 h-12 rounded-full bg-pastel-pink text-zinc-950 flex flex-col items-center justify-center shadow-lg fab-glow transition transform active:scale-90 border-2 border-zinc-950">
+                        <i class="fa-solid fa-qrcode text-base font-black"></i>
+                    </button>
+                </div>
+
+                <button onclick="switchTab('tab-kegiatan')" id="nav-tab-kegiatan" class="flex flex-col items-center justify-center w-12 py-1 text-zinc-500 hover:text-white transition">
+                    <i class="fa-regular fa-calendar-check text-sm"></i>
+                    <span class="text-[9px] font-bold mt-1">Agenda</span>
+                </button>
+
+                <button onclick="switchTab('tab-info')" id="nav-tab-info" class="flex flex-col items-center justify-center w-12 py-1 text-zinc-500 hover:text-white transition">
+                    <i class="fa-regular fa-circle-question text-sm"></i>
+                    <span class="text-[9px] font-bold mt-1">Info</span>
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= MODAL CENTER FAB QRIS ================= -->
+        <div id="qris-modal" class="fixed inset-0 bg-zinc-950/70 backdrop-blur-md z-50 hidden flex justify-center items-end md:items-center p-0 md:p-4">
+            <div class="w-full max-w-md bg-white rounded-t-[36px] md:rounded-[36px] p-6 space-y-5 shadow-2xl animate-in slide-in-from-bottom duration-300 border border-zinc-100">
+                
+                <div class="flex items-center justify-between border-b border-zinc-100 pb-3">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-8 h-8 rounded-full bg-pastel-yellow flex items-center justify-center text-zinc-900 font-bold">
+                            <i class="fa-solid fa-qrcode text-xs"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xs font-black text-zinc-900">Infaq Gazebo via QRIS</h3>
+                            <p class="text-[10px] text-zinc-400">Scan via All E-Wallet & Mobile Banking</p>
+                        </div>
+                    </div>
+                    <button onclick="closeQrisModal()" class="w-8 h-8 rounded-full bg-zinc-100 text-zinc-500 hover:text-zinc-900 flex items-center justify-center">
+                        <i class="fa-solid fa-xmark text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- QRIS Canvas Box -->
+                <div class="bg-zinc-50 p-5 rounded-3xl flex flex-col items-center justify-center space-y-3 text-zinc-900 border border-zinc-100">
+                    <div id="qris-code-holder" class="p-2 bg-white border border-zinc-200 rounded-2xl shadow-sm"></div>
+                    <p class="text-xs font-black tracking-wide">A.N. GAZEBO MENGAJI INFAQ</p>
+                </div>
+
+                <!-- Amount Nominal Suggestions -->
+                <div class="space-y-2">
+                    <p class="text-xs font-bold text-zinc-600">Pilih Nominal Infaq Subuh / Majelis:</p>
+                    <div class="grid grid-cols-4 gap-2 text-xs">
+                        <button onclick="setDonationAmount(5000)" class="py-2.5 bg-zinc-100 hover:bg-pastel-pink/40 rounded-xl text-zinc-900 font-bold transition active:scale-95">Rp 5rb</button>
+                        <button onclick="setDonationAmount(10000)" class="py-2.5 bg-zinc-100 hover:bg-pastel-pink/40 rounded-xl text-zinc-900 font-bold transition active:scale-95">Rp 10rb</button>
+                        <button onclick="setDonationAmount(25000)" class="py-2.5 bg-zinc-100 hover:bg-pastel-pink/40 rounded-xl text-zinc-900 font-bold transition active:scale-95">Rp 25rb</button>
+                        <button onclick="setDonationAmount(50000)" class="py-2.5 bg-zinc-100 hover:bg-pastel-pink/40 rounded-xl text-zinc-900 font-bold transition active:scale-95">Rp 50rb</button>
+                    </div>
+                </div>
+
+                <button onclick="closeQrisModal()" class="w-full py-3.5 bg-zinc-950 text-white font-black rounded-full text-xs shadow-md">
+                    Tutup
+                </button>
+            </div>
+        </div>
+
+        <!-- Toast Messenger -->
+        <div id="toast-msg" class="fixed top-12 left-1/2 transform -translate-x-1/2 bg-zinc-950 text-white px-5 py-3 rounded-full text-xs font-bold shadow-2xl transition opacity-0 pointer-events-none z-50 flex items-center space-x-2 border border-zinc-800">
+            <i class="fa-solid fa-circle-check text-pastel-yellow"></i>
+            <span id="toast-text">Pesan notifikasi</span>
+        </div>
+
+    </div>
+
+    <script>
+        let isAudioPlaying = false;
+        let activeTab = 'tab-poster';
+
+        window.onload = function() {
+            // Generate QR code preview for donations
+            new QRCode(document.getElementById("qris-code-holder"), {
+                text: "https://gazebomengaji.org/infaq-qris-official",
+                width: 140,
+                height: 140,
+                colorDark: "#09090b",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        };
+
+        function switchTab(tabId) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(t => t.classList.remove('active'));
+
+            const target = document.getElementById(tabId);
+            if(target) {
+                target.classList.add('active');
+            }
+
+            document.getElementById('main-scroll-area').scrollTop = 0;
+
+            const navIds = ['tab-poster', 'tab-form', 'tab-kegiatan', 'tab-info'];
+            navIds.forEach(id => {
+                const navBtn = document.getElementById('nav-' + id);
+                if (navBtn) {
+                    if (id === tabId) {
+                        navBtn.classList.remove('text-zinc-500');
+                        navBtn.classList.add('text-white');
+                    } else {
+                        navBtn.classList.remove('text-white');
+                        navBtn.classList.add('text-zinc-500');
+                    }
+                }
+            });
+
+            activeTab = tabId;
+        }
+
+        function handleAttendanceSubmit(event) {
+            event.preventDefault();
+
+            const nama = document.getElementById('input-nama').value;
+            const wa = document.getElementById('input-wa').value;
+            const niatChoice = document.querySelector('input[name="niat_choice"]:checked').value;
+            
+            // Confetti animation
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 90,
+                    spread: 70,
+                    origin: { y: 0.7 }
+                });
+            }
+
+            // Ticket Pass Output
+            document.getElementById('res-nama').innerText = nama;
+            document.getElementById('res-niat').innerText = `"${niatChoice}"`;
+            document.getElementById('ticket-time').innerText = "Waktu Presensi: " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            const qrcodeContainer = document.getElementById('qrcode-container');
+            qrcodeContainer.innerHTML = '';
+            new QRCode(qrcodeContainer, {
+                text: `GZB-TICKET-${Date.now()}-${nama.replace(/\s+/g, '')}`,
+                width: 75,
+                height: 75,
+                colorDark: "#09090b",
+                colorLight: "#ffffff"
+            });
+
+            document.getElementById('ticket-result').classList.remove('hidden');
+            document.getElementById('ticket-result').scrollIntoView({ behavior: 'smooth' });
+
+            const currentCount = parseInt(document.getElementById('live-counter').innerText);
+            document.getElementById('live-counter').innerText = currentCount + 1;
+
+            showToast("Bismillah! Presensi & Niatmu Tercatat!");
+        }
+
+        function openQrisModal() {
+            document.getElementById('qris-modal').classList.remove('hidden');
+        }
+
+        function closeQrisModal() {
+            document.getElementById('qris-modal').classList.add('hidden');
+        }
+
+        function setDonationAmount(amount) {
+            showToast("Nominal Infaq dipilih: Rp " + amount.toLocaleString('id-ID'));
+        }
+
+        function copyTicketPass() {
+            showToast("Kode ID Tiket Disalin ke Clipboard!");
+        }
+
+        function showNotificationToast() {
+            showToast("Kajian Utama Sabtu ini pukul 19:30 WIB");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast-msg');
+            const toastText = document.getElementById('toast-text');
+            toastText.innerText = msg;
+            
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        function playAudioSummary() {
+            const icon = document.getElementById('play-icon');
+            if(!isAudioPlaying) {
+                icon.classList.remove('fa-volume-high');
+                icon.classList.add('fa-pause');
+                showToast("Memutar audio ringkasan...");
+                isAudioPlaying = true;
+            } else {
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-volume-high');
+                showToast("Audio dihentikan.");
+                isAudioPlaying = false;
+            }
+        }
+    </script>
+</body>
+</html>
