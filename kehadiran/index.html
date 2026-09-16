@@ -107,8 +107,19 @@
     <div id="phone-frame" class="w-full max-w-md bg-brand-bgLight min-h-screen md:min-h-[860px] md:max-h-[880px] md:rounded-[52px] shadow-2xl relative flex flex-col overflow-hidden border-0 md:border-[10px] border-slate-300 transition-colors duration-500">
         
         <!-- SCREEN 1: HOME VIEW -->
-        <div id="screen-home" class="app-screen active flex-1 flex-col justify-between px-4 py-2 overflow-y-auto hide-scrollbar">
+        <div id="screen-home" class="app-screen active flex-1 flex-col justify-between px-4 py-2 overflow-y-auto hide-scrollbar relative">
             
+            <!-- Floating Live Attendance Activity Pop-up (Top Banner Dropdown on Home Screen) -->
+            <div id="live-activity-toast" class="absolute top-2 left-4 right-4 bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-sky-100 flex items-center space-x-3 transition-all duration-500 transform -translate-y-24 opacity-0 z-40 pointer-events-none">
+                <div class="w-9 h-9 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-[11px] font-extrabold text-zinc-950 leading-tight truncate" id="live-toast-title">1 Jamaah baru saja mengonfirmasi</p>
+                    <p class="text-[9.5px] font-semibold text-slate-500 truncate" id="live-toast-desc">Mengisi daftar hadir majelis</p>
+                </div>
+            </div>
+
             <div class="flex-1 flex items-center justify-center py-1">
                 <div class="w-full bg-white/90 backdrop-blur-xl rounded-[32px] p-3.5 shadow-[0_20px_50px_rgba(15,23,42,0.06)] flex flex-col justify-between border border-slate-200/85 relative overflow-hidden space-y-1.5">
                     
@@ -133,22 +144,22 @@
                         </div>
                         <div class="grid grid-cols-3 gap-2 max-w-[260px] mx-auto">
                             <div class="bg-white rounded-xl py-2 px-1 flex flex-col items-center justify-center shadow-xs">
-                                <span id="timer-hours" class="font-mono text-lg font-black text-zinc-950 leading-none">09</span>
+                                <span id="timer-hours" class="font-mono text-lg font-black text-zinc-950 leading-none">00</span>
                                 <span class="text-[8px] font-black text-slate-400 mt-1 uppercase tracking-wider">JAM</span>
                             </div>
                             <div class="bg-white rounded-xl py-2 px-1 flex flex-col items-center justify-center shadow-xs">
-                                <span id="timer-minutes" class="font-mono text-lg font-black text-zinc-950 leading-none">23</span>
+                                <span id="timer-minutes" class="font-mono text-lg font-black text-zinc-950 leading-none">00</span>
                                 <span class="text-[8px] font-black text-slate-400 mt-1 uppercase tracking-wider">MENIT</span>
                             </div>
                             <div class="bg-white rounded-xl py-2 px-1 flex flex-col items-center justify-center shadow-xs">
-                                <span id="timer-seconds" class="font-mono text-lg font-black text-zinc-950 leading-none">42</span>
+                                <span id="timer-seconds" class="font-mono text-lg font-black text-zinc-950 leading-none">00</span>
                                 <span class="text-[8px] font-black text-slate-400 mt-1 uppercase tracking-wider">DETIK</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Poster Kajian Card -->
-                    <div class="bg-brand-cardBlue/95 backdrop-blur-2xl rounded-[28px] p-4 text-zinc-950 shadow-[0_14px_40px_-6px_rgba(2,132,199,0.16)] space-y-2.5 border border-sky-200/90">
+                    <div class="bg-brand-cardBlue/95 backdrop-blur-2xl rounded-[28px] p-4 text-zinc-950 shadow-[0_14px_40px_-6px_rgba(2,132,199,0.16)] space-y-2 border border-sky-200/90">
                         <div class="flex items-center space-x-1.5 flex-wrap">
                             <span class="px-2.5 py-0.5 bg-white/80 backdrop-blur-md rounded-full text-[9.5px] font-extrabold text-zinc-900 shadow-xs border border-white/90">
                                 Terbuka Umum
@@ -158,39 +169,35 @@
                             </span>
                         </div>
 
-                        <!-- Profile Photo, Title, and Ustaz -->
-                        <div class="flex items-center space-x-3.5 py-3.5 px-1">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" 
+                        <div class="flex items-center space-x-3.5 py-1 px-1">
+                            <img id="display-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" 
                                  alt="Pemateri" class="w-14 h-14 rounded-full object-cover border-2 border-white/90 shadow-md shrink-0">
-                            <div class="min-w-0 flex-1 space-y-1">
-                                <h2 class="text-base font-black leading-tight text-zinc-950 tracking-tight">
+                            <div class="min-w-0 flex-1 space-y-0.5">
+                                <p id="display-kitab" class="text-[9.5px] font-extrabold uppercase tracking-wider text-sky-800">
+                                    KITAB: AL-HIKAM
+                                </p>
+                                <h2 id="display-title" class="text-base font-black leading-tight text-zinc-950 tracking-tight">
                                     Kajian Hati & Niat
                                 </h2>
-                                <p class="text-[11px] font-semibold text-zinc-800">
+                                <p id="display-ustadz" class="text-[11px] font-semibold text-zinc-800">
                                     Ust. Hanan Attaki
                                 </p>
                             </div>
-                        </div>
-
-                        <div class="py-1 border-t border-sky-900/10">
-                            <p class="text-[10.5px] font-medium text-zinc-900 leading-snug">
-                                Mantapkan niat sebelum majelis dimulai agar ilmu yang didapat berkah & berbekas.
-                            </p>
                         </div>
 
                         <!-- Event Meta Info -->
                         <div class="space-y-1 text-[10.5px] font-bold text-zinc-950 pt-0.5">
                             <div class="flex items-center space-x-2 bg-white/60 p-2 rounded-xl">
                                 <i class="fa-solid fa-clock text-sky-600 text-[11px] shrink-0 w-4 text-center"></i>
-                                <span class="truncate">20:00 - 21:00 WIB (Ba'da Isya - Selesai)</span>
+                                <span id="display-time-str" class="truncate">20:00 - 21:00 WIB (Ba'da Isya - Selesai)</span>
                             </div>
                             <div class="flex items-center space-x-2 bg-white/60 p-2 rounded-xl">
                                 <i class="fa-solid fa-calendar-days text-sky-600 text-[11px] shrink-0 w-4 text-center"></i>
-                                <span class="truncate">Rabu, 16 Sep 2026 &nbsp;<i class="fa-solid fa-moon text-[9px] text-sky-600 mx-0.5"></i>&nbsp; 5 Rabi'ul Awal 1448H</span>
+                                <span id="display-date-str" class="truncate">Rabu, 16 Sep 2026 &nbsp;<i class="fa-solid fa-moon text-[9px] text-sky-600 mx-0.5"></i>&nbsp; 5 Rabi'ul Awal 1448H</span>
                             </div>
                             <div class="flex items-start space-x-2 bg-white/60 p-2 rounded-xl">
                                 <i class="fa-solid fa-location-dot text-sky-600 text-[11px] shrink-0 w-4 text-center mt-0.5"></i>
-                                <span class="leading-snug">Ruang Gazebo Mengaji di Gazebo Sport Center (GSC)</span>
+                                <span id="display-location" class="leading-snug">Ruang Gazebo Mengaji di Gazebo Sport Center (GSC)</span>
                             </div>
                         </div>
 
@@ -205,10 +212,11 @@
                             </button>
                         </div>
                     </div>
+
                 </div>
             </div>
 
-            <div class="text-center text-zinc-400 text-[10px] font-semibold pb-0.5 shrink-0">
+            <div class="text-center text-zinc-400 text-[10px] font-semibold pb-1 shrink-0 mt-auto pt-2">
                 <span>Gazebo Mengaji • Sentuh Donasi atau Niat Hadir</span>
             </div>
         </div>
@@ -228,7 +236,7 @@
                     <div class="space-y-1">
                         <h2 class="text-xl font-extrabold text-zinc-950 tracking-tight">Form Kehadiran Majelis</h2>
                         <p class="text-xs text-slate-500 font-medium leading-relaxed">
-                            Lengkapi data Anda untuk menerbitkan Tiket Jalan Menuju Surga.
+                            Lengkapi data Anda untuk konfirmasi kehadiran majelis.
                         </p>
                     </div>
 
@@ -252,12 +260,8 @@
                                    class="w-full bg-slate-50/70 border border-slate-200 rounded-2xl px-5 py-3.5 text-xs font-bold text-zinc-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-100 transition shadow-xs">
                         </div>
 
-                        <div class="flex items-center justify-between pt-5 border-t border-slate-100">
-                            <button type="button" onclick="navigateTo('screen-home')" class="py-3 px-6 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs rounded-full transition active:scale-95 flex items-center space-x-1.5">
-                                <span>Kembali</span>
-                            </button>
-
-                            <button type="submit" class="py-3 px-6 bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-xs rounded-full transition active:scale-95 shadow-md shadow-sky-500/25 flex items-center space-x-2">
+                        <div class="pt-5 border-t border-slate-100">
+                            <button type="submit" class="w-full py-3.5 px-6 bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-xs rounded-full transition active:scale-95 shadow-md shadow-sky-500/25 flex items-center justify-center space-x-2">
                                 <span>InsyaAllah Hadir</span>
                                 <i class="fa-solid fa-circle-check text-xs"></i>
                             </button>
@@ -661,41 +665,209 @@
                     <span>Kembali ke Beranda</span>
                 </button>
             </div>
+        </div>
+
         <!-- Toast Notification Pop-up (Slide Down from Top) -->
         <div id="toast-msg" class="fixed top-5 left-1/2 transform -translate-x-1/2 -translate-y-16 bg-zinc-950/95 backdrop-blur-md text-white px-5 py-3 rounded-full text-xs font-bold shadow-2xl transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 pointer-events-none z-50 flex items-center space-x-2 border border-zinc-800">
             <i class="fa-solid fa-circle-check text-sky-400" id="toast-icon"></i>
             <span id="toast-text">Notifikasi</span>
         </div>
 
-        <!-- Floating Live Attendance Activity Pop-up (Top Banner Dropdown) -->
-        <div id="live-activity-toast" class="absolute top-4 left-4 right-4 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-sky-100 flex items-center space-x-3 transition-all duration-500 transform -translate-y-24 opacity-0 z-40 pointer-events-none">
-            <div class="w-9.5 h-9.5 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
-                <i class="fa-solid fa-user-check"></i>
-            </div>
-            <div class="flex-1 min-w-0">
-                <p class="text-[11px] font-extrabold text-zinc-950 leading-tight truncate" id="live-toast-title">3 Jamaah Baru Konfirmasi</p>
-                <p class="text-[9.5px] font-semibold text-slate-500 truncate" id="live-toast-desc">Baru saja mengisi daftar hadir majelis</p>
-            </div>
-        </div>
     </div>
 
     <script>
+        // CENTRALIZED EVENT CONFIGURATION
+        // Modifikasi data di sini atau hubungkan dengan Google Sheets CSV URL
+        const EVENT_CONFIG = {
+            title: "Kajian Hati & Niat",
+            ustadz: "Ust. Hanan Attaki",
+            kitab: "KITAB: AL-HIKAM",
+            dateISO: "2026-09-16T20:00:00+07:00", // Format: YYYY-MM-DDTHH:mm:ss+07:00 (Untuk Countdown Timer)
+            timeCustom: "20:00 - 21:00 WIB (Ba'da Isya - Selesai)", // Teks Waktu Bebas Yang Tampil Di Aplikasi
+            location: "Ruang Gazebo Mengaji di Gazebo Sport Center (GSC)",
+            gscShort: "Ruang Gazebo GSC",
+            qrisUrl: "https://gazebomengaji.org/infaq-qris-official",
+            // Tempelkan Link CSV Google Sheets di sini:
+            sheetCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlyiBuI8q7dgfTvzIv0RgBVDvT2zk_XoW7hbq3GHT1XRrR20aneHpQc1xQmUxOZfiZODR49YUuw8XH/pub?output=csv"
+        };
+
         let currentPassData = null;
 
+        // Navigation Helper for Screen Switching
+        function navigateTo(screenId) {
+            const screens = document.querySelectorAll('.app-screen');
+            screens.forEach(s => s.classList.remove('active'));
+            const target = document.getElementById(screenId);
+            if (target) {
+                target.classList.add('active');
+                target.scrollTop = 0;
+            }
+        }
+
+        // Donation Chip Selector
+        function selectDonasiNominal(amount) {
+            const inputNominal = document.getElementById('input-donasi-nominal');
+            if (inputNominal) {
+                inputNominal.value = amount.toLocaleString('id-ID');
+            }
+        }
+
+        // Donation Input Formatter
+        function formatDonationInput(el) {
+            let val = el.value.replace(/\D/g, '');
+            if (val) {
+                el.value = parseInt(val, 10).toLocaleString('id-ID');
+            } else {
+                el.value = '';
+            }
+        }
+
+        // QRIS Code Generator Initialization
+        function initDonasiQRIS() {
+            const qrisContainer = document.getElementById('donasi-qris-box');
+            if (qrisContainer) {
+                qrisContainer.innerHTML = '';
+                if (typeof QRCode !== 'undefined') {
+                    new QRCode(qrisContainer, {
+                        text: EVENT_CONFIG.qrisUrl || "https://gazebomengaji.org/infaq-qris",
+                        width: 120,
+                        height: 120,
+                        colorDark: "#0f172a",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                }
+            }
+        }
+
         window.onload = function() {
+            initEventConfig();
             startCountdown();
             initDonasiQRIS();
             startLiveNotifications();
         };
 
+        function initEventConfig() {
+            // Jika ada sheet CSV, aplikasi bisa fetch otomatis (opsional)
+            if (EVENT_CONFIG.sheetCsvUrl && !EVENT_CONFIG.sheetCsvUrl.includes("YOUR_SPREADSHEET_ID_HERE")) {
+                fetchSheetConfig();
+            } else {
+                renderEventConfig();
+            }
+        }
+
+        function getHijriDateString(dateObj) {
+            try {
+                // Formatting Hijri secara otomatis menggunakan engine bawaan JavaScript
+                const formatter = new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+                return formatter.format(dateObj) + "H";
+            } catch (e) {
+                return "5 Rabi'ul Awal 1448H"; // Fallback jika browser tidak mendukung
+            }
+        }
+
+        function renderEventConfig() {
+            const dateObj = new Date(EVENT_CONFIG.dateISO);
+            
+            const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+            
+            const dayName = days[dateObj.getDay()];
+            const dayNum = dateObj.getDate();
+            const monthName = months[dateObj.getMonth()];
+            const yearNum = dateObj.getFullYear();
+            
+            const masehiStr = `${dayName}, ${dayNum} ${monthName} ${yearNum}`;
+            const hijriStr = getHijriDateString(dateObj);
+            
+            const timeHours = String(dateObj.getHours()).padStart(2, '0');
+            const timeMinutes = String(dateObj.getMinutes()).padStart(2, '0');
+            const defaultTimeStr = `${timeHours}:${timeMinutes} - ${parseInt(timeHours,10)+1}:${timeMinutes} WIB (Ba'da Isya - Selesai)`;
+            const timeStr = EVENT_CONFIG.timeCustom || defaultTimeStr;
+
+            // Update DOM Elements
+            const kitabEl = document.getElementById('display-kitab');
+            const titleEl = document.getElementById('display-title');
+            const ustadzEl = document.getElementById('display-ustadz');
+            const dateStrEl = document.getElementById('display-date-str');
+            const timeStrEl = document.getElementById('display-time-str');
+            const locEl = document.getElementById('display-location');
+
+            if (kitabEl) kitabEl.innerText = EVENT_CONFIG.kitab;
+            if (titleEl) titleEl.innerText = EVENT_CONFIG.title;
+            if (ustadzEl) ustadzEl.innerText = EVENT_CONFIG.ustadz;
+            if (dateStrEl) {
+                dateStrEl.innerHTML = `${masehiStr} &nbsp;<i class="fa-solid fa-moon text-[9px] text-sky-600 mx-0.5"></i>&nbsp; ${hijriStr}`;
+            }
+            if (timeStrEl) timeStrEl.innerText = timeStr;
+            if (locEl) locEl.innerText = EVENT_CONFIG.location;
+        }
+
+        async function fetchSheetConfig() {
+            if (!EVENT_CONFIG.sheetCsvUrl || EVENT_CONFIG.sheetCsvUrl.includes("YOUR_SPREADSHEET_ID_HERE")) {
+                renderEventConfig();
+                return;
+            }
+
+            try {
+                // Cache-busting agar perubahan di Google Sheets langsung terupdate tanpa tertahan cache browser
+                const cacheBuster = EVENT_CONFIG.sheetCsvUrl.includes('?') 
+                    ? `&_t=${Date.now()}` 
+                    : `?_t=${Date.now()}`;
+                
+                const res = await fetch(EVENT_CONFIG.sheetCsvUrl + cacheBuster);
+                const text = await res.text();
+
+                // Parser CSV sederhana yang aman terhadap tanda petik & koma dalam teks
+                const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
+                if (lines.length > 1) {
+                    const parseCsvLine = (line) => {
+                        const values = [];
+                        let current = '';
+                        let inQuotes = false;
+                        for (let i = 0; i < line.length; i++) {
+                            const char = line[i];
+                            if (char === '"' || char === "'") {
+                                inQuotes = !inQuotes;
+                            } else if (char === ',' && !inQuotes) {
+                                values.push(current.trim().replace(/^["']|["']$/g, ''));
+                                current = '';
+                            } else {
+                                current += char;
+                            }
+                        }
+                        values.push(current.trim().replace(/^["']|["']$/g, ''));
+                        return values;
+                    };
+
+                    const data = parseCsvLine(lines[1]); // Baris ke-2 (Baris data pertama)
+                    if (data[0]) EVENT_CONFIG.title = data[0];
+                    if (data[1]) EVENT_CONFIG.ustadz = data[1];
+                    if (data[2]) EVENT_CONFIG.kitab = data[2];
+                    if (data[3]) EVENT_CONFIG.dateISO = data[3].trim().replace(' ', 'T');
+                    if (data[4]) EVENT_CONFIG.timeCustom = data[4];
+                    if (data[5]) EVENT_CONFIG.location = data[5];
+                }
+                renderEventConfig();
+            } catch (err) {
+                console.warn("Gagal membaca Google Sheet, menggunakan konfigurasi default:", err);
+                renderEventConfig();
+            }
+        }
+
         function startLiveNotifications() {
+            // Notifikasi hanya menyebut "Jamaah" atau nama yang disensor tanpa label (Jamaah)
             const notifications = [
-                { title: "1 Jamaah telah mengisi daftar hadir", desc: "Baru saja mengonfirmasi niat hadir majelis" },
-                { title: "3 Jamaah baru saja mengonfirmasi hadir", desc: "Menyiapkan diri menuju Taman Surga" },
-                { title: "Ahmad (Yogyakarta) telah konfirmasi", desc: "1 jamaah baru saja mendaftar" },
-                { title: "2 Jamaah baru mengisi daftar hadir", desc: "Baru saja mengonfirmasi kedatangan" },
-                { title: "Fatimah (Sleman) baru saja mendaftar", desc: "Niat hadir kajian Ba'da Isya" },
-                { title: "4 Jamaah mengonfirmasi kedatangan", desc: "Daftar hadir diperbarui 2 menit lalu" }
+                { title: "1 Jamaah baru saja mengonfirmasi", desc: "Niat hadir majelis Ba'da Isya" },
+                { title: "Ah**** mengisi daftar hadir", desc: "Menyiapkan diri menuju Taman Surga" },
+                { title: "3 Jamaah baru mengonfirmasi kedatangan", desc: "Daftar hadir diperbarui 2 menit lalu" },
+                { title: "Fa**** mengisi daftar hadir", desc: "1 jamaah baru saja mengonfirmasi" },
+                { title: "2 Jamaah baru mengonfirmasi hadir", desc: "Mengisi daftar hadir majelis" },
+                { title: "Ab***** telah konfirmasi", desc: "Niat hadir kajian rutin" }
             ];
 
             let index = 0;
@@ -723,69 +895,17 @@
                 index = (index + 1) % notifications.length;
             };
 
-            // Initial pop-up after 3 seconds, then repeat every 9 seconds
+            // Initial pop-up after 2.5 seconds, then repeat every 8 seconds
             setTimeout(() => {
                 showNextNotification();
-                setInterval(showNextNotification, 9000);
-            }, 3000);
-        }
-
-        function initDonasiQRIS() {
-            const qrisHolder = document.getElementById("donasi-qris-box");
-            if (qrisHolder && qrisHolder.children.length === 0) {
-                new QRCode(qrisHolder, {
-                    text: "https://gazebomengaji.org/infaq-qris-official",
-                    width: 110,
-                    height: 110,
-                    colorDark: "#0f172a",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-            }
-        }
-
-        function formatNumberWithDots(val) {
-            const raw = String(val).replace(/\D/g, '');
-            if (!raw) return '';
-            return parseInt(raw, 10).toLocaleString('id-ID');
-        }
-
-        function formatDonationInput(inputEl) {
-            const formatted = formatNumberWithDots(inputEl.value);
-            inputEl.value = formatted;
-        }
-
-        function selectDonasiNominal(val) {
-            const nominalInput = document.getElementById('input-donasi-nominal');
-            if (nominalInput) {
-                nominalInput.value = formatNumberWithDots(val);
-            }
-        }
-
-        function navigateTo(screenId) {
-            const screens = document.querySelectorAll('.app-screen');
-            screens.forEach(s => s.classList.remove('active'));
-
-            const targetScreen = document.getElementById(screenId);
-            const frame = document.getElementById('phone-frame');
-
-            if (targetScreen) {
-                targetScreen.classList.add('active');
-            }
-
-            if (screenId === 'screen-boarding-pass') {
-                frame.style.backgroundColor = '#2563eb';
-            } else if (screenId === 'screen-donasi-invoice') {
-                frame.style.backgroundColor = '#0f172a';
-            } else {
-                frame.style.backgroundColor = '#f1f5f9';
-            }
+                setInterval(showNextNotification, 8000);
+            }, 2500);
         }
 
         function startCountdown() {
-            const targetTime = new Date('2026-09-16T20:00:00+07:00').getTime();
-
             const updateTimer = () => {
+                // Membaca tanggal ISO secara dinamis dari EVENT_CONFIG
+                const targetTime = new Date(EVENT_CONFIG.dateISO).getTime();
                 const now = new Date().getTime();
                 let diff = Math.floor((targetTime - now) / 1000);
 
@@ -811,10 +931,8 @@
         function handlePresensiSubmit(event) {
             event.preventDefault();
 
-            const nama = document.getElementById('input-presensi-nama').value.trim();
-
+            // Pindah langsung ke Layar Sukses Konfirmasi Kehadiran
             navigateTo('screen-presensi-sukses');
-            showToast(`Presensi Berhasil untuk ${nama || 'Jamaah'}!`);
 
             if (typeof confetti === 'function') {
                 confetti({ particleCount: 90, spread: 70, origin: { y: 0.5 } });
@@ -853,26 +971,12 @@
             }
         }
 
-        function renderPassCard(data) {
-            document.getElementById('pass-holder-name').innerText = data.holderName;
-            if (document.getElementById('pass-header-kajian-title')) document.getElementById('pass-header-kajian-title').innerText = data.kajianTitle || 'Kajian Hati & Niat';
-            if (document.getElementById('pass-kajian-title')) document.getElementById('pass-kajian-title').innerText = data.kajianTitle || 'Kajian Hati & Niat';
-            if (document.getElementById('pass-kajian-speaker')) document.getElementById('pass-kajian-speaker').innerText = data.kajianSpeaker || 'Ust. Hanan Attaki';
-            document.getElementById('pass-flight-no').innerText = data.flightNo;
-            document.getElementById('pass-seat-no').innerText = data.seatNo;
-            document.getElementById('pass-class-name').innerText = data.className;
-            document.getElementById('pass-date-str').innerText = data.dateStr;
-            document.getElementById('pass-time-str').innerText = data.timeStr;
-            document.getElementById('pass-qr-serial').innerText = data.qrCodeText;
-        }
-
         async function handleAddToWallet() {
             const screenEl = document.getElementById('screen-boarding-pass');
             const btnText = document.getElementById('btn-wallet-text');
 
             if (btnText) btnText.innerText = "Meracik JPG Boarding Pass...";
 
-            // Reset scroll position to top for clean capture
             if (screenEl) screenEl.scrollTop = 0;
 
             try {
@@ -888,7 +992,6 @@
                         windowWidth: screenEl.scrollWidth,
                         windowHeight: screenEl.scrollHeight,
                         onclone: (clonedDoc) => {
-                            // Target cloned elements to hide buttons and disable animations
                             const clonedScreen = clonedDoc.getElementById('screen-boarding-pass');
                             const clonedCloseBtn = clonedDoc.getElementById('boardpass-close-btn');
                             const clonedBottomControls = clonedDoc.getElementById('boardpass-bottom-controls');
@@ -898,7 +1001,6 @@
                                 clonedScreen.style.transform = 'none';
                                 clonedScreen.style.transition = 'none';
                             }
-                            // Use visibility:hidden to preserve exact layout height without shifting text/icons
                             if (clonedCloseBtn) clonedCloseBtn.style.visibility = 'hidden';
                             if (clonedBottomControls) clonedBottomControls.style.visibility = 'hidden';
                         }
