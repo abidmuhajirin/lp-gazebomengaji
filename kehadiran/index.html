@@ -679,36 +679,42 @@
         // CENTRALIZED EVENT CONFIGURATION
         // Modifikasi data di sini atau hubungkan dengan Google Sheets CSV URL
         const EVENT_CONFIG = {
-            title: "Kajian Hati & Niat",
-            ustadz: "Ust. Hanan Attaki",
-            kitab: "KITAB: AL-HIKAM",
+            title: "Hobi Laknat",
+            ustadz: "Ustadz Muhammad Ihsan, S.UD, M.H.I.",
+            kitab: "Kitab Al Kabair",
             dateISO: "2026-09-16T20:00:00+07:00", // Format: YYYY-MM-DDTHH:mm:ss+07:00
-            timeCustom: "20:00 - 21:00 WIB (Ba'da Isya - Selesai)",
+            timeCustom: "Ba'da Subuh - Selesai",
             location: "Ruang Gazebo Mengaji di Gazebo Sport Center (GSC)",
             gscShort: "Ruang Gazebo GSC",
             qrisUrl: "https://gazebomengaji.org/infaq-qris-official",
-            // Tempelkan Link Google Sheets di sini (Bisa Link Berbagi Biasa / Link CSV):
+            // Link Google Sheets CSV Publik dari Sheet 2:
             sheetCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlyiBuI8q7dgfTvzIv0RgBVDvT2zk_XoW7hbq3GHT1XRrR20aneHpQc1xQmUxOZfiZODR49YUuw8XH/pub?gid=399437584&single=true&output=csv"
         };
 
         let currentPassData = null;
 
-        // Helper untuk Mengonversi Semua Jenis Link Google Sheets ke Link CSV Langsung
+        // Helper untuk Mengonversi Semua Jenis Link Google Sheets (Termasuk Sheet 2 / Tab 2 & GID) ke Link CSV Langsung
         function getDirectCsvUrl(url) {
             if (!url || url.includes("YOUR_SPREADSHEET_ID_HERE")) return null;
             
-            // Jika sudah berbentuk pub?output=csv atau gviz/tq
-            if (url.includes("pub?output=csv") || url.includes("tqx=out:csv")) {
-                return url;
+            let cleanUrl = url.trim();
+
+            // Jika sudah berbentuk pub atau gviz dengan output=csv
+            if (cleanUrl.includes("output=csv") || cleanUrl.includes("tqx=out:csv")) {
+                return cleanUrl;
             }
 
-            // Jika user menempelkan link biasa (contoh: /edit?usp=sharing)
-            const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+            // Ambil ID GID (khusus Sheet 2, Sheet 3, dst. yang punya #gid=... atau ?gid=...)
+            const gidMatch = cleanUrl.match(/[?&#]gid=([0-9]+)/);
+            const gidParam = gidMatch ? `&gid=${gidMatch[1]}` : '';
+
+            // Ambil Spreadsheet ID utama
+            const match = cleanUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
             if (match && match[1]) {
-                return `https://docs.google.com/spreadsheets/d/${match[1]}/gviz/tq?tqx=out:csv`;
+                return `https://docs.google.com/spreadsheets/d/${match[1]}/gviz/tq?tqx=out:csv${gidParam}`;
             }
 
-            return url;
+            return cleanUrl;
         }
 
         // Navigation Helper for Screen Switching
@@ -788,8 +794,38 @@
             }
         }
 
+        // Flexible Date Parser untuk membaca semua variasi format tanggal dari Google Sheets
+        function parseFlexibleDate(dateInput) {
+            if (!dateInput) return new Date();
+            if (dateInput instanceof Date) return dateInput;
+            
+            let s = String(dateInput).trim();
+            
+            // Ubah format jam dengan titik (20.00) menjadi titik dua (20:00)
+            s = s.replace(/(\d{1,2})\.(\d{2})/, '$1:$2');
+            
+            // Format YYYY-MM-DD atau YYYY/MM/DD HH:mm:ss
+            let matchISO = s.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+            if (matchISO) {
+                let [_, y, m, day, hr, min, sec] = matchISO;
+                return new Date(parseInt(y), parseInt(m)-1, parseInt(day), parseInt(hr||0), parseInt(min||0), parseInt(sec||0));
+            }
+            
+            // Format Indonesia: DD-MM-YYYY atau DD/MM/YYYY HH:mm:ss
+            let matchDMY = s.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+            if (matchDMY) {
+                let [_, day, m, y, hr, min, sec] = matchDMY;
+                return new Date(parseInt(y), parseInt(m)-1, parseInt(day), parseInt(hr||0), parseInt(min||0), parseInt(sec||0));
+            }
+            
+            let d = new Date(s);
+            if (!isNaN(d.getTime())) return d;
+            
+            return new Date();
+        }
+
         function renderEventConfig() {
-            const dateObj = new Date(EVENT_CONFIG.dateISO);
+            const dateObj = parseFlexibleDate(EVENT_CONFIG.dateISO);
             
             const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
             const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
@@ -833,6 +869,8 @@
                     : `?_t=${Date.now()}`;
                 
                 const res = await fetch(directUrl + cacheBuster);
+                if (!res.ok) throw new Error("HTTP error " + res.status);
+
                 const text = await res.text();
 
                 // Parser CSV sederhana yang aman terhadap tanda petik & koma dalam teks
@@ -844,35 +882,35 @@
                         let inQuotes = false;
                         for (let i = 0; i < line.length; i++) {
                             const char = line[i];
-                            if (char === '"' || char === "'") {
-                                inQuotes = !inQuotes;
+                            if (char === '"') {
+                                if (inQuotes && line[i + 1] === '"') {
+                                    current += '"';
+                                    i++;
+                                } else {
+                                    inQuotes = !inQuotes;
+                                }
                             } else if (char === ',' && !inQuotes) {
-                                values.push(current.trim().replace(/^["']|["']$/g, ''));
+                                values.push(current.trim().replace(/^"|"$/g, ''));
                                 current = '';
                             } else {
                                 current += char;
                             }
                         }
-                        values.push(current.trim().replace(/^["']|["']$/g, ''));
+                        values.push(current.trim().replace(/^"|"$/g, ''));
                         return values;
                     };
 
                     const data = parseCsvLine(lines[1]); // Baris ke-2 (Baris data pertama)
-                    if (data[0]) EVENT_CONFIG.title = data[0];
-                    if (data[1]) EVENT_CONFIG.ustadz = data[1];
-                    if (data[2]) EVENT_CONFIG.kitab = data[2];
+                    if (data[0] && data[0].trim()) EVENT_CONFIG.title = data[0].trim();
+                    if (data[1] && data[1].trim()) EVENT_CONFIG.ustadz = data[1].trim();
+                    if (data[2] && data[2].trim()) EVENT_CONFIG.kitab = data[2].trim();
                     
-                    // Format Tanggal ISO yang Aman untuk Semua Browser / HP
-                    if (data[3]) {
-                        let rawDate = data[3].trim().replace(' ', 'T');
-                        if (!rawDate.includes('+') && !rawDate.includes('Z') && rawDate.length <= 16) {
-                            rawDate += ':00+07:00';
-                        }
-                        EVENT_CONFIG.dateISO = rawDate;
+                    if (data[3] && data[3].trim()) {
+                        EVENT_CONFIG.dateISO = data[3].trim();
                     }
 
-                    if (data[4]) EVENT_CONFIG.timeCustom = data[4];
-                    if (data[5]) EVENT_CONFIG.location = data[5];
+                    if (data[4] && data[4].trim()) EVENT_CONFIG.timeCustom = data[4].trim();
+                    if (data[5] && data[5].trim()) EVENT_CONFIG.location = data[5].trim();
                 }
                 renderEventConfig();
             } catch (err) {
@@ -927,11 +965,12 @@
         function startCountdown() {
             const updateTimer = () => {
                 // Membaca tanggal ISO secara dinamis dari EVENT_CONFIG
-                const targetTime = new Date(EVENT_CONFIG.dateISO).getTime();
+                const dateObj = parseFlexibleDate(EVENT_CONFIG.dateISO);
+                const targetTime = dateObj.getTime();
                 const now = new Date().getTime();
                 let diff = Math.floor((targetTime - now) / 1000);
 
-                if (diff <= 0) diff = 0;
+                if (isNaN(diff) || diff <= 0) diff = 0;
 
                 const h = Math.floor(diff / 3600);
                 const m = Math.floor((diff % 3600) / 60);
