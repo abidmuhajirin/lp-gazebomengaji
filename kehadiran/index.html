@@ -55,13 +55,6 @@
             scrollbar-width: none;
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-        }
-
         .app-screen {
             display: none;
             opacity: 0;
@@ -73,6 +66,13 @@
             display: flex;
             opacity: 1;
             transform: scale(1);
+        }
+
+        /* Prevent transition/transform shift during screenshot generation */
+        .no-capture-shift,
+        .no-capture-shift * {
+            transition: none !important;
+            animation: none !important;
         }
 
         /* Thermal receipt styling */
@@ -112,43 +112,43 @@
             <div class="flex-1 flex items-center justify-center py-1">
                 <div class="w-full bg-white/90 backdrop-blur-xl rounded-[32px] p-3.5 shadow-[0_20px_50px_rgba(15,23,42,0.06)] flex flex-col justify-between border border-slate-200/85 relative overflow-hidden space-y-1.5">
                     
-                    <!-- Brand Header with tight spacing -->
-                    <div class="flex items-center justify-between px-1 shrink-0">
+                    <!-- Brand Header -->
+                    <div class="flex items-center justify-between px-1 shrink-0 py-0.5">
                         <div class="flex items-center space-x-1.5">
                             <div class="w-6 h-6 rounded-full bg-zinc-950 text-white flex items-center justify-center font-black text-[11px] shadow-sm">
                                 <i class="fa-solid fa-kaaba"></i>
                             </div>
                             <span class="font-black text-xs tracking-wider text-zinc-950">GAZEBO MENGAJI</span>
                         </div>
-                        <span class="text-[9.5px] font-extrabold px-2 py-0.5 bg-sky-100 text-sky-800 rounded-full">Kajian Rutin</span>
+                        <span class="text-[9.5px] font-extrabold px-2.5 py-0.5 bg-sky-100 text-sky-800 rounded-full">Kajian Rutin</span>
                     </div>
 
-                    <!-- Dedicated Countdown Banner Card (Neutral Gray, no outline) -->
-                    <div class="bg-slate-100 rounded-2xl p-2 text-center shadow-2xs relative overflow-hidden">
+                    <!-- Neutral Gray Countdown Banner Card -->
+                    <div class="bg-slate-100 rounded-2xl p-2.5 text-center shadow-2xs relative overflow-hidden">
                         <div class="flex items-center justify-center space-x-1.5 pb-1">
-                            <i class="fa-solid fa-hourglass-half text-slate-500 text-[9px]"></i>
-                            <span class="text-[9.5px] font-black text-slate-700 uppercase tracking-widest">
+                            <i class="fa-solid fa-hourglass-half text-slate-500 text-[10px]"></i>
+                            <span class="text-[10px] font-black text-slate-700 uppercase tracking-widest">
                                 MENUJU TAMAN SURGA
                             </span>
                         </div>
-                        <div class="grid grid-cols-3 gap-1.5 max-w-[240px] mx-auto">
-                            <div class="bg-white rounded-xl py-1 px-1 flex flex-col items-center justify-center shadow-xs">
-                                <span id="timer-hours" class="font-mono text-sm font-black text-zinc-950 leading-none">09</span>
-                                <span class="text-[7px] font-black text-zinc-400 mt-0.5 uppercase tracking-wider">JAM</span>
+                        <div class="grid grid-cols-3 gap-2 max-w-[260px] mx-auto">
+                            <div class="bg-white rounded-xl py-2 px-1 flex flex-col items-center justify-center shadow-xs">
+                                <span id="timer-hours" class="font-mono text-lg font-black text-zinc-950 leading-none">09</span>
+                                <span class="text-[8px] font-black text-slate-400 mt-1 uppercase tracking-wider">JAM</span>
                             </div>
-                            <div class="bg-white rounded-xl py-1 px-1 flex flex-col items-center justify-center shadow-xs">
-                                <span id="timer-minutes" class="font-mono text-sm font-black text-zinc-950 leading-none">23</span>
-                                <span class="text-[7px] font-black text-zinc-400 mt-0.5 uppercase tracking-wider">MENIT</span>
+                            <div class="bg-white rounded-xl py-2 px-1 flex flex-col items-center justify-center shadow-xs">
+                                <span id="timer-minutes" class="font-mono text-lg font-black text-zinc-950 leading-none">23</span>
+                                <span class="text-[8px] font-black text-slate-400 mt-1 uppercase tracking-wider">MENIT</span>
                             </div>
-                            <div class="bg-white rounded-xl py-1 px-1 flex flex-col items-center justify-center shadow-xs">
-                                <span id="timer-seconds" class="font-mono text-sm font-black text-zinc-950 leading-none">42</span>
-                                <span class="text-[7px] font-black text-zinc-400 mt-0.5 uppercase tracking-wider">DETIK</span>
+                            <div class="bg-white rounded-xl py-2 px-1 flex flex-col items-center justify-center shadow-xs">
+                                <span id="timer-seconds" class="font-mono text-lg font-black text-zinc-950 leading-none">42</span>
+                                <span class="text-[8px] font-black text-slate-400 mt-1 uppercase tracking-wider">DETIK</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Poster Kajian Card -->
-                    <div class="bg-brand-cardBlue/95 backdrop-blur-2xl rounded-[28px] p-3.5 text-zinc-950 shadow-[0_14px_40px_-6px_rgba(2,132,199,0.16)] space-y-2 border border-sky-200/90">
+                    <div class="bg-brand-cardBlue/95 backdrop-blur-2xl rounded-[28px] p-4 text-zinc-950 shadow-[0_14px_40px_-6px_rgba(2,132,199,0.16)] space-y-2.5 border border-sky-200/90">
                         <div class="flex items-center space-x-1.5 flex-wrap">
                             <span class="px-2.5 py-0.5 bg-white/80 backdrop-blur-md rounded-full text-[9.5px] font-extrabold text-zinc-900 shadow-xs border border-white/90">
                                 Terbuka Umum
@@ -158,20 +158,21 @@
                             </span>
                         </div>
 
-                        <div class="flex items-center space-x-2.5 pt-0.5">
+                        <!-- Profile Photo, Title, and Ustaz -->
+                        <div class="flex items-center space-x-3.5 py-3.5 px-1">
                             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" 
-                                 alt="Pemateri" class="w-10 h-10 rounded-full object-cover border-2 border-white/90 shadow-md shrink-0">
-                            <div class="min-w-0 flex-1">
+                                 alt="Pemateri" class="w-14 h-14 rounded-full object-cover border-2 border-white/90 shadow-md shrink-0">
+                            <div class="min-w-0 flex-1 space-y-1">
                                 <h2 class="text-base font-black leading-tight text-zinc-950 tracking-tight">
                                     Kajian Hati & Niat
                                 </h2>
-                                <p class="text-[11px] font-semibold text-zinc-800 mt-0.5">
+                                <p class="text-[11px] font-semibold text-zinc-800">
                                     Ust. Hanan Attaki
                                 </p>
                             </div>
                         </div>
 
-                        <div class="pt-1 pb-0.5 border-t border-sky-900/10">
+                        <div class="py-1 border-t border-sky-900/10">
                             <p class="text-[10.5px] font-medium text-zinc-900 leading-snug">
                                 Mantapkan niat sebelum majelis dimulai agar ilmu yang didapat berkah & berbekas.
                             </p>
@@ -185,7 +186,7 @@
                             </div>
                             <div class="flex items-center space-x-2 bg-white/60 p-2 rounded-xl">
                                 <i class="fa-solid fa-calendar-days text-sky-600 text-[11px] shrink-0 w-4 text-center"></i>
-                                <span class="truncate">Rabu, 16 Sep 2026 / <i class="fa-solid fa-moon text-[9px] text-sky-600 ml-0.5 mr-0.5"></i> 5 Rabi'ul Awal 1448H</span>
+                                <span class="truncate">Rabu, 16 Sep 2026 &nbsp;<i class="fa-solid fa-moon text-[9px] text-sky-600 mx-0.5"></i>&nbsp; 5 Rabi'ul Awal 1448H</span>
                             </div>
                             <div class="flex items-start space-x-2 bg-white/60 p-2 rounded-xl">
                                 <i class="fa-solid fa-location-dot text-sky-600 text-[11px] shrink-0 w-4 text-center mt-0.5"></i>
@@ -212,7 +213,7 @@
             </div>
         </div>
 
-        <!-- SCREEN 2: PRESENSI FORM (CENTERED) -->
+        <!-- SCREEN 2: PRESENSI FORM -->
         <div id="screen-presensi-form" class="app-screen flex-1 flex-col justify-center p-6 overflow-y-auto hide-scrollbar">
             <div class="space-y-4 max-w-sm mx-auto w-full my-auto">
                 <div class="flex items-center justify-between text-zinc-900 pb-1">
@@ -241,6 +242,7 @@
                         <div class="space-y-1.5">
                             <label class="text-[11px] font-bold text-slate-700">Nomor WhatsApp:</label>
                             <input type="tel" id="input-presensi-wa" required placeholder="0812xxxxxxx" 
+                                   oninput="this.value = this.value.replace(/\D/g, '')"
                                    class="w-full bg-slate-50/70 border border-slate-200 rounded-2xl px-5 py-3.5 text-xs font-bold text-zinc-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-100 transition shadow-xs">
                         </div>
 
@@ -256,8 +258,8 @@
                             </button>
 
                             <button type="submit" class="py-3 px-6 bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-xs rounded-full transition active:scale-95 shadow-md shadow-sky-500/25 flex items-center space-x-2">
-                                <span>Cetak Tiket</span>
-                                <i class="fa-solid fa-ticket text-xs"></i>
+                                <span>InsyaAllah Hadir</span>
+                                <i class="fa-solid fa-circle-check text-xs"></i>
                             </button>
                         </div>
                     </form>
@@ -265,7 +267,41 @@
             </div>
         </div>
 
-        <!-- SCREEN 3: DONASI FORM (CENTERED) -->
+        <!-- SCREEN: PRESENSI SUKSES (BERHASIL) -->
+        <div id="screen-presensi-sukses" class="app-screen flex-1 flex-col justify-center items-center p-6 bg-slate-100 overflow-y-auto hide-scrollbar text-center">
+            <div class="w-full max-w-sm bg-white rounded-[32px] p-7 shadow-xl border border-slate-200/80 space-y-5 flex flex-col items-center my-auto">
+                
+                <!-- Animated Checkmark Icon -->
+                <div class="w-20 h-20 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-4xl shadow-lg shadow-emerald-500/10 animate-bounce">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                
+                <div class="space-y-2">
+                    <span class="px-3.5 py-1 bg-emerald-50 text-emerald-700 text-[11px] font-black rounded-full border border-emerald-200 tracking-widest uppercase">
+                        BERHASIL
+                    </span>
+                    <h2 class="text-lg font-black text-zinc-950 pt-2 leading-snug">
+                        Konfirmasi Kehadiran Dicatat
+                    </h2>
+                    <p class="text-xs text-slate-600 font-semibold leading-relaxed pt-1">
+                        Jazaakumullahu Khairan sudah konfirmasi kedatangan, semoga Allah catat amal niatmu ini sebagai kebaikan dan Allah mudahkan jalanmu menuju surga.
+                    </p>
+                </div>
+
+                <div class="w-full pt-4 space-y-2.5 border-t border-slate-100">
+                    <button onclick="navigateTo('screen-home')" class="w-full py-3.5 bg-zinc-950 hover:bg-black text-white font-extrabold text-xs rounded-full transition active:scale-95 shadow-md flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-house text-xs"></i>
+                        <span>Kembali ke Beranda</span>
+                    </button>
+                    <button onclick="navigateTo('screen-donasi-form')" class="w-full py-3 bg-sky-50 hover:bg-sky-100 text-sky-700 font-extrabold text-xs rounded-full transition active:scale-95 flex items-center justify-center space-x-2 border border-sky-200/80">
+                        <i class="fa-solid fa-heart text-xs text-sky-600"></i>
+                        <span>Infaq / Donasi Kajian</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: DONASI FORM -->
         <div id="screen-donasi-form" class="app-screen flex-1 flex-col justify-center p-6 overflow-y-auto hide-scrollbar">
             <div class="space-y-4 max-w-sm mx-auto w-full my-auto">
                 <div class="flex items-center justify-between text-zinc-900 pb-1">
@@ -335,14 +371,14 @@
                             <p class="text-[9.5px] font-semibold text-slate-400">Mendukung BCA, Mandiri, GoPay, OVO, ShopeePay & QRIS Lainnya</p>
                         </div>
 
-                        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
-                            <button type="button" onclick="navigateTo('screen-home')" class="py-3 px-6 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs rounded-full transition active:scale-95 flex items-center space-x-1.5">
-                                <span>Kembali</span>
-                            </button>
-
-                            <button type="submit" class="py-3 px-6 bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-xs rounded-full transition active:scale-95 shadow-md shadow-sky-500/25 flex items-center space-x-2">
+                        <!-- Stacked Buttons for Mobile -->
+                        <div class="flex flex-col space-y-2.5 pt-4 border-t border-slate-100">
+                            <button type="submit" class="w-full py-3.5 px-6 bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-xs rounded-full transition active:scale-95 shadow-md shadow-sky-500/25 flex items-center justify-center space-x-2">
                                 <span>Download Struk Invoice</span>
                                 <i class="fa-solid fa-receipt text-xs"></i>
+                            </button>
+                            <button type="button" onclick="navigateTo('screen-home')" class="w-full py-3 px-6 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs rounded-full transition active:scale-95 flex items-center justify-center space-x-1.5">
+                                <span>Kembali</span>
                             </button>
                         </div>
                     </form>
@@ -351,160 +387,169 @@
         </div>
 
         <!-- SCREEN 4: BOARDING PASS SCREEN -->
-        <div id="screen-boarding-pass" class="app-screen flex-1 flex-col justify-between p-6 bg-blue-600 overflow-y-auto hide-scrollbar">
+        <div id="screen-boarding-pass" class="app-screen flex-1 flex-col justify-between p-5 bg-blue-600 overflow-y-auto hide-scrollbar">
             
-            <div id="boardpass-top-controls" class="flex items-center justify-between text-white pt-1 pb-2">
+            <div id="boardpass-top-controls" class="flex items-center justify-between text-white pt-1 pb-3 shrink-0">
                 <div>
-                    <span class="text-[10px] font-extrabold uppercase tracking-widest text-blue-200 block">Boarding Pass Taman Surga</span>
+                    <span class="text-[10px] font-extrabold uppercase tracking-widest text-blue-200 block leading-tight">Kamu Bisa Jadikan Story Instagram atau Whatsapp</span>
                     <h1 class="text-xl font-black tracking-tight text-white leading-tight">
                         Tiket Kajian
                     </h1>
                 </div>
-                <button onclick="navigateTo('screen-home')" class="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition active:scale-90">
+                <button id="boardpass-close-btn" onclick="navigateTo('screen-home')" class="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition active:scale-90 shrink-0">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
 
-            <!-- BOARDING PASS EXPORT WRAPPER (Exact Preview Screen match) -->
-            <div id="ig-story-export-wrapper" class="p-4 bg-blue-600 rounded-[36px] my-2 shadow-2xl flex flex-col justify-center">
+            <!-- BOARDING PASS CARD EXPORT WRAPPER -->
+            <div id="ig-story-export-wrapper" class="w-full my-auto flex flex-col justify-center">
                 
-                <div class="text-center pb-2 text-white">
-                    <p class="text-[10px] font-black uppercase tracking-widest text-blue-200">Boarding Pass Taman Surga</p>
-                    <h3 class="text-base font-black tracking-tight" id="pass-header-kajian-title">Kajian Hati & Niat</h3>
+                <div class="text-center pb-3 text-white">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-blue-200 leading-normal">KAMU BISA JADIKAN STORY INSTAGRAM ATAU WHATSAPP</p>
+                    <h3 class="text-base font-black tracking-tight leading-normal" id="pass-header-kajian-title">Kajian Hati & Niat</h3>
                 </div>
 
-                <div id="boarding-pass-card" class="bg-slate-50 rounded-[32px] overflow-hidden shadow-2xl relative border-0">
+                <div id="boarding-pass-card" class="bg-white rounded-[32px] overflow-hidden shadow-2xl relative border-0">
                     
-                    <div class="p-5 flex items-center space-x-3 bg-white">
-                        <img id="pass-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" 
-                             alt="Passenger Avatar" class="w-12 h-12 rounded-full object-cover shadow-xs shrink-0">
-                        <div class="min-w-0 flex-1">
-                            <h3 class="text-base font-black text-slate-900 leading-tight" id="pass-holder-name">Abidzar</h3>
-                            <p class="text-[11px] font-medium text-slate-400">Jamaah</p>
+                    <!-- Passenger Info -->
+                    <div class="p-4 flex items-center justify-between bg-white border-b border-slate-100">
+                        <div class="flex items-center space-x-3">
+                            <img id="pass-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" 
+                                 alt="Passenger Avatar" class="w-11 h-11 rounded-full object-cover shadow-xs shrink-0">
+                            <div class="flex flex-col justify-center">
+                                <h3 class="text-base font-black text-slate-900 leading-normal" id="pass-holder-name">Abidzar</h3>
+                                <p class="text-[11px] font-medium text-slate-400 leading-normal">Jamaah</p>
+                            </div>
                         </div>
-                        <span class="px-2.5 py-1 bg-blue-50 text-blue-700 text-[10px] font-black rounded-full border border-blue-200/80">
+                        <span class="px-3 py-1 bg-blue-50 text-blue-700 text-[10px] font-black rounded-full border border-blue-200/80 shrink-0 inline-flex items-center justify-center">
                             TIKET KAJIAN
                         </span>
                     </div>
 
-                    <!-- Seamless Notch Row Top -->
-                    <div class="relative flex items-center h-6 bg-white -my-1">
-                        <div class="w-3.5 h-6 bg-blue-600 rounded-r-full shrink-0 z-20"></div>
-                        <div class="flex-1 border-b-2 border-dashed border-slate-300 mx-1"></div>
-                        <div class="w-3.5 h-6 bg-blue-600 rounded-l-full shrink-0 z-20"></div>
+                    <!-- Notch Row Top -->
+                    <div class="flex items-center h-5 bg-white overflow-hidden my-0">
+                        <div class="w-3.5 h-5 bg-blue-600 rounded-r-full shrink-0"></div>
+                        <div class="flex-1 border-b-2 border-dashed border-slate-300 mx-2"></div>
+                        <div class="w-3.5 h-5 bg-blue-600 rounded-l-full shrink-0"></div>
                     </div>
 
+                    <!-- Kajian Details Banner -->
                     <div class="px-5 py-3 bg-gradient-to-r from-sky-50 to-blue-50 border-b border-slate-100 flex items-center justify-between space-x-2">
-                        <div class="min-w-0 flex-1 space-y-0.5">
-                            <span class="text-[9px] font-extrabold text-blue-600 uppercase tracking-wider block">Kajian Majelis</span>
-                            <h4 class="text-xs font-black text-slate-900 leading-snug truncate" id="pass-kajian-title">Kajian Hati & Niat</h4>
-                            <p class="text-[10.5px] font-bold text-slate-600 truncate" id="pass-kajian-speaker">Ust. Hanan Attaki</p>
+                        <div class="flex flex-col justify-center min-w-0 flex-1">
+                            <span class="text-[9px] font-extrabold text-blue-600 uppercase tracking-wider block leading-normal mb-0.5">Kajian Majelis</span>
+                            <h4 class="text-xs font-black text-slate-900 leading-normal" id="pass-kajian-title">Kajian Hati & Niat</h4>
+                            <p class="text-[10.5px] font-bold text-slate-600 leading-normal" id="pass-kajian-speaker">Ust. Hanan Attaki</p>
                         </div>
-                        <div class="text-right shrink-0 space-y-1">
+                        <div class="flex flex-col items-end justify-center shrink-0 text-right">
                             <span class="px-2 py-0.5 bg-white text-blue-700 text-[9.5px] font-extrabold rounded-xl border border-blue-200 shadow-2xs inline-flex items-center space-x-1">
                                 <i class="fa-solid fa-location-dot text-blue-600 text-[9px]"></i>
-                                <span>GSC</span>
+                                <span class="leading-normal">GSC</span>
                             </span>
-                            <p class="text-[8.5px] font-bold text-slate-500 truncate max-w-[100px]" title="Ruang Gazebo Mengaji di Gazebo Sport Center (GSC)">Ruang Gazebo GSC</p>
+                            <p class="text-[8.5px] font-bold text-slate-500 leading-normal mt-1" title="Ruang Gazebo Mengaji di Gazebo Sport Center (GSC)">Ruang Gazebo GSC</p>
                         </div>
                     </div>
 
-                    <div class="px-6 py-4 bg-white flex items-center justify-between">
-                        <div class="text-left">
-                            <p class="text-[10px] font-semibold text-slate-400">20:00 WIB</p>
-                            <p class="text-2xl font-black text-slate-900 tracking-tight">GZB</p>
-                            <p class="text-[10px] font-medium text-slate-400">Gazebo Mengaji</p>
+                    <!-- Airport Codes Row -->
+                    <div class="px-6 py-4 bg-white flex items-center justify-between relative">
+                        <div class="flex flex-col justify-center text-left">
+                            <p class="text-[10px] font-semibold text-slate-400 leading-normal mb-1">20:00 WIB</p>
+                            <p class="text-2xl font-black text-slate-900 tracking-tight leading-normal">GZB</p>
+                            <p class="text-[10px] font-medium text-slate-400 leading-normal">Gazebo Mengaji</p>
                         </div>
                         
                         <div class="flex-1 flex items-center justify-center px-3 relative">
-                            <div class="w-full h-[1.5px] bg-slate-300 relative flex items-center justify-center">
-                                <div class="w-2 h-2 rounded-full bg-slate-400 absolute left-0"></div>
-                                <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs shadow-md z-10">
+                            <div class="w-full h-[2px] bg-slate-200 absolute inset-y-0 my-auto left-0 right-0"></div>
+                            <div class="w-full flex items-center justify-between relative z-10 px-1">
+                                <div class="w-2 h-2 rounded-full bg-slate-400"></div>
+                                <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs shadow-md">
                                     <i class="fa-solid fa-plane"></i>
                                 </div>
-                                <div class="w-2 h-2 rounded-full bg-slate-400 absolute right-0"></div>
+                                <div class="w-2 h-2 rounded-full bg-slate-400"></div>
                             </div>
                         </div>
 
-                        <div class="text-right">
-                            <p class="text-[10px] font-semibold text-slate-400">21:00 WIB</p>
-                            <p class="text-2xl font-black text-slate-900 tracking-tight">JNH</p>
-                            <p class="text-[10px] font-medium text-slate-400">Taman Surga</p>
+                        <div class="flex flex-col justify-center text-right">
+                            <p class="text-[10px] font-semibold text-slate-400 leading-normal mb-1">21:00 WIB</p>
+                            <p class="text-2xl font-black text-slate-900 tracking-tight leading-normal">JNH</p>
+                            <p class="text-[10px] font-medium text-slate-400 leading-normal">Taman Surga</p>
                         </div>
                     </div>
 
-                    <div class="px-5 py-2 bg-white grid grid-cols-2 gap-3">
-                        <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-2.5 flex items-start space-x-2.5">
+                    <!-- Date & Time Box Grid -->
+                    <div class="px-5 py-2 bg-white grid grid-cols-2 gap-2.5">
+                        <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-2.5 flex items-center space-x-2.5">
                             <div class="w-7 h-7 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xs shrink-0">
                                 <i class="fa-regular fa-calendar-days"></i>
                             </div>
-                            <div class="min-w-0">
-                                <p class="text-[9.5px] font-semibold text-slate-400">Date</p>
-                                <p class="text-[11px] font-extrabold text-slate-900 truncate" id="pass-date-str">16 Sep 2026</p>
+                            <div class="flex flex-col justify-center min-w-0 flex-1">
+                                <p class="text-[9.5px] font-semibold text-slate-400 leading-normal mb-0.5">Date</p>
+                                <p class="text-[10.5px] font-extrabold text-slate-900 leading-normal" id="pass-date-str">Rabu, 16 Sep 2026</p>
                             </div>
                         </div>
 
-                        <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-2.5 flex items-start space-x-2.5">
+                        <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-2.5 flex items-center space-x-2.5">
                             <div class="w-7 h-7 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xs shrink-0">
                                 <i class="fa-regular fa-clock"></i>
                             </div>
-                            <div class="min-w-0">
-                                <p class="text-[9.5px] font-semibold text-slate-400">Time</p>
-                                <p class="text-[11px] font-extrabold text-slate-900 truncate" id="pass-time-str">1 Jam (20:00)</p>
+                            <div class="flex flex-col justify-center min-w-0 flex-1">
+                                <p class="text-[9.5px] font-semibold text-slate-400 leading-normal mb-0.5">Time</p>
+                                <p class="text-[10.5px] font-extrabold text-slate-900 leading-normal" id="pass-time-str">1 Jam (20:00)</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Seamless Notch Row Bottom -->
-                    <div class="relative flex items-center h-6 bg-white -my-1">
-                        <div class="w-3.5 h-6 bg-blue-600 rounded-r-full shrink-0 z-20"></div>
-                        <div class="flex-1 border-b-2 border-dashed border-slate-300 mx-1"></div>
-                        <div class="w-3.5 h-6 bg-blue-600 rounded-l-full shrink-0 z-20"></div>
+                    <!-- Notch Row Bottom -->
+                    <div class="flex items-center h-5 bg-white overflow-hidden my-0">
+                        <div class="w-3.5 h-5 bg-blue-600 rounded-r-full shrink-0"></div>
+                        <div class="flex-1 border-b-2 border-dashed border-slate-300 mx-2"></div>
+                        <div class="w-3.5 h-5 bg-blue-600 rounded-l-full shrink-0"></div>
                     </div>
 
-                    <div class="px-6 py-3 bg-white grid grid-cols-4 gap-2 text-center">
-                        <div>
-                            <p class="text-[9.5px] font-medium text-slate-400">Gate</p>
-                            <p class="text-xs font-extrabold text-slate-900 mt-0.5">GSC</p>
+                    <!-- Gate / Seat / Flight Meta -->
+                    <div class="px-6 py-3 bg-white grid grid-cols-4 gap-2 text-center items-center">
+                        <div class="flex flex-col items-center justify-center">
+                            <p class="text-[9.5px] font-medium text-slate-400 leading-normal mb-1">Gate</p>
+                            <p class="text-xs font-extrabold text-slate-900 leading-normal">GSC</p>
                         </div>
-                        <div>
-                            <p class="text-[9.5px] font-medium text-slate-400">Seat</p>
-                            <p class="text-xs font-extrabold text-slate-900 mt-0.5" id="pass-seat-no">Saf 02</p>
+                        <div class="flex flex-col items-center justify-center">
+                            <p class="text-[9.5px] font-medium text-slate-400 leading-normal mb-1">Seat</p>
+                            <p class="text-xs font-extrabold text-slate-900 leading-normal" id="pass-seat-no">Saf 02</p>
                         </div>
-                        <div>
-                            <p class="text-[9.5px] font-medium text-slate-400">Flight no</p>
-                            <p class="text-xs font-extrabold text-slate-900 mt-0.5" id="pass-flight-no">KJN-812</p>
+                        <div class="flex flex-col items-center justify-center">
+                            <p class="text-[9.5px] font-medium text-slate-400 leading-normal mb-1">Flight no</p>
+                            <p class="text-xs font-extrabold text-slate-900 leading-normal" id="pass-flight-no">KJN-812</p>
                         </div>
-                        <div>
-                            <p class="text-[9.5px] font-medium text-slate-400">Class</p>
-                            <p class="text-xs font-extrabold text-slate-900 mt-0.5 truncate" id="pass-class-name">Syar'i</p>
+                        <div class="flex flex-col items-center justify-center">
+                            <p class="text-[9.5px] font-medium text-slate-400 leading-normal mb-1">Class</p>
+                            <p class="text-xs font-extrabold text-slate-900 leading-normal" id="pass-class-name">Syar'i</p>
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-b from-sky-100 to-sky-200 p-4 text-center space-y-1.5 border-t border-sky-200/60">
-                        <div class="flex justify-center items-center space-x-1 h-12 bg-white p-2 rounded-xl shadow-inner border border-sky-200 max-w-[240px] mx-auto">
-                            <div class="w-1 h-full bg-slate-900"></div>
-                            <div class="w-2.5 h-full bg-slate-900"></div>
-                            <div class="w-0.5 h-full bg-slate-900"></div>
-                            <div class="w-1.5 h-full bg-slate-900"></div>
-                            <div class="w-1 h-full bg-slate-900"></div>
-                            <div class="w-3 h-full bg-slate-900"></div>
-                            <div class="w-0.5 h-full bg-slate-900"></div>
-                            <div class="w-2 h-full bg-slate-900"></div>
-                            <div class="w-1 h-full bg-slate-900"></div>
-                            <div class="w-2.5 h-full bg-slate-900"></div>
-                            <div class="w-0.5 h-full bg-slate-900"></div>
-                            <div class="w-1.5 h-full bg-slate-900"></div>
-                            <div class="w-2 h-full bg-slate-900"></div>
-                            <div class="w-1 h-full bg-slate-900"></div>
+                    <!-- Barcode Footer Section -->
+                    <div class="bg-gradient-to-b from-sky-100 to-sky-200 p-4 text-center space-y-2 border-t border-sky-200/60 flex flex-col items-center">
+                        <div class="flex justify-center items-center space-x-1 h-8 py-1 px-3 bg-white rounded-xl shadow-inner border border-sky-200 max-w-[240px] w-full mx-auto">
+                            <div class="w-1 h-6 bg-slate-900"></div>
+                            <div class="w-2.5 h-6 bg-slate-900"></div>
+                            <div class="w-0.5 h-6 bg-slate-900"></div>
+                            <div class="w-1.5 h-6 bg-slate-900"></div>
+                            <div class="w-1 h-6 bg-slate-900"></div>
+                            <div class="w-3 h-6 bg-slate-900"></div>
+                            <div class="w-0.5 h-6 bg-slate-900"></div>
+                            <div class="w-2 h-6 bg-slate-900"></div>
+                            <div class="w-1 h-6 bg-slate-900"></div>
+                            <div class="w-2.5 h-6 bg-slate-900"></div>
+                            <div class="w-0.5 h-6 bg-slate-900"></div>
+                            <div class="w-1.5 h-6 bg-slate-900"></div>
+                            <div class="w-2 h-6 bg-slate-900"></div>
+                            <div class="w-1 h-6 bg-slate-900"></div>
                         </div>
-                        <p class="text-[11px] font-mono font-bold text-slate-600 tracking-wider" id="pass-qr-serial">X 0 6 1 3 8 4 2 0 0 8 2 6 8</p>
-                        <p class="text-[11px] font-bold text-blue-700 font-sans tracking-wide">Bismillah Menuju Taman Surga</p>
+                        <p class="text-[11px] font-mono font-bold text-slate-600 tracking-wider leading-normal" id="pass-qr-serial">X 0 6 1 3 8 4 2 0 0 8 2 6 8</p>
+                        <p class="text-[11px] font-bold text-blue-700 font-sans tracking-wide leading-normal">Bismillah Menuju Taman Surga</p>
                     </div>
                 </div>
             </div>
 
-            <div id="boardpass-bottom-controls" class="pb-2 pt-1">
+            <div id="boardpass-bottom-controls" class="pb-2 pt-3 shrink-0">
                 <button onclick="handleAddToWallet()" class="w-full py-4 bg-white hover:bg-slate-100 text-blue-950 font-black text-xs md:text-sm rounded-full shadow-2xl transition active:scale-95 flex items-center justify-center space-x-2">
                     <i class="fa-solid fa-download text-blue-600"></i>
                     <span id="btn-wallet-text">Download Tiket Jalan Menuju Surga</span>
@@ -616,12 +661,21 @@
                     <span>Kembali ke Beranda</span>
                 </button>
             </div>
-        </div>
-
-        <!-- Toast Notification Pop-up -->
-        <div id="toast-msg" class="fixed top-10 left-1/2 transform -translate-x-1/2 bg-zinc-950 text-white px-5 py-3 rounded-full text-xs font-bold shadow-2xl transition-all duration-300 opacity-0 pointer-events-none z-50 flex items-center space-x-2 border border-zinc-800">
+        <!-- Toast Notification Pop-up (Slide Down from Top) -->
+        <div id="toast-msg" class="fixed top-5 left-1/2 transform -translate-x-1/2 -translate-y-16 bg-zinc-950/95 backdrop-blur-md text-white px-5 py-3 rounded-full text-xs font-bold shadow-2xl transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 pointer-events-none z-50 flex items-center space-x-2 border border-zinc-800">
             <i class="fa-solid fa-circle-check text-sky-400" id="toast-icon"></i>
             <span id="toast-text">Notifikasi</span>
+        </div>
+
+        <!-- Floating Live Attendance Activity Pop-up (Top Banner Dropdown) -->
+        <div id="live-activity-toast" class="absolute top-4 left-4 right-4 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-sky-100 flex items-center space-x-3 transition-all duration-500 transform -translate-y-24 opacity-0 z-40 pointer-events-none">
+            <div class="w-9.5 h-9.5 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                <i class="fa-solid fa-user-check"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-[11px] font-extrabold text-zinc-950 leading-tight truncate" id="live-toast-title">3 Jamaah Baru Konfirmasi</p>
+                <p class="text-[9.5px] font-semibold text-slate-500 truncate" id="live-toast-desc">Baru saja mengisi daftar hadir majelis</p>
+            </div>
         </div>
     </div>
 
@@ -631,7 +685,50 @@
         window.onload = function() {
             startCountdown();
             initDonasiQRIS();
+            startLiveNotifications();
         };
+
+        function startLiveNotifications() {
+            const notifications = [
+                { title: "1 Jamaah telah mengisi daftar hadir", desc: "Baru saja mengonfirmasi niat hadir majelis" },
+                { title: "3 Jamaah baru saja mengonfirmasi hadir", desc: "Menyiapkan diri menuju Taman Surga" },
+                { title: "Ahmad (Yogyakarta) telah konfirmasi", desc: "1 jamaah baru saja mendaftar" },
+                { title: "2 Jamaah baru mengisi daftar hadir", desc: "Baru saja mengonfirmasi kedatangan" },
+                { title: "Fatimah (Sleman) baru saja mendaftar", desc: "Niat hadir kajian Ba'da Isya" },
+                { title: "4 Jamaah mengonfirmasi kedatangan", desc: "Daftar hadir diperbarui 2 menit lalu" }
+            ];
+
+            let index = 0;
+            const liveToast = document.getElementById('live-activity-toast');
+            const toastTitle = document.getElementById('live-toast-title');
+            const toastDesc = document.getElementById('live-toast-desc');
+
+            if (!liveToast) return;
+
+            const showNextNotification = () => {
+                const item = notifications[index];
+                toastTitle.innerText = item.title;
+                toastDesc.innerText = item.desc;
+
+                // Show popup from top with smooth slide down
+                liveToast.classList.remove('-translate-y-24', 'opacity-0', 'pointer-events-none');
+                liveToast.classList.add('translate-y-0', 'opacity-100');
+
+                // Hide after 4 seconds
+                setTimeout(() => {
+                    liveToast.classList.remove('translate-y-0', 'opacity-100');
+                    liveToast.classList.add('-translate-y-24', 'opacity-0', 'pointer-events-none');
+                }, 4000);
+
+                index = (index + 1) % notifications.length;
+            };
+
+            // Initial pop-up after 3 seconds, then repeat every 9 seconds
+            setTimeout(() => {
+                showNextNotification();
+                setInterval(showNextNotification, 9000);
+            }, 3000);
+        }
 
         function initDonasiQRIS() {
             const qrisHolder = document.getElementById("donasi-qris-box");
@@ -715,31 +812,12 @@
             event.preventDefault();
 
             const nama = document.getElementById('input-presensi-nama').value.trim();
-            const wa = document.getElementById('input-presensi-wa').value.trim();
-            const niatInput = document.getElementById('input-presensi-niat');
-            const niat = niatInput ? niatInput.value.trim() : "Menuntut Ilmu Syar'i";
 
-            currentPassData = {
-                type: 'BOARDING_PASS',
-                holderName: nama || 'Abidzar',
-                kajianTitle: 'Kajian Hati & Niat',
-                kajianSpeaker: 'Ust. Hanan Attaki',
-                kajianLoc: 'Ruang Gazebo Mengaji di Gazebo Sport Center (GSC)',
-                flightNo: 'KJN-' + Math.floor(100 + Math.random() * 900),
-                seatNo: 'Saf 0' + Math.floor(1 + Math.random() * 8),
-                className: 'Syar\'i',
-                seqNo: String(Math.floor(10 + Math.random() * 90)),
-                dateStr: 'Rabu, 16 Sep 2026',
-                timeStr: '1 Jam (20:00)',
-                qrCodeText: `X 0 6 1 3 8 4 2 0 0 8 2 6 8`
-            };
-
-            renderPassCard(currentPassData);
-            navigateTo('screen-boarding-pass');
-            showToast(`Presensi Berhasil untuk ${nama}!`);
+            navigateTo('screen-presensi-sukses');
+            showToast(`Presensi Berhasil untuk ${nama || 'Jamaah'}!`);
 
             if (typeof confetti === 'function') {
-                confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+                confetti({ particleCount: 90, spread: 70, origin: { y: 0.5 } });
             }
         }
 
@@ -753,7 +831,11 @@
 
             const formattedNominal = "Rp " + nominal.toLocaleString('id-ID');
             const invNumber = "INV-2026-" + Math.floor(1000 + Math.random() * 9000);
-            const dateStr = "16 Sep 2026, 20:00";
+            
+            // Realtime timestamp
+            const now = new Date();
+            const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+            const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}, ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
             document.getElementById('inv-no').innerText = invNumber;
             document.getElementById('inv-date').innerText = dateStr;
@@ -785,25 +867,44 @@
         }
 
         async function handleAddToWallet() {
-            const exportWrapperEl = document.getElementById('ig-story-export-wrapper');
-            const topControls = document.getElementById('boardpass-top-controls');
-            const bottomControls = document.getElementById('boardpass-bottom-controls');
+            const screenEl = document.getElementById('screen-boarding-pass');
             const btnText = document.getElementById('btn-wallet-text');
 
             if (btnText) btnText.innerText = "Meracik JPG Boarding Pass...";
 
-            // Hide action controls temporarily during canvas screenshot capture
-            if (topControls) topControls.style.display = 'none';
-            if (bottomControls) bottomControls.style.display = 'none';
+            // Reset scroll position to top for clean capture
+            if (screenEl) screenEl.scrollTop = 0;
 
             try {
-                if (typeof html2canvas === 'function' && exportWrapperEl) {
-                    const canvas = await html2canvas(exportWrapperEl, {
+                if (typeof html2canvas === 'function' && screenEl) {
+                    const canvas = await html2canvas(screenEl, {
                         scale: 2,
                         useCORS: true,
-                        backgroundColor: '#2563eb'
+                        allowTaint: true,
+                        backgroundColor: '#2563eb',
+                        logging: false,
+                        scrollX: 0,
+                        scrollY: 0,
+                        windowWidth: screenEl.scrollWidth,
+                        windowHeight: screenEl.scrollHeight,
+                        onclone: (clonedDoc) => {
+                            // Target cloned elements to hide buttons and disable animations
+                            const clonedScreen = clonedDoc.getElementById('screen-boarding-pass');
+                            const clonedCloseBtn = clonedDoc.getElementById('boardpass-close-btn');
+                            const clonedBottomControls = clonedDoc.getElementById('boardpass-bottom-controls');
+
+                            if (clonedScreen) {
+                                clonedScreen.classList.add('no-capture-shift');
+                                clonedScreen.style.transform = 'none';
+                                clonedScreen.style.transition = 'none';
+                            }
+                            // Use visibility:hidden to preserve exact layout height without shifting text/icons
+                            if (clonedCloseBtn) clonedCloseBtn.style.visibility = 'hidden';
+                            if (clonedBottomControls) clonedBottomControls.style.visibility = 'hidden';
+                        }
                     });
-                    const image = canvas.toDataURL("image/jpeg", 0.95);
+                    
+                    const image = canvas.toDataURL("image/jpeg", 0.98);
                     const link = document.createElement('a');
                     link.download = `Tiket-Taman-Surga-${currentPassData?.holderName || 'Jamaah'}.jpg`;
                     link.href = image;
@@ -820,8 +921,6 @@
                 console.error("Error generating JPG image:", err);
                 showToast("Terjadi kesalahan saat mengunduh gambar.");
             } finally {
-                if (topControls) topControls.style.display = 'flex';
-                if (bottomControls) bottomControls.style.display = 'block';
                 if (btnText) btnText.innerText = "Download Tiket Jalan Menuju Surga";
             }
         }
@@ -835,6 +934,7 @@
                     const canvas = await html2canvas(receiptEl, {
                         scale: 2,
                         useCORS: true,
+                        allowTaint: true,
                         backgroundColor: '#ffffff'
                     });
                     const image = canvas.toDataURL("image/jpeg", 0.95);
@@ -855,9 +955,12 @@
             const toastText = document.getElementById('toast-text');
             toastText.innerText = msg;
             
-            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.remove('-translate-y-16', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
             setTimeout(() => {
-                toast.classList.add('opacity-0', 'pointer-events-none');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('-translate-y-16', 'opacity-0', 'pointer-events-none');
             }, 3000);
         }
     </script>
