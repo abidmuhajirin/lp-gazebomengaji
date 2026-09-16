@@ -224,14 +224,6 @@
         <!-- SCREEN 2: PRESENSI FORM -->
         <div id="screen-presensi-form" class="app-screen flex-1 flex-col justify-center p-6 overflow-y-auto hide-scrollbar">
             <div class="space-y-4 max-w-sm mx-auto w-full my-auto">
-                <div class="flex items-center justify-between text-zinc-900 pb-1">
-                    <button onclick="navigateTo('screen-home')" class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-zinc-800 transition active:scale-90 shadow-xs">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </button>
-                    <div></div>
-                    <div class="w-10"></div>
-                </div>
-
                 <div class="bg-white rounded-[32px] p-6 shadow-xl border border-slate-200/80 space-y-5">
                     <div class="space-y-1">
                         <h2 class="text-xl font-extrabold text-zinc-950 tracking-tight">Form Kehadiran Majelis</h2>
@@ -390,177 +382,6 @@
             </div>
         </div>
 
-        <!-- SCREEN 4: BOARDING PASS SCREEN -->
-        <div id="screen-boarding-pass" class="app-screen flex-1 flex-col justify-between p-5 bg-blue-600 overflow-y-auto hide-scrollbar">
-            
-            <div id="boardpass-top-controls" class="flex items-center justify-between text-white pt-1 pb-3 shrink-0">
-                <div>
-                    <span class="text-[10px] font-extrabold uppercase tracking-widest text-blue-200 block leading-tight">Kamu Bisa Jadikan Story Instagram atau Whatsapp</span>
-                    <h1 class="text-xl font-black tracking-tight text-white leading-tight">
-                        Tiket Kajian
-                    </h1>
-                </div>
-                <button id="boardpass-close-btn" onclick="navigateTo('screen-home')" class="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition active:scale-90 shrink-0">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
-            <!-- BOARDING PASS CARD EXPORT WRAPPER -->
-            <div id="ig-story-export-wrapper" class="w-full my-auto flex flex-col justify-center">
-                
-                <div class="text-center pb-3 text-white">
-                    <p class="text-[10px] font-black uppercase tracking-widest text-blue-200 leading-normal">KAMU BISA JADIKAN STORY INSTAGRAM ATAU WHATSAPP</p>
-                    <h3 class="text-base font-black tracking-tight leading-normal" id="pass-header-kajian-title">Kajian Hati & Niat</h3>
-                </div>
-
-                <div id="boarding-pass-card" class="bg-white rounded-[32px] overflow-hidden shadow-2xl relative border-0">
-                    
-                    <!-- Passenger Info -->
-                    <div class="p-4 flex items-center justify-between bg-white border-b border-slate-100">
-                        <div class="flex items-center space-x-3">
-                            <img id="pass-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" 
-                                 alt="Passenger Avatar" class="w-11 h-11 rounded-full object-cover shadow-xs shrink-0">
-                            <div class="flex flex-col justify-center">
-                                <h3 class="text-base font-black text-slate-900 leading-normal" id="pass-holder-name">Abidzar</h3>
-                                <p class="text-[11px] font-medium text-slate-400 leading-normal">Jamaah</p>
-                            </div>
-                        </div>
-                        <span class="px-3 py-1 bg-blue-50 text-blue-700 text-[10px] font-black rounded-full border border-blue-200/80 shrink-0 inline-flex items-center justify-center">
-                            TIKET KAJIAN
-                        </span>
-                    </div>
-
-                    <!-- Notch Row Top -->
-                    <div class="flex items-center h-5 bg-white overflow-hidden my-0">
-                        <div class="w-3.5 h-5 bg-blue-600 rounded-r-full shrink-0"></div>
-                        <div class="flex-1 border-b-2 border-dashed border-slate-300 mx-2"></div>
-                        <div class="w-3.5 h-5 bg-blue-600 rounded-l-full shrink-0"></div>
-                    </div>
-
-                    <!-- Kajian Details Banner -->
-                    <div class="px-5 py-3 bg-gradient-to-r from-sky-50 to-blue-50 border-b border-slate-100 flex items-center justify-between space-x-2">
-                        <div class="flex flex-col justify-center min-w-0 flex-1">
-                            <span class="text-[9px] font-extrabold text-blue-600 uppercase tracking-wider block leading-normal mb-0.5">Kajian Majelis</span>
-                            <h4 class="text-xs font-black text-slate-900 leading-normal" id="pass-kajian-title">Kajian Hati & Niat</h4>
-                            <p class="text-[10.5px] font-bold text-slate-600 leading-normal" id="pass-kajian-speaker">Ust. Hanan Attaki</p>
-                        </div>
-                        <div class="flex flex-col items-end justify-center shrink-0 text-right">
-                            <span class="px-2 py-0.5 bg-white text-blue-700 text-[9.5px] font-extrabold rounded-xl border border-blue-200 shadow-2xs inline-flex items-center space-x-1">
-                                <i class="fa-solid fa-location-dot text-blue-600 text-[9px]"></i>
-                                <span class="leading-normal">GSC</span>
-                            </span>
-                            <p class="text-[8.5px] font-bold text-slate-500 leading-normal mt-1" title="Ruang Gazebo Mengaji di Gazebo Sport Center (GSC)">Ruang Gazebo GSC</p>
-                        </div>
-                    </div>
-
-                    <!-- Airport Codes Row -->
-                    <div class="px-6 py-4 bg-white flex items-center justify-between relative">
-                        <div class="flex flex-col justify-center text-left">
-                            <p class="text-[10px] font-semibold text-slate-400 leading-normal mb-1">20:00 WIB</p>
-                            <p class="text-2xl font-black text-slate-900 tracking-tight leading-normal">GZB</p>
-                            <p class="text-[10px] font-medium text-slate-400 leading-normal">Gazebo Mengaji</p>
-                        </div>
-                        
-                        <div class="flex-1 flex items-center justify-center px-3 relative">
-                            <div class="w-full h-[2px] bg-slate-200 absolute inset-y-0 my-auto left-0 right-0"></div>
-                            <div class="w-full flex items-center justify-between relative z-10 px-1">
-                                <div class="w-2 h-2 rounded-full bg-slate-400"></div>
-                                <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs shadow-md">
-                                    <i class="fa-solid fa-plane"></i>
-                                </div>
-                                <div class="w-2 h-2 rounded-full bg-slate-400"></div>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col justify-center text-right">
-                            <p class="text-[10px] font-semibold text-slate-400 leading-normal mb-1">21:00 WIB</p>
-                            <p class="text-2xl font-black text-slate-900 tracking-tight leading-normal">JNH</p>
-                            <p class="text-[10px] font-medium text-slate-400 leading-normal">Taman Surga</p>
-                        </div>
-                    </div>
-
-                    <!-- Date & Time Box Grid -->
-                    <div class="px-5 py-2 bg-white grid grid-cols-2 gap-2.5">
-                        <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-2.5 flex items-center space-x-2.5">
-                            <div class="w-7 h-7 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xs shrink-0">
-                                <i class="fa-regular fa-calendar-days"></i>
-                            </div>
-                            <div class="flex flex-col justify-center min-w-0 flex-1">
-                                <p class="text-[9.5px] font-semibold text-slate-400 leading-normal mb-0.5">Date</p>
-                                <p class="text-[10.5px] font-extrabold text-slate-900 leading-normal" id="pass-date-str">Rabu, 16 Sep 2026</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-2.5 flex items-center space-x-2.5">
-                            <div class="w-7 h-7 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xs shrink-0">
-                                <i class="fa-regular fa-clock"></i>
-                            </div>
-                            <div class="flex flex-col justify-center min-w-0 flex-1">
-                                <p class="text-[9.5px] font-semibold text-slate-400 leading-normal mb-0.5">Time</p>
-                                <p class="text-[10.5px] font-extrabold text-slate-900 leading-normal" id="pass-time-str">1 Jam (20:00)</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Notch Row Bottom -->
-                    <div class="flex items-center h-5 bg-white overflow-hidden my-0">
-                        <div class="w-3.5 h-5 bg-blue-600 rounded-r-full shrink-0"></div>
-                        <div class="flex-1 border-b-2 border-dashed border-slate-300 mx-2"></div>
-                        <div class="w-3.5 h-5 bg-blue-600 rounded-l-full shrink-0"></div>
-                    </div>
-
-                    <!-- Gate / Seat / Flight Meta -->
-                    <div class="px-6 py-3 bg-white grid grid-cols-4 gap-2 text-center items-center">
-                        <div class="flex flex-col items-center justify-center">
-                            <p class="text-[9.5px] font-medium text-slate-400 leading-normal mb-1">Gate</p>
-                            <p class="text-xs font-extrabold text-slate-900 leading-normal">GSC</p>
-                        </div>
-                        <div class="flex flex-col items-center justify-center">
-                            <p class="text-[9.5px] font-medium text-slate-400 leading-normal mb-1">Seat</p>
-                            <p class="text-xs font-extrabold text-slate-900 leading-normal" id="pass-seat-no">Saf 02</p>
-                        </div>
-                        <div class="flex flex-col items-center justify-center">
-                            <p class="text-[9.5px] font-medium text-slate-400 leading-normal mb-1">Flight no</p>
-                            <p class="text-xs font-extrabold text-slate-900 leading-normal" id="pass-flight-no">KJN-812</p>
-                        </div>
-                        <div class="flex flex-col items-center justify-center">
-                            <p class="text-[9.5px] font-medium text-slate-400 leading-normal mb-1">Class</p>
-                            <p class="text-xs font-extrabold text-slate-900 leading-normal" id="pass-class-name">Syar'i</p>
-                        </div>
-                    </div>
-
-                    <!-- Barcode Footer Section -->
-                    <div class="bg-gradient-to-b from-sky-100 to-sky-200 p-4 text-center space-y-2 border-t border-sky-200/60 flex flex-col items-center">
-                        <div class="flex justify-center items-center space-x-1 h-8 py-1 px-3 bg-white rounded-xl shadow-inner border border-sky-200 max-w-[240px] w-full mx-auto">
-                            <div class="w-1 h-6 bg-slate-900"></div>
-                            <div class="w-2.5 h-6 bg-slate-900"></div>
-                            <div class="w-0.5 h-6 bg-slate-900"></div>
-                            <div class="w-1.5 h-6 bg-slate-900"></div>
-                            <div class="w-1 h-6 bg-slate-900"></div>
-                            <div class="w-3 h-6 bg-slate-900"></div>
-                            <div class="w-0.5 h-6 bg-slate-900"></div>
-                            <div class="w-2 h-6 bg-slate-900"></div>
-                            <div class="w-1 h-6 bg-slate-900"></div>
-                            <div class="w-2.5 h-6 bg-slate-900"></div>
-                            <div class="w-0.5 h-6 bg-slate-900"></div>
-                            <div class="w-1.5 h-6 bg-slate-900"></div>
-                            <div class="w-2 h-6 bg-slate-900"></div>
-                            <div class="w-1 h-6 bg-slate-900"></div>
-                        </div>
-                        <p class="text-[11px] font-mono font-bold text-slate-600 tracking-wider leading-normal" id="pass-qr-serial">X 0 6 1 3 8 4 2 0 0 8 2 6 8</p>
-                        <p class="text-[11px] font-bold text-blue-700 font-sans tracking-wide leading-normal">Bismillah Menuju Taman Surga</p>
-                    </div>
-                </div>
-            </div>
-
-            <div id="boardpass-bottom-controls" class="pb-2 pt-3 shrink-0">
-                <button onclick="handleAddToWallet()" class="w-full py-4 bg-white hover:bg-slate-100 text-blue-950 font-black text-xs md:text-sm rounded-full shadow-2xl transition active:scale-95 flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-download text-blue-600"></i>
-                    <span id="btn-wallet-text">Download Tiket Jalan Menuju Surga</span>
-                </button>
-            </div>
-        </div>
-
         <!-- SCREEN 5: DONASI INVOICE THERMAL RECEIPT -->
         <div id="screen-donasi-invoice" class="app-screen flex-1 flex-col justify-between p-6 bg-slate-900 overflow-y-auto hide-scrollbar">
             <div class="flex items-center justify-between text-white pt-2 no-print">
@@ -677,45 +498,20 @@
 
     <script>
         // CENTRALIZED EVENT CONFIGURATION
-        // Modifikasi data di sini atau hubungkan dengan Google Sheets CSV URL
         const EVENT_CONFIG = {
             title: "Hobi Laknat",
             ustadz: "Ustadz Muhammad Ihsan, S.UD, M.H.I.",
             kitab: "Kitab Al Kabair",
-            dateISO: "2026-09-16T20:00:00+07:00", // Format: YYYY-MM-DDTHH:mm:ss+07:00
+            dateISO: "2026-09-25 20:00", // Format: YYYY-MM-DD HH:mm (Gunakan tanggal masa depan untuk countdown)
             timeCustom: "Ba'da Subuh - Selesai",
             location: "Ruang Gazebo Mengaji di Gazebo Sport Center (GSC)",
             gscShort: "Ruang Gazebo GSC",
             qrisUrl: "https://gazebomengaji.org/infaq-qris-official",
-            // Link Google Sheets CSV Publik dari Sheet 2:
-            sheetCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlyiBuI8q7dgfTvzIv0RgBVDvT2zk_XoW7hbq3GHT1XRrR20aneHpQc1xQmUxOZfiZODR49YUuw8XH/pub?gid=399437584&single=true&output=csv"
+            sheetCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlyiBuI8q7dgfTvzIv0RgBVDvT2zk_XoW7hbq3GHT1XRrR20aneHpQc1xQmUxOZfiZODR49YUuw8XH/pub?gid=399437584&single=true&output=csv",
+            presensiScriptUrl: "https://script.google.com/macros/s/AKfycbwgbKcUr_xP7XFjl-1PdAudDs3SXvQRZqXtHQ9okFBMITexztP7ThkTAxl3D2FfpqeA/exec" // Link Web App Google Apps Script jika ingin menyimpan database
         };
 
         let currentPassData = null;
-
-        // Helper untuk Mengonversi Semua Jenis Link Google Sheets (Termasuk Sheet 2 / Tab 2 & GID) ke Link CSV Langsung
-        function getDirectCsvUrl(url) {
-            if (!url || url.includes("YOUR_SPREADSHEET_ID_HERE")) return null;
-            
-            let cleanUrl = url.trim();
-
-            // Jika sudah berbentuk pub atau gviz dengan output=csv
-            if (cleanUrl.includes("output=csv") || cleanUrl.includes("tqx=out:csv")) {
-                return cleanUrl;
-            }
-
-            // Ambil ID GID (khusus Sheet 2, Sheet 3, dst. yang punya #gid=... atau ?gid=...)
-            const gidMatch = cleanUrl.match(/[?&#]gid=([0-9]+)/);
-            const gidParam = gidMatch ? `&gid=${gidMatch[1]}` : '';
-
-            // Ambil Spreadsheet ID utama
-            const match = cleanUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
-            if (match && match[1]) {
-                return `https://docs.google.com/spreadsheets/d/${match[1]}/gviz/tq?tqx=out:csv${gidParam}`;
-            }
-
-            return cleanUrl;
-        }
 
         // Navigation Helper for Screen Switching
         function navigateTo(screenId) {
@@ -764,6 +560,26 @@
             }
         }
 
+        // Helper untuk Mengonversi Semua Jenis Link Google Sheets ke Direct CSV
+        function getDirectCsvUrl(url) {
+            if (!url || url.includes("YOUR_SPREADSHEET_ID_HERE")) return null;
+            let cleanUrl = url.trim();
+
+            if (cleanUrl.includes("output=csv") || cleanUrl.includes("tqx=out:csv")) {
+                return cleanUrl;
+            }
+
+            const gidMatch = cleanUrl.match(/[?&#]gid=([0-9]+)/);
+            const gidParam = gidMatch ? `&gid=${gidMatch[1]}` : '';
+
+            const match = cleanUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
+            if (match && match[1]) {
+                return `https://docs.google.com/spreadsheets/d/${match[1]}/gviz/tq?tqx=out:csv${gidParam}`;
+            }
+
+            return cleanUrl;
+        }
+
         window.onload = function() {
             initEventConfig();
             startCountdown();
@@ -782,36 +598,32 @@
 
         function getHijriDateString(dateObj) {
             try {
-                // Formatting Hijri secara otomatis menggunakan engine bawaan JavaScript
                 const formatter = new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', {
                     day: 'numeric',
                     month: 'long',
                     year: 'numeric'
                 });
-                return formatter.format(dateObj) + "H";
+                let formatted = formatter.format(dateObj);
+                formatted = formatted.replace(/\s*(AH|H)$/i, '').trim();
+                return formatted + " H";
             } catch (e) {
-                return "5 Rabi'ul Awal 1448H"; // Fallback jika browser tidak mendukung
+                return "5 Rabi'ul Awal 1448 H";
             }
         }
 
-        // Flexible Date Parser untuk membaca semua variasi format tanggal dari Google Sheets
         function parseFlexibleDate(dateInput) {
             if (!dateInput) return new Date();
             if (dateInput instanceof Date) return dateInput;
             
             let s = String(dateInput).trim();
-            
-            // Ubah format jam dengan titik (20.00) menjadi titik dua (20:00)
             s = s.replace(/(\d{1,2})\.(\d{2})/, '$1:$2');
             
-            // Format YYYY-MM-DD atau YYYY/MM/DD HH:mm:ss
             let matchISO = s.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
             if (matchISO) {
                 let [_, y, m, day, hr, min, sec] = matchISO;
                 return new Date(parseInt(y), parseInt(m)-1, parseInt(day), parseInt(hr||0), parseInt(min||0), parseInt(sec||0));
             }
             
-            // Format Indonesia: DD-MM-YYYY atau DD/MM/YYYY HH:mm:ss
             let matchDMY = s.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
             if (matchDMY) {
                 let [_, day, m, y, hr, min, sec] = matchDMY;
@@ -840,10 +652,21 @@
             
             const timeHours = String(dateObj.getHours()).padStart(2, '0');
             const timeMinutes = String(dateObj.getMinutes()).padStart(2, '0');
-            const defaultTimeStr = `${timeHours}:${timeMinutes} - ${parseInt(timeHours,10)+1}:${timeMinutes} WIB (Ba'da Isya - Selesai)`;
-            const timeStr = EVENT_CONFIG.timeCustom || defaultTimeStr;
+            const formattedClock = `${timeHours}:${timeMinutes} WIB`;
+            const defaultTimeStr = `${timeHours}:${timeMinutes} - ${String((dateObj.getHours() + 1) % 24).padStart(2, '0')}:${timeMinutes} WIB (Ba'da Isya - Selesai)`;
 
-            // Update DOM Elements
+            let timeStr = "";
+            if (EVENT_CONFIG.timeCustom && EVENT_CONFIG.timeCustom.trim()) {
+                const custom = EVENT_CONFIG.timeCustom.trim();
+                if (/\d{1,2}[:.]\d{2}/.test(custom)) {
+                    timeStr = custom;
+                } else {
+                    timeStr = `${formattedClock} (${custom})`;
+                }
+            } else {
+                timeStr = defaultTimeStr;
+            }
+
             const kitabEl = document.getElementById('display-kitab');
             const titleEl = document.getElementById('display-title');
             const ustadzEl = document.getElementById('display-ustadz');
@@ -863,7 +686,6 @@
 
         async function fetchSheetConfig(directUrl) {
             try {
-                // Cache-busting agar perubahan di Google Sheets langsung terupdate tanpa tertahan cache browser
                 const cacheBuster = directUrl.includes('?') 
                     ? `&_t=${Date.now()}` 
                     : `?_t=${Date.now()}`;
@@ -872,8 +694,6 @@
                 if (!res.ok) throw new Error("HTTP error " + res.status);
 
                 const text = await res.text();
-
-                // Parser CSV sederhana yang aman terhadap tanda petik & koma dalam teks
                 const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
                 if (lines.length > 1) {
                     const parseCsvLine = (line) => {
@@ -900,15 +720,11 @@
                         return values;
                     };
 
-                    const data = parseCsvLine(lines[1]); // Baris ke-2 (Baris data pertama)
+                    const data = parseCsvLine(lines[1]);
                     if (data[0] && data[0].trim()) EVENT_CONFIG.title = data[0].trim();
                     if (data[1] && data[1].trim()) EVENT_CONFIG.ustadz = data[1].trim();
                     if (data[2] && data[2].trim()) EVENT_CONFIG.kitab = data[2].trim();
-                    
-                    if (data[3] && data[3].trim()) {
-                        EVENT_CONFIG.dateISO = data[3].trim();
-                    }
-
+                    if (data[3] && data[3].trim()) EVENT_CONFIG.dateISO = data[3].trim();
                     if (data[4] && data[4].trim()) EVENT_CONFIG.timeCustom = data[4].trim();
                     if (data[5] && data[5].trim()) EVENT_CONFIG.location = data[5].trim();
                 }
@@ -920,12 +736,11 @@
         }
 
         function startLiveNotifications() {
-            // Notifikasi hanya menyebut "Jamaah" atau nama yang disensor tanpa label (Jamaah)
             const notifications = [
-                { title: "1 Jamaah baru saja mengonfirmasi", desc: "Niat hadir majelis Ba'da Isya" },
+                { title: "1 Jamaah baru saja mengonfirmasi", desc: "Mengisi daftar hadir majelis" },
                 { title: "Ah**** mengisi daftar hadir", desc: "Menyiapkan diri menuju Taman Surga" },
                 { title: "3 Jamaah baru mengonfirmasi kedatangan", desc: "Daftar hadir diperbarui 2 menit lalu" },
-                { title: "Fa**** mengisi daftar hadir", desc: "1 jamaah baru saja mengonfirmasi" },
+                { title: "Fa**** mengisi daftar hadir", desc: "Mengisi daftar hadir majelis" },
                 { title: "2 Jamaah baru mengonfirmasi hadir", desc: "Mengisi daftar hadir majelis" },
                 { title: "Ab***** telah konfirmasi", desc: "Niat hadir kajian rutin" }
             ];
@@ -942,11 +757,9 @@
                 toastTitle.innerText = item.title;
                 toastDesc.innerText = item.desc;
 
-                // Show popup from top with smooth slide down
                 liveToast.classList.remove('-translate-y-24', 'opacity-0', 'pointer-events-none');
                 liveToast.classList.add('translate-y-0', 'opacity-100');
 
-                // Hide after 4 seconds
                 setTimeout(() => {
                     liveToast.classList.remove('translate-y-0', 'opacity-100');
                     liveToast.classList.add('-translate-y-24', 'opacity-0', 'pointer-events-none');
@@ -955,7 +768,6 @@
                 index = (index + 1) % notifications.length;
             };
 
-            // Initial pop-up after 2.5 seconds, then repeat every 8 seconds
             setTimeout(() => {
                 showNextNotification();
                 setInterval(showNextNotification, 8000);
@@ -964,39 +776,59 @@
 
         function startCountdown() {
             const updateTimer = () => {
-                // Membaca tanggal ISO secara dinamis dari EVENT_CONFIG
                 const dateObj = parseFlexibleDate(EVENT_CONFIG.dateISO);
-                const targetTime = dateObj.getTime();
-                const now = new Date().getTime();
-                let diff = Math.floor((targetTime - now) / 1000);
+                const now = new Date();
+                const diff = dateObj.getTime() - now.getTime();
 
-                if (isNaN(diff) || diff <= 0) diff = 0;
+                if (diff <= 0) {
+                    document.getElementById('timer-hours').innerText = '00';
+                    document.getElementById('timer-minutes').innerText = '00';
+                    document.getElementById('timer-seconds').innerText = '00';
+                    return;
+                }
 
-                const h = Math.floor(diff / 3600);
-                const m = Math.floor((diff % 3600) / 60);
-                const s = diff % 60;
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-                const hEl = document.getElementById('timer-hours');
-                const mEl = document.getElementById('timer-minutes');
-                const sEl = document.getElementById('timer-seconds');
-
-                if (hEl) hEl.innerText = String(h).padStart(2, '0');
-                if (mEl) mEl.innerText = String(m).padStart(2, '0');
-                if (sEl) sEl.innerText = String(s).padStart(2, '0');
+                document.getElementById('timer-hours').innerText = String(hours).padStart(2, '0');
+                document.getElementById('timer-minutes').innerText = String(minutes).padStart(2, '0');
+                document.getElementById('timer-seconds').innerText = String(seconds).padStart(2, '0');
             };
 
             updateTimer();
             setInterval(updateTimer, 1000);
         }
 
-        function handlePresensiSubmit(event) {
+        async function handlePresensiSubmit(event) {
             event.preventDefault();
 
-            // Pindah langsung ke Layar Sukses Konfirmasi Kehadiran
+            const nama = document.getElementById('input-presensi-nama')?.value.trim() || '';
+            const wa = document.getElementById('input-presensi-wa')?.value.trim() || '';
+            const niat = document.getElementById('input-presensi-niat')?.value.trim() || '';
+
             navigateTo('screen-presensi-sukses');
 
             if (typeof confetti === 'function') {
                 confetti({ particleCount: 90, spread: 70, origin: { y: 0.5 } });
+            }
+
+            if (EVENT_CONFIG.presensiScriptUrl && EVENT_CONFIG.presensiScriptUrl.trim() !== "") {
+                try {
+                    const formData = new FormData();
+                    formData.append('nama', nama);
+                    formData.append('wa', wa);
+                    formData.append('niat', niat);
+                    formData.append('waktu', new Date().toLocaleString('id-ID'));
+
+                    fetch(EVENT_CONFIG.presensiScriptUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        body: formData
+                    }).catch(err => console.warn('Gagal menyimpan presensi ke Google Sheets:', err));
+                } catch (err) {
+                    console.warn('Error pengiriman presensi:', err);
+                }
             }
         }
 
@@ -1011,7 +843,6 @@
             const formattedNominal = "Rp " + nominal.toLocaleString('id-ID');
             const invNumber = "INV-2026-" + Math.floor(1000 + Math.random() * 9000);
             
-            // Realtime timestamp
             const now = new Date();
             const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
             const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}, ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
@@ -1029,62 +860,6 @@
 
             if (typeof confetti === 'function') {
                 confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
-            }
-        }
-
-        async function handleAddToWallet() {
-            const screenEl = document.getElementById('screen-boarding-pass');
-            const btnText = document.getElementById('btn-wallet-text');
-
-            if (btnText) btnText.innerText = "Meracik JPG Boarding Pass...";
-
-            if (screenEl) screenEl.scrollTop = 0;
-
-            try {
-                if (typeof html2canvas === 'function' && screenEl) {
-                    const canvas = await html2canvas(screenEl, {
-                        scale: 2,
-                        useCORS: true,
-                        allowTaint: true,
-                        backgroundColor: '#2563eb',
-                        logging: false,
-                        scrollX: 0,
-                        scrollY: 0,
-                        windowWidth: screenEl.scrollWidth,
-                        windowHeight: screenEl.scrollHeight,
-                        onclone: (clonedDoc) => {
-                            const clonedScreen = clonedDoc.getElementById('screen-boarding-pass');
-                            const clonedCloseBtn = clonedDoc.getElementById('boardpass-close-btn');
-                            const clonedBottomControls = clonedDoc.getElementById('boardpass-bottom-controls');
-
-                            if (clonedScreen) {
-                                clonedScreen.classList.add('no-capture-shift');
-                                clonedScreen.style.transform = 'none';
-                                clonedScreen.style.transition = 'none';
-                            }
-                            if (clonedCloseBtn) clonedCloseBtn.style.visibility = 'hidden';
-                            if (clonedBottomControls) clonedBottomControls.style.visibility = 'hidden';
-                        }
-                    });
-                    
-                    const image = canvas.toDataURL("image/jpeg", 0.98);
-                    const link = document.createElement('a');
-                    link.download = `Tiket-Taman-Surga-${currentPassData?.holderName || 'Jamaah'}.jpg`;
-                    link.href = image;
-                    link.click();
-
-                    if (typeof confetti === 'function') {
-                        confetti({ particleCount: 120, spread: 90, origin: { y: 0.8 } });
-                    }
-                    showToast("Boarding Pass JPG Berhasil Didownload!");
-                } else {
-                    showToast("Gagal memproses gambar tiket.");
-                }
-            } catch (err) {
-                console.error("Error generating JPG image:", err);
-                showToast("Terjadi kesalahan saat mengunduh gambar.");
-            } finally {
-                if (btnText) btnText.innerText = "Download Tiket Jalan Menuju Surga";
             }
         }
 
@@ -1116,15 +891,16 @@
         function showToast(msg) {
             const toast = document.getElementById('toast-msg');
             const toastText = document.getElementById('toast-text');
-            toastText.innerText = msg;
-            
-            toast.classList.remove('-translate-y-16', 'opacity-0', 'pointer-events-none');
-            toast.classList.add('translate-y-0', 'opacity-100');
+            if (toast && toastText) {
+                toastText.innerText = msg;
+                toast.classList.remove('-translate-y-16', 'opacity-0', 'pointer-events-none');
+                toast.classList.add('translate-y-0', 'opacity-100');
 
-            setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('-translate-y-16', 'opacity-0', 'pointer-events-none');
-            }, 3000);
+                setTimeout(() => {
+                    toast.classList.remove('translate-y-0', 'opacity-100');
+                    toast.classList.add('-translate-y-16', 'opacity-0', 'pointer-events-none');
+                }, 3000);
+            }
         }
     </script>
 </body>
