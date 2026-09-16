@@ -62,13 +62,6 @@
             border: 1px solid rgba(255, 255, 255, 0.7);
         }
 
-        .glass-tile {
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-        }
-
         .app-screen {
             display: none;
             opacity: 0;
@@ -82,18 +75,10 @@
             transform: scale(1);
         }
 
-        .receipt-teeth-top {
-            background-image: linear-gradient(135deg, #ffffff 50%, transparent 50%), linear-gradient(225deg, #ffffff 50%, transparent 50%);
-            background-position: top left;
-            background-repeat: repeat-x;
-            background-size: 14px 14px;
-        }
-        
-        .receipt-teeth-bottom {
-            background-image: linear-gradient(45deg, #ffffff 50%, transparent 50%), linear-gradient(315deg, #ffffff 50%, transparent 50%);
-            background-position: bottom left;
-            background-repeat: repeat-x;
-            background-size: 14px 14px;
+        /* Thermal receipt styling */
+        .receipt-card {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            background: #ffffff;
         }
 
         .stamp-paid {
@@ -116,116 +101,120 @@
         }
     </style>
 </head>
+
 <body class="flex justify-center items-center min-h-screen p-0 md:p-6 text-zinc-900">
 
     <div id="phone-frame" class="w-full max-w-md bg-brand-bgLight min-h-screen md:min-h-[860px] md:max-h-[880px] md:rounded-[52px] shadow-2xl relative flex flex-col overflow-hidden border-0 md:border-[10px] border-slate-300 transition-colors duration-500">
         
         <!-- SCREEN 1: HOME VIEW -->
-        <div id="screen-home" class="app-screen active flex-1 flex-col justify-between p-6 overflow-y-auto hide-scrollbar">
+        <div id="screen-home" class="app-screen active flex-1 flex-col justify-between px-4 py-2 overflow-y-auto hide-scrollbar">
             
-            <div class="flex-1 flex items-center justify-center py-2">
-                <div class="w-full bg-white/90 backdrop-blur-xl rounded-[36px] p-4 shadow-[0_20px_50px_rgba(15,23,42,0.06)] flex flex-col justify-between border border-slate-200/85 relative overflow-hidden space-y-3.5">
+            <div class="flex-1 flex items-center justify-center py-1">
+                <div class="w-full bg-white/90 backdrop-blur-xl rounded-[32px] p-3.5 shadow-[0_20px_50px_rgba(15,23,42,0.06)] flex flex-col justify-between border border-slate-200/85 relative overflow-hidden space-y-1.5">
                     
-                    <!-- Countdown Banner -->
-                    <div class="glass-card rounded-2xl py-3 px-4 text-center shadow-xs backdrop-blur-md relative overflow-hidden">
-                        <p class="text-[12px] font-black text-zinc-900 uppercase tracking-wider pb-2">
-                            <span>MENUJU TAMAN SURGA</span>
-                        </p>
-                        <div class="grid grid-cols-3 gap-2.5 max-w-[280px] mx-auto">
-                            <div class="glass-tile rounded-xl py-2 px-1 flex flex-col items-center justify-center shadow-xs">
-                                <span id="timer-hours" class="font-mono text-2xl font-black text-zinc-950 leading-none">09</span>
-                                <span class="text-[8px] font-black text-zinc-500 mt-1 uppercase tracking-wider">JAM</span>
+                    <!-- Brand Header with tight spacing -->
+                    <div class="flex items-center justify-between px-1 shrink-0">
+                        <div class="flex items-center space-x-1.5">
+                            <div class="w-6 h-6 rounded-full bg-zinc-950 text-white flex items-center justify-center font-black text-[11px] shadow-sm">
+                                <i class="fa-solid fa-kaaba"></i>
                             </div>
-                            <div class="glass-tile rounded-xl py-2 px-1 flex flex-col items-center justify-center shadow-xs">
-                                <span id="timer-minutes" class="font-mono text-2xl font-black text-zinc-950 leading-none">23</span>
-                                <span class="text-[8px] font-black text-zinc-500 mt-1 uppercase tracking-wider">MENIT</span>
-                            </div>
-                            <div class="glass-tile rounded-xl py-2 px-1 flex flex-col items-center justify-center shadow-xs">
-                                <span id="timer-seconds" class="font-mono text-2xl font-black text-zinc-950 leading-none">42</span>
-                                <span class="text-[8px] font-black text-zinc-500 mt-1 uppercase tracking-wider">DETIK</span>
-                            </div>
+                            <span class="font-black text-xs tracking-wider text-zinc-950">GAZEBO MENGAJI</span>
                         </div>
+                        <span class="text-[9.5px] font-extrabold px-2 py-0.5 bg-sky-100 text-sky-800 rounded-full">Kajian Rutin</span>
                     </div>
 
-                    <!-- Brand Header -->
-                    <div class="flex items-center justify-center space-x-2 pt-1 pb-0.5 shrink-0">
-                        <div class="w-7 h-7 rounded-full bg-zinc-950 text-white flex items-center justify-center font-black text-xs shadow-md">
-                            <i class="fa-solid fa-kaaba"></i>
+                    <!-- Dedicated Countdown Banner Card (Neutral Gray, no outline) -->
+                    <div class="bg-slate-100 rounded-2xl p-2 text-center shadow-2xs relative overflow-hidden">
+                        <div class="flex items-center justify-center space-x-1.5 pb-1">
+                            <i class="fa-solid fa-hourglass-half text-slate-500 text-[9px]"></i>
+                            <span class="text-[9.5px] font-black text-slate-700 uppercase tracking-widest">
+                                MENUJU TAMAN SURGA
+                            </span>
                         </div>
-                        <span class="font-black text-base tracking-wider text-zinc-950">GAZEBO MENGAJI</span>
+                        <div class="grid grid-cols-3 gap-1.5 max-w-[240px] mx-auto">
+                            <div class="bg-white rounded-xl py-1 px-1 flex flex-col items-center justify-center shadow-xs">
+                                <span id="timer-hours" class="font-mono text-sm font-black text-zinc-950 leading-none">09</span>
+                                <span class="text-[7px] font-black text-zinc-400 mt-0.5 uppercase tracking-wider">JAM</span>
+                            </div>
+                            <div class="bg-white rounded-xl py-1 px-1 flex flex-col items-center justify-center shadow-xs">
+                                <span id="timer-minutes" class="font-mono text-sm font-black text-zinc-950 leading-none">23</span>
+                                <span class="text-[7px] font-black text-zinc-400 mt-0.5 uppercase tracking-wider">MENIT</span>
+                            </div>
+                            <div class="bg-white rounded-xl py-1 px-1 flex flex-col items-center justify-center shadow-xs">
+                                <span id="timer-seconds" class="font-mono text-sm font-black text-zinc-950 leading-none">42</span>
+                                <span class="text-[7px] font-black text-zinc-400 mt-0.5 uppercase tracking-wider">DETIK</span>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Poster Kajian Card -->
-                    <div class="bg-brand-cardBlue/95 backdrop-blur-2xl rounded-[32px] p-5 text-zinc-950 shadow-[0_14px_40px_-6px_rgba(2,132,199,0.16)] space-y-4 border border-sky-200/90">
+                    <div class="bg-brand-cardBlue/95 backdrop-blur-2xl rounded-[28px] p-3.5 text-zinc-950 shadow-[0_14px_40px_-6px_rgba(2,132,199,0.16)] space-y-2 border border-sky-200/90">
                         <div class="flex items-center space-x-1.5 flex-wrap">
-                            <span class="px-3 py-1 bg-white/80 backdrop-blur-md rounded-full text-[10px] font-extrabold text-zinc-900 shadow-xs border border-white/90">
+                            <span class="px-2.5 py-0.5 bg-white/80 backdrop-blur-md rounded-full text-[9.5px] font-extrabold text-zinc-900 shadow-xs border border-white/90">
                                 Terbuka Umum
                             </span>
-                            <span class="px-3 py-1 bg-white/80 backdrop-blur-md rounded-full text-[10px] font-extrabold text-zinc-900 shadow-xs border border-white/90">
+                            <span class="px-2.5 py-0.5 bg-white/80 backdrop-blur-md rounded-full text-[9.5px] font-extrabold text-zinc-900 shadow-xs border border-white/90">
                                 Ikhwan & Akhwat
                             </span>
                         </div>
 
-                        <div class="flex items-center space-x-3 pt-0.5">
+                        <div class="flex items-center space-x-2.5 pt-0.5">
                             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" 
-                                 alt="Pemateri" class="w-12 h-12 rounded-full object-cover border-2 border-white/90 shadow-md shrink-0">
+                                 alt="Pemateri" class="w-10 h-10 rounded-full object-cover border-2 border-white/90 shadow-md shrink-0">
                             <div class="min-w-0 flex-1">
-                                <h2 class="text-xl font-black leading-tight text-zinc-950 tracking-tight">
+                                <h2 class="text-base font-black leading-tight text-zinc-950 tracking-tight">
                                     Kajian Hati & Niat
                                 </h2>
-                                <p class="text-xs font-semibold text-zinc-800 mt-0.5">
+                                <p class="text-[11px] font-semibold text-zinc-800 mt-0.5">
                                     Ust. Hanan Attaki
                                 </p>
                             </div>
                         </div>
 
-                        <div class="pt-2 pb-1 border-t border-sky-900/10">
-                            <p class="text-xs font-medium text-zinc-900 leading-snug">
+                        <div class="pt-1 pb-0.5 border-t border-sky-900/10">
+                            <p class="text-[10.5px] font-medium text-zinc-900 leading-snug">
                                 Mantapkan niat sebelum majelis dimulai agar ilmu yang didapat berkah & berbekas.
                             </p>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-2 text-[11px] font-bold text-zinc-950 pt-0.5">
-                            <div class="flex items-center space-x-1.5">
-                                <i class="fa-regular fa-calendar-days text-zinc-900 text-xs shrink-0"></i>
-                                <span class="break-words">Rabu, 16 Sep 2026</span>
+                        <!-- Event Meta Info -->
+                        <div class="space-y-1 text-[10.5px] font-bold text-zinc-950 pt-0.5">
+                            <div class="flex items-center space-x-2 bg-white/60 p-2 rounded-xl">
+                                <i class="fa-solid fa-clock text-sky-600 text-[11px] shrink-0 w-4 text-center"></i>
+                                <span class="truncate">20:00 - 21:00 WIB (Ba'da Isya - Selesai)</span>
                             </div>
-                            <div class="flex items-center space-x-1.5">
-                                <i class="fa-regular fa-clock text-zinc-900 text-xs shrink-0"></i>
-                                <span class="break-words">20:00 WIB</span>
+                            <div class="flex items-center space-x-2 bg-white/60 p-2 rounded-xl">
+                                <i class="fa-solid fa-calendar-days text-sky-600 text-[11px] shrink-0 w-4 text-center"></i>
+                                <span class="truncate">Rabu, 16 Sep 2026 / <i class="fa-solid fa-moon text-[9px] text-sky-600 ml-0.5 mr-0.5"></i> 5 Rabi'ul Awal 1448H</span>
                             </div>
-                            <div class="flex items-center space-x-1.5">
-                                <i class="fa-solid fa-moon text-zinc-900 text-xs shrink-0"></i>
-                                <span class="break-words">5 Rabi'ul Awal 1448H</span>
-                            </div>
-                            <div class="flex items-center space-x-1.5">
-                                <i class="fa-solid fa-location-dot text-zinc-900 text-xs shrink-0"></i>
-                                <span class="break-words" title="Ruang Kelas Gazebo Mengaji (GSC)">Ruang Kelas GSC</span>
+                            <div class="flex items-start space-x-2 bg-white/60 p-2 rounded-xl">
+                                <i class="fa-solid fa-location-dot text-sky-600 text-[11px] shrink-0 w-4 text-center mt-0.5"></i>
+                                <span class="leading-snug">Ruang Gazebo Mengaji di Gazebo Sport Center (GSC)</span>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-2.5 pt-2">
-                            <button onclick="navigateTo('screen-donasi-form')" class="py-3 px-4 bg-white/80 hover:bg-white text-zinc-950 font-extrabold text-xs rounded-2xl transition active:scale-95 shadow-xs flex items-center justify-center space-x-1 border border-white/80">
+                        <div class="grid grid-cols-2 gap-2 pt-1">
+                            <button onclick="navigateTo('screen-donasi-form')" class="py-2.5 px-3 bg-white/80 hover:bg-white text-zinc-950 font-extrabold text-[11px] rounded-2xl transition active:scale-95 shadow-xs flex items-center justify-center border border-white/80">
                                 <span>Donasi Kajian</span>
                             </button>
 
-                            <button onclick="navigateTo('screen-presensi-form')" class="py-3 px-4 bg-zinc-950 hover:bg-black text-white font-extrabold text-xs rounded-2xl transition active:scale-95 shadow-md flex items-center justify-center space-x-1.5">
+                            <button onclick="navigateTo('screen-presensi-form')" class="py-2.5 px-3 bg-zinc-950 hover:bg-black text-white font-extrabold text-[11px] rounded-2xl transition active:scale-95 shadow-md flex items-center justify-center space-x-1.5">
                                 <span>Niat Hadir</span>
-                                <i class="fa-solid fa-arrow-right text-xs"></i>
+                                <i class="fa-solid fa-arrow-right text-[10px]"></i>
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="text-center text-zinc-400 text-[10px] font-semibold pb-2 shrink-0">
+            <div class="text-center text-zinc-400 text-[10px] font-semibold pb-0.5 shrink-0">
                 <span>Gazebo Mengaji • Sentuh Donasi atau Niat Hadir</span>
             </div>
         </div>
 
         <!-- SCREEN 2: PRESENSI FORM (CENTERED) -->
         <div id="screen-presensi-form" class="app-screen flex-1 flex-col justify-center p-6 overflow-y-auto hide-scrollbar">
-            <div class="space-y-4 pt-1 max-w-sm mx-auto w-full">
+            <div class="space-y-4 max-w-sm mx-auto w-full my-auto">
                 <div class="flex items-center justify-between text-zinc-900 pb-1">
                     <button onclick="navigateTo('screen-home')" class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-zinc-800 transition active:scale-90 shadow-xs">
                         <i class="fa-solid fa-chevron-left"></i>
@@ -278,7 +267,7 @@
 
         <!-- SCREEN 3: DONASI FORM (CENTERED) -->
         <div id="screen-donasi-form" class="app-screen flex-1 flex-col justify-center p-6 overflow-y-auto hide-scrollbar">
-            <div class="space-y-4 pt-1 max-w-sm mx-auto w-full">
+            <div class="space-y-4 max-w-sm mx-auto w-full my-auto">
                 <div class="flex items-center justify-between text-zinc-900 pb-1">
                     <button onclick="navigateTo('screen-home')" class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-zinc-800 transition active:scale-90 shadow-xs">
                         <i class="fa-solid fa-chevron-left"></i>
@@ -305,19 +294,19 @@
                         <div class="space-y-2">
                             <label class="text-[11px] font-bold text-slate-700">Nominal Infaq:</label>
                             <div class="grid grid-cols-3 gap-2">
-                                <label class="cursor-pointer px-3 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 transition flex items-center justify-center space-x-1.5 has-[:checked]:bg-sky-600 has-[:checked]:border-sky-600 has-[:checked]:text-white shadow-xs hover:border-sky-300">
+                                <label class="cursor-pointer px-2 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 transition flex items-center justify-center space-x-1.5 has-[:checked]:bg-sky-600 has-[:checked]:border-sky-600 has-[:checked]:text-white shadow-xs hover:border-sky-300">
                                     <input type="radio" name="donasi_chip" value="10000" onclick="selectDonasiNominal(10000)" class="hidden peer">
                                     <i class="fa-solid fa-check text-[10px] hidden peer-checked:inline-block"></i>
                                     <span>10.000</span>
                                 </label>
 
-                                <label class="cursor-pointer px-3 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 transition flex items-center justify-center space-x-1.5 has-[:checked]:bg-sky-600 has-[:checked]:border-sky-600 has-[:checked]:text-white shadow-xs hover:border-sky-300">
+                                <label class="cursor-pointer px-2 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 transition flex items-center justify-center space-x-1.5 has-[:checked]:bg-sky-600 has-[:checked]:border-sky-600 has-[:checked]:text-white shadow-xs hover:border-sky-300">
                                     <input type="radio" name="donasi_chip" value="50000" checked onclick="selectDonasiNominal(50000)" class="hidden peer">
                                     <i class="fa-solid fa-check text-[10px] hidden peer-checked:inline-block"></i>
                                     <span>50.000</span>
                                 </label>
 
-                                <label class="cursor-pointer px-3 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 transition flex items-center justify-center space-x-1.5 has-[:checked]:bg-sky-600 has-[:checked]:border-sky-600 has-[:checked]:text-white shadow-xs hover:border-sky-300">
+                                <label class="cursor-pointer px-2 py-2.5 rounded-2xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 transition flex items-center justify-center space-x-1.5 has-[:checked]:bg-sky-600 has-[:checked]:border-sky-600 has-[:checked]:text-white shadow-xs hover:border-sky-300">
                                     <input type="radio" name="donasi_chip" value="100000" onclick="selectDonasiNominal(100000)" class="hidden peer">
                                     <i class="fa-solid fa-check text-[10px] hidden peer-checked:inline-block"></i>
                                     <span>100.000</span>
@@ -352,7 +341,7 @@
                             </button>
 
                             <button type="submit" class="py-3 px-6 bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-xs rounded-full transition active:scale-95 shadow-md shadow-sky-500/25 flex items-center space-x-2">
-                                <span>Cetak Invoice</span>
+                                <span>Download Struk Invoice</span>
                                 <i class="fa-solid fa-receipt text-xs"></i>
                             </button>
                         </div>
@@ -364,7 +353,7 @@
         <!-- SCREEN 4: BOARDING PASS SCREEN -->
         <div id="screen-boarding-pass" class="app-screen flex-1 flex-col justify-between p-6 bg-blue-600 overflow-y-auto hide-scrollbar">
             
-            <div class="flex items-center justify-between text-white pt-1 pb-2">
+            <div id="boardpass-top-controls" class="flex items-center justify-between text-white pt-1 pb-2">
                 <div>
                     <span class="text-[10px] font-extrabold uppercase tracking-widest text-blue-200 block">Boarding Pass Taman Surga</span>
                     <h1 class="text-xl font-black tracking-tight text-white leading-tight">
@@ -376,8 +365,14 @@
                 </button>
             </div>
 
-            <!-- IG STORY FULLSCREEN CONTAINER FOR EXPORT -->
-            <div id="ig-story-export-wrapper" class="p-4 bg-gradient-to-b from-blue-600 via-blue-700 to-indigo-900 rounded-[36px] my-2 shadow-2xl flex flex-col justify-center">
+            <!-- BOARDING PASS EXPORT WRAPPER (Exact Preview Screen match) -->
+            <div id="ig-story-export-wrapper" class="p-4 bg-blue-600 rounded-[36px] my-2 shadow-2xl flex flex-col justify-center">
+                
+                <div class="text-center pb-2 text-white">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-blue-200">Boarding Pass Taman Surga</p>
+                    <h3 class="text-base font-black tracking-tight" id="pass-header-kajian-title">Kajian Hati & Niat</h3>
+                </div>
+
                 <div id="boarding-pass-card" class="bg-slate-50 rounded-[32px] overflow-hidden shadow-2xl relative border-0">
                     
                     <div class="p-5 flex items-center space-x-3 bg-white">
@@ -399,18 +394,18 @@
                         <div class="w-3.5 h-6 bg-blue-600 rounded-l-full shrink-0 z-20"></div>
                     </div>
 
-                    <div class="px-6 py-3.5 bg-gradient-to-r from-sky-50 to-blue-50 border-b border-slate-100 flex items-center justify-between space-x-3">
+                    <div class="px-5 py-3 bg-gradient-to-r from-sky-50 to-blue-50 border-b border-slate-100 flex items-center justify-between space-x-2">
                         <div class="min-w-0 flex-1 space-y-0.5">
-                            <span class="text-[9.5px] font-extrabold text-blue-600 uppercase tracking-wider block">Kajian Majelis</span>
-                            <h4 class="text-sm font-black text-slate-900 leading-snug truncate" id="pass-kajian-title">Kajian Hati & Niat</h4>
-                            <p class="text-[11px] font-bold text-slate-600 truncate" id="pass-kajian-speaker">Ust. Hanan Attaki</p>
+                            <span class="text-[9px] font-extrabold text-blue-600 uppercase tracking-wider block">Kajian Majelis</span>
+                            <h4 class="text-xs font-black text-slate-900 leading-snug truncate" id="pass-kajian-title">Kajian Hati & Niat</h4>
+                            <p class="text-[10.5px] font-bold text-slate-600 truncate" id="pass-kajian-speaker">Ust. Hanan Attaki</p>
                         </div>
                         <div class="text-right shrink-0 space-y-1">
-                            <span class="px-2.5 py-1 bg-white text-blue-700 text-[10px] font-extrabold rounded-xl border border-blue-200 shadow-2xs inline-flex items-center space-x-1">
-                                <i class="fa-solid fa-location-dot text-blue-600 text-[10px]"></i>
+                            <span class="px-2 py-0.5 bg-white text-blue-700 text-[9.5px] font-extrabold rounded-xl border border-blue-200 shadow-2xs inline-flex items-center space-x-1">
+                                <i class="fa-solid fa-location-dot text-blue-600 text-[9px]"></i>
                                 <span>GSC</span>
                             </span>
-                            <p class="text-[9px] font-bold text-slate-500 truncate max-w-[110px]" id="pass-kajian-loc" title="Ruang Kelas GSC">Ruang Kelas GSC</p>
+                            <p class="text-[8.5px] font-bold text-slate-500 truncate max-w-[100px]" title="Ruang Gazebo Mengaji di Gazebo Sport Center (GSC)">Ruang Gazebo GSC</p>
                         </div>
                     </div>
 
@@ -439,23 +434,23 @@
                     </div>
 
                     <div class="px-5 py-2 bg-white grid grid-cols-2 gap-3">
-                        <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-3 flex items-start space-x-3">
-                            <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-sm shrink-0">
+                        <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-2.5 flex items-start space-x-2.5">
+                            <div class="w-7 h-7 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xs shrink-0">
                                 <i class="fa-regular fa-calendar-days"></i>
                             </div>
                             <div class="min-w-0">
-                                <p class="text-[10px] font-semibold text-slate-400">Date</p>
-                                <p class="text-xs font-extrabold text-slate-900 truncate" id="pass-date-str">16 Sep 2026</p>
+                                <p class="text-[9.5px] font-semibold text-slate-400">Date</p>
+                                <p class="text-[11px] font-extrabold text-slate-900 truncate" id="pass-date-str">16 Sep 2026</p>
                             </div>
                         </div>
 
-                        <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-3 flex items-start space-x-3">
-                            <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-sm shrink-0">
+                        <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-2.5 flex items-start space-x-2.5">
+                            <div class="w-7 h-7 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xs shrink-0">
                                 <i class="fa-regular fa-clock"></i>
                             </div>
                             <div class="min-w-0">
-                                <p class="text-[10px] font-semibold text-slate-400">Time</p>
-                                <p class="text-xs font-extrabold text-slate-900 truncate" id="pass-time-str">1 Jam (20:00)</p>
+                                <p class="text-[9.5px] font-semibold text-slate-400">Time</p>
+                                <p class="text-[11px] font-extrabold text-slate-900 truncate" id="pass-time-str">1 Jam (20:00)</p>
                             </div>
                         </div>
                     </div>
@@ -467,27 +462,27 @@
                         <div class="w-3.5 h-6 bg-blue-600 rounded-l-full shrink-0 z-20"></div>
                     </div>
 
-                    <div class="px-6 py-3.5 bg-white grid grid-cols-4 gap-2 text-center">
+                    <div class="px-6 py-3 bg-white grid grid-cols-4 gap-2 text-center">
                         <div>
-                            <p class="text-[10px] font-medium text-slate-400">Gate</p>
-                            <p class="text-sm font-extrabold text-slate-900 mt-0.5">GSC</p>
+                            <p class="text-[9.5px] font-medium text-slate-400">Gate</p>
+                            <p class="text-xs font-extrabold text-slate-900 mt-0.5">GSC</p>
                         </div>
                         <div>
-                            <p class="text-[10px] font-medium text-slate-400">Seat</p>
-                            <p class="text-sm font-extrabold text-slate-900 mt-0.5" id="pass-seat-no">Saf 02</p>
+                            <p class="text-[9.5px] font-medium text-slate-400">Seat</p>
+                            <p class="text-xs font-extrabold text-slate-900 mt-0.5" id="pass-seat-no">Saf 02</p>
                         </div>
                         <div>
-                            <p class="text-[10px] font-medium text-slate-400">Flight no</p>
-                            <p class="text-sm font-extrabold text-slate-900 mt-0.5" id="pass-flight-no">KJN-812</p>
+                            <p class="text-[9.5px] font-medium text-slate-400">Flight no</p>
+                            <p class="text-xs font-extrabold text-slate-900 mt-0.5" id="pass-flight-no">KJN-812</p>
                         </div>
                         <div>
-                            <p class="text-[10px] font-medium text-slate-400">Class</p>
-                            <p class="text-sm font-extrabold text-slate-900 mt-0.5 truncate" id="pass-class-name">Syar'i</p>
+                            <p class="text-[9.5px] font-medium text-slate-400">Class</p>
+                            <p class="text-xs font-extrabold text-slate-900 mt-0.5 truncate" id="pass-class-name">Syar'i</p>
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-b from-sky-100 to-sky-200 p-5 text-center space-y-2 border-t border-sky-200/60">
-                        <div class="flex justify-center items-center space-x-1.5 h-14 bg-white p-2.5 rounded-xl shadow-inner border border-sky-200 max-w-[260px] mx-auto">
+                    <div class="bg-gradient-to-b from-sky-100 to-sky-200 p-4 text-center space-y-1.5 border-t border-sky-200/60">
+                        <div class="flex justify-center items-center space-x-1 h-12 bg-white p-2 rounded-xl shadow-inner border border-sky-200 max-w-[240px] mx-auto">
                             <div class="w-1 h-full bg-slate-900"></div>
                             <div class="w-2.5 h-full bg-slate-900"></div>
                             <div class="w-0.5 h-full bg-slate-900"></div>
@@ -503,13 +498,13 @@
                             <div class="w-2 h-full bg-slate-900"></div>
                             <div class="w-1 h-full bg-slate-900"></div>
                         </div>
-                        <p class="text-xs font-mono font-bold text-slate-600 tracking-wider" id="pass-qr-serial">X 0 6 1 3 8 4 2 0 0 8 2 6 8</p>
+                        <p class="text-[11px] font-mono font-bold text-slate-600 tracking-wider" id="pass-qr-serial">X 0 6 1 3 8 4 2 0 0 8 2 6 8</p>
                         <p class="text-[11px] font-bold text-blue-700 font-sans tracking-wide">Bismillah Menuju Taman Surga</p>
                     </div>
                 </div>
             </div>
 
-            <div class="pb-2 pt-1">
+            <div id="boardpass-bottom-controls" class="pb-2 pt-1">
                 <button onclick="handleAddToWallet()" class="w-full py-4 bg-white hover:bg-slate-100 text-blue-950 font-black text-xs md:text-sm rounded-full shadow-2xl transition active:scale-95 flex items-center justify-center space-x-2">
                     <i class="fa-solid fa-download text-blue-600"></i>
                     <span id="btn-wallet-text">Download Tiket Jalan Menuju Surga</span>
@@ -520,7 +515,7 @@
         <!-- SCREEN 5: DONASI INVOICE THERMAL RECEIPT -->
         <div id="screen-donasi-invoice" class="app-screen flex-1 flex-col justify-between p-6 bg-slate-900 overflow-y-auto hide-scrollbar">
             <div class="flex items-center justify-between text-white pt-2 no-print">
-                <h1 class="text-2xl font-black tracking-tight text-white flex items-center gap-2">
+                <h1 class="text-xl font-black tracking-tight text-white flex items-center gap-2">
                     <i class="fa-solid fa-receipt text-sky-400"></i>
                     <span>Struk Invoice</span>
                 </h1>
@@ -529,22 +524,21 @@
                 </button>
             </div>
 
-            <div class="my-4 relative drop-shadow-2xl">
-                <div class="h-3 w-full receipt-teeth-top"></div>
-                <div class="bg-white px-6 py-6 text-zinc-900 space-y-4 font-mono text-xs relative">
+            <div class="my-4 relative max-w-sm mx-auto w-full" id="receipt-export-wrapper">
+                <div class="receipt-card rounded-2xl p-6 text-zinc-900 space-y-4 font-mono text-xs relative">
                     <div class="absolute top-8 right-6 border-2 border-emerald-600 text-emerald-600 font-black text-xs px-3 py-1 rounded tracking-widest uppercase stamp-paid opacity-90 pointer-events-none">
                         PAID / LUNAS
                     </div>
 
-                    <div class="text-center space-y-1 pb-3 border-b border-dashed border-zinc-300">
+                    <div class="text-center space-y-1 pb-4 border-b border-dashed border-zinc-300">
                         <div class="w-10 h-10 mx-auto rounded-full bg-zinc-950 text-white flex items-center justify-center text-base font-black mb-1">
                             <i class="fa-solid fa-kaaba"></i>
                         </div>
                         <h2 class="font-extrabold text-sm tracking-wider uppercase font-sans text-zinc-950">GAZEBO MENGAJI</h2>
-                        <p class="text-[10px] text-zinc-500 font-sans">Ruang Kelas GSC</p>
+                        <p class="text-[10px] text-zinc-500 font-sans">Ruang Gazebo GSC</p>
                     </div>
 
-                    <div class="space-y-1 text-[11px] pb-3 border-b border-dashed border-zinc-300">
+                    <div class="space-y-1.5 text-[11px] pb-4 border-b border-dashed border-zinc-300">
                         <div class="flex justify-between">
                             <span class="text-zinc-500">No. Struk:</span>
                             <span class="font-bold text-zinc-900" id="inv-no">INV-2026-8812</span>
@@ -563,7 +557,7 @@
                         </div>
                     </div>
 
-                    <div class="space-y-2 pb-3 border-b border-dashed border-zinc-300">
+                    <div class="space-y-2 pb-4 border-b border-dashed border-zinc-300">
                         <div class="flex justify-between font-bold text-[10px] text-zinc-400 uppercase">
                             <span>Deskripsi</span>
                             <span>Jumlah</span>
@@ -577,7 +571,7 @@
                         </div>
                     </div>
 
-                    <div class="space-y-1 text-[11px] pt-1">
+                    <div class="space-y-1.5 text-[11px] pt-1">
                         <div class="flex justify-between text-zinc-500">
                             <span>Subtotal Infaq</span>
                             <span id="inv-subtotal">Rp 50.000</span>
@@ -593,7 +587,7 @@
                     </div>
 
                     <div class="pt-3 text-center space-y-2">
-                        <div class="flex justify-center items-center space-x-1 h-10 py-1 bg-zinc-100 rounded px-2">
+                        <div class="flex justify-center items-center space-x-1 h-8 py-1 bg-zinc-100 rounded px-2">
                             <div class="w-1 h-full bg-zinc-900"></div>
                             <div class="w-2 h-full bg-zinc-900"></div>
                             <div class="w-0.5 h-full bg-zinc-900"></div>
@@ -610,13 +604,12 @@
                         <p class="text-[9px] text-zinc-400 font-sans tracking-widest uppercase">Jazakumullah Khairan Katsiran</p>
                     </div>
                 </div>
-                <div class="h-3 w-full receipt-teeth-bottom"></div>
             </div>
 
-            <div class="pb-2 space-y-2 no-print">
-                <button onclick="handlePrintInvoice()" class="w-full py-3.5 bg-sky-400 hover:bg-sky-300 text-zinc-950 font-black text-xs rounded-full shadow-2xl transition active:scale-95 flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-print"></i>
-                    <span>Cetak / Simpan Struk Invoice</span>
+            <div class="pb-2 space-y-2 no-print max-w-sm mx-auto w-full">
+                <button onclick="handleDownloadReceipt()" class="w-full py-3.5 bg-sky-400 hover:bg-sky-300 text-zinc-950 font-black text-xs rounded-full shadow-2xl transition active:scale-95 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Download Struk Invoice</span>
                 </button>
                 <button onclick="navigateTo('screen-home')" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-full transition active:scale-95 flex items-center justify-center space-x-1.5">
                     <i class="fa-solid fa-house"></i>
@@ -731,12 +724,12 @@
                 holderName: nama || 'Abidzar',
                 kajianTitle: 'Kajian Hati & Niat',
                 kajianSpeaker: 'Ust. Hanan Attaki',
-                kajianLoc: 'Ruang Kelas GSC',
+                kajianLoc: 'Ruang Gazebo Mengaji di Gazebo Sport Center (GSC)',
                 flightNo: 'KJN-' + Math.floor(100 + Math.random() * 900),
                 seatNo: 'Saf 0' + Math.floor(1 + Math.random() * 8),
                 className: 'Syar\'i',
                 seqNo: String(Math.floor(10 + Math.random() * 90)),
-                dateStr: '16 Sep 2026',
+                dateStr: 'Rabu, 16 Sep 2026',
                 timeStr: '1 Jam (20:00)',
                 qrCodeText: `X 0 6 1 3 8 4 2 0 0 8 2 6 8`
             };
@@ -780,9 +773,9 @@
 
         function renderPassCard(data) {
             document.getElementById('pass-holder-name').innerText = data.holderName;
+            if (document.getElementById('pass-header-kajian-title')) document.getElementById('pass-header-kajian-title').innerText = data.kajianTitle || 'Kajian Hati & Niat';
             if (document.getElementById('pass-kajian-title')) document.getElementById('pass-kajian-title').innerText = data.kajianTitle || 'Kajian Hati & Niat';
             if (document.getElementById('pass-kajian-speaker')) document.getElementById('pass-kajian-speaker').innerText = data.kajianSpeaker || 'Ust. Hanan Attaki';
-            if (document.getElementById('pass-kajian-loc')) document.getElementById('pass-kajian-loc').innerText = data.kajianLoc || 'Ruang Kelas GSC';
             document.getElementById('pass-flight-no').innerText = data.flightNo;
             document.getElementById('pass-seat-no').innerText = data.seatNo;
             document.getElementById('pass-class-name').innerText = data.className;
@@ -793,41 +786,68 @@
 
         async function handleAddToWallet() {
             const exportWrapperEl = document.getElementById('ig-story-export-wrapper');
+            const topControls = document.getElementById('boardpass-top-controls');
+            const bottomControls = document.getElementById('boardpass-bottom-controls');
             const btnText = document.getElementById('btn-wallet-text');
 
-            if (btnText) btnText.innerText = "Meracik Story Instagram...";
+            if (btnText) btnText.innerText = "Meracik JPG Boarding Pass...";
+
+            // Hide action controls temporarily during canvas screenshot capture
+            if (topControls) topControls.style.display = 'none';
+            if (bottomControls) bottomControls.style.display = 'none';
 
             try {
                 if (typeof html2canvas === 'function' && exportWrapperEl) {
                     const canvas = await html2canvas(exportWrapperEl, {
-                        scale: 3,
+                        scale: 2,
                         useCORS: true,
                         backgroundColor: '#2563eb'
                     });
-                    const image = canvas.toDataURL("image/png");
+                    const image = canvas.toDataURL("image/jpeg", 0.95);
                     const link = document.createElement('a');
-                    link.download = `IG-Story-Tiket-Kajian-${currentPassData?.holderName || 'Jamaah'}.png`;
+                    link.download = `Tiket-Taman-Surga-${currentPassData?.holderName || 'Jamaah'}.jpg`;
                     link.href = image;
                     link.click();
 
                     if (typeof confetti === 'function') {
                         confetti({ particleCount: 120, spread: 90, origin: { y: 0.8 } });
                     }
-                    showToast("Tiket IG Story Berhasil Didownload!");
+                    showToast("Boarding Pass JPG Berhasil Didownload!");
                 } else {
                     showToast("Gagal memproses gambar tiket.");
                 }
             } catch (err) {
-                console.error("Error generating story image:", err);
+                console.error("Error generating JPG image:", err);
                 showToast("Terjadi kesalahan saat mengunduh gambar.");
             } finally {
+                if (topControls) topControls.style.display = 'flex';
+                if (bottomControls) bottomControls.style.display = 'block';
                 if (btnText) btnText.innerText = "Download Tiket Jalan Menuju Surga";
             }
         }
 
-        function handlePrintInvoice() {
-            showToast("Membuka dialog cetak struk...");
-            window.print();
+        async function handleDownloadReceipt() {
+            const receiptEl = document.getElementById('receipt-export-wrapper');
+            showToast("Menyiapkan file struk...");
+
+            try {
+                if (typeof html2canvas === 'function' && receiptEl) {
+                    const canvas = await html2canvas(receiptEl, {
+                        scale: 2,
+                        useCORS: true,
+                        backgroundColor: '#ffffff'
+                    });
+                    const image = canvas.toDataURL("image/jpeg", 0.95);
+                    const link = document.createElement('a');
+                    link.download = `Struk-Infaq-Gazebo-Mengaji.jpg`;
+                    link.href = image;
+                    link.click();
+                    showToast("Struk Infaq Berhasil Didownload!");
+                }
+            } catch (err) {
+                console.error("Error downloading receipt:", err);
+                showToast("Gagal mengunduh struk.");
+            }
         }
 
         function showToast(msg) {
