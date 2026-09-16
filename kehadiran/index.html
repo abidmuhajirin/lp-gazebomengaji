@@ -682,16 +682,34 @@
             title: "Kajian Hati & Niat",
             ustadz: "Ust. Hanan Attaki",
             kitab: "KITAB: AL-HIKAM",
-            dateISO: "2026-09-16T20:00:00+07:00", // Format: YYYY-MM-DDTHH:mm:ss+07:00 (Untuk Countdown Timer)
-            timeCustom: "20:00 - 21:00 WIB (Ba'da Isya - Selesai)", // Teks Waktu Bebas Yang Tampil Di Aplikasi
+            dateISO: "2026-09-16T20:00:00+07:00", // Format: YYYY-MM-DDTHH:mm:ss+07:00
+            timeCustom: "20:00 - 21:00 WIB (Ba'da Isya - Selesai)",
             location: "Ruang Gazebo Mengaji di Gazebo Sport Center (GSC)",
             gscShort: "Ruang Gazebo GSC",
             qrisUrl: "https://gazebomengaji.org/infaq-qris-official",
-            // Tempelkan Link CSV Google Sheets di sini:
-            sheetCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlyiBuI8q7dgfTvzIv0RgBVDvT2zk_XoW7hbq3GHT1XRrR20aneHpQc1xQmUxOZfiZODR49YUuw8XH/pub?output=csv"
+            // Tempelkan Link Google Sheets di sini (Bisa Link Berbagi Biasa / Link CSV):
+            sheetCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlyiBuI8q7dgfTvzIv0RgBVDvT2zk_XoW7hbq3GHT1XRrR20aneHpQc1xQmUxOZfiZODR49YUuw8XH/pubhtml?gid=399437584&single=true"
         };
 
         let currentPassData = null;
+
+        // Helper untuk Mengonversi Semua Jenis Link Google Sheets ke Link CSV Langsung
+        function getDirectCsvUrl(url) {
+            if (!url || url.includes("YOUR_SPREADSHEET_ID_HERE")) return null;
+            
+            // Jika sudah berbentuk pub?output=csv atau gviz/tq
+            if (url.includes("pub?output=csv") || url.includes("tqx=out:csv")) {
+                return url;
+            }
+
+            // Jika user menempelkan link biasa (contoh: /edit?usp=sharing)
+            const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+            if (match && match[1]) {
+                return `https://docs.google.com/spreadsheets/d/${match[1]}/gviz/tq?tqx=out:csv`;
+            }
+
+            return url;
+        }
 
         // Navigation Helper for Screen Switching
         function navigateTo(screenId) {
@@ -748,9 +766,9 @@
         };
 
         function initEventConfig() {
-            // Jika ada sheet CSV, aplikasi bisa fetch otomatis (opsional)
-            if (EVENT_CONFIG.sheetCsvUrl && !EVENT_CONFIG.sheetCsvUrl.includes("YOUR_SPREADSHEET_ID_HERE")) {
-                fetchSheetConfig();
+            const directUrl = getDirectCsvUrl(EVENT_CONFIG.sheetCsvUrl);
+            if (directUrl) {
+                fetchSheetConfig(directUrl);
             } else {
                 renderEventConfig();
             }
@@ -776,10 +794,10 @@
             const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
             const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
             
-            const dayName = days[dateObj.getDay()];
-            const dayNum = dateObj.getDate();
-            const monthName = months[dateObj.getMonth()];
-            const yearNum = dateObj.getFullYear();
+            const dayName = days[dateObj.getDay()] || "Rabu";
+            const dayNum = dateObj.getDate() || 16;
+            const monthName = months[dateObj.getMonth()] || "Sep";
+            const yearNum = dateObj.getFullYear() || 2026;
             
             const masehiStr = `${dayName}, ${dayNum} ${monthName} ${yearNum}`;
             const hijriStr = getHijriDateString(dateObj);
@@ -807,19 +825,14 @@
             if (locEl) locEl.innerText = EVENT_CONFIG.location;
         }
 
-        async function fetchSheetConfig() {
-            if (!EVENT_CONFIG.sheetCsvUrl || EVENT_CONFIG.sheetCsvUrl.includes("YOUR_SPREADSHEET_ID_HERE")) {
-                renderEventConfig();
-                return;
-            }
-
+        async function fetchSheetConfig(directUrl) {
             try {
                 // Cache-busting agar perubahan di Google Sheets langsung terupdate tanpa tertahan cache browser
-                const cacheBuster = EVENT_CONFIG.sheetCsvUrl.includes('?') 
+                const cacheBuster = directUrl.includes('?') 
                     ? `&_t=${Date.now()}` 
                     : `?_t=${Date.now()}`;
                 
-                const res = await fetch(EVENT_CONFIG.sheetCsvUrl + cacheBuster);
+                const res = await fetch(directUrl + cacheBuster);
                 const text = await res.text();
 
                 // Parser CSV sederhana yang aman terhadap tanda petik & koma dalam teks
@@ -848,7 +861,16 @@
                     if (data[0]) EVENT_CONFIG.title = data[0];
                     if (data[1]) EVENT_CONFIG.ustadz = data[1];
                     if (data[2]) EVENT_CONFIG.kitab = data[2];
-                    if (data[3]) EVENT_CONFIG.dateISO = data[3].trim().replace(' ', 'T');
+                    
+                    // Format Tanggal ISO yang Aman untuk Semua Browser / HP
+                    if (data[3]) {
+                        let rawDate = data[3].trim().replace(' ', 'T');
+                        if (!rawDate.includes('+') && !rawDate.includes('Z') && rawDate.length <= 16) {
+                            rawDate += ':00+07:00';
+                        }
+                        EVENT_CONFIG.dateISO = rawDate;
+                    }
+
                     if (data[4]) EVENT_CONFIG.timeCustom = data[4];
                     if (data[5]) EVENT_CONFIG.location = data[5];
                 }
