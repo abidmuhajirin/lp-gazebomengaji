@@ -224,6 +224,14 @@
         <!-- SCREEN 2: PRESENSI FORM -->
         <div id="screen-presensi-form" class="app-screen flex-1 flex-col justify-center p-6 overflow-y-auto hide-scrollbar">
             <div class="space-y-4 max-w-sm mx-auto w-full my-auto">
+                <div class="flex items-center justify-between text-zinc-900 pb-1">
+                    <button onclick="navigateTo('screen-home')" class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-zinc-800 transition active:scale-90 shadow-xs">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div></div>
+                    <div class="w-10"></div>
+                </div>
+
                 <div class="bg-white rounded-[32px] p-6 shadow-xl border border-slate-200/80 space-y-5">
                     <div class="space-y-1">
                         <h2 class="text-xl font-extrabold text-zinc-950 tracking-tight">Form Kehadiran Majelis</h2>
@@ -508,10 +516,8 @@
             gscShort: "Ruang Gazebo GSC",
             qrisUrl: "https://gazebomengaji.org/infaq-qris-official",
             sheetCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlyiBuI8q7dgfTvzIv0RgBVDvT2zk_XoW7hbq3GHT1XRrR20aneHpQc1xQmUxOZfiZODR49YUuw8XH/pub?gid=399437584&single=true&output=csv",
-            presensiScriptUrl: "https://script.google.com/macros/s/AKfycbwgbKcUr_xP7XFjl-1PdAudDs3SXvQRZqXtHQ9okFBMITexztP7ThkTAxl3D2FfpqeA/exec" // Link Web App Google Apps Script jika ingin menyimpan database
+            presensiScriptUrl: "" // Link Web App Google Apps Script jika ingin menyimpan database
         };
-
-        let currentPassData = null;
 
         // Navigation Helper for Screen Switching
         function navigateTo(screenId) {
