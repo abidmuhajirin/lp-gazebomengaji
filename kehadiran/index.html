@@ -372,6 +372,14 @@
                         <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2.5 text-center">
                             <p class="text-[11px] font-extrabold text-slate-700">Scan QRIS Gazebo Mengaji:</p>
                             <div id="donasi-qris-box" class="p-3 bg-white border border-slate-200 rounded-2xl shadow-xs inline-block"></div>
+                            
+                            <div class="pt-0.5">
+                                <button type="button" onclick="downloadQrisImage()" class="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-200 text-sky-700 rounded-full text-[10.5px] font-extrabold shadow-xs transition active:scale-95">
+                                    <i class="fa-solid fa-download text-sky-600"></i>
+                                    <span>Unduh Barcode QRIS</span>
+                                </button>
+                            </div>
+
                             <p class="text-[9.5px] font-semibold text-slate-400">Mendukung BCA, Mandiri, GoPay, OVO, ShopeePay & QRIS Lainnya</p>
                         </div>
 
@@ -514,7 +522,9 @@
             timeCustom: "Ba'da Subuh - Selesai",
             location: "Ruang Gazebo Mengaji di Gazebo Sport Center (GSC)",
             gscShort: "Ruang Gazebo GSC",
-            qrisUrl: "https://gazebomengaji.org/infaq-qris-official",
+            qrisUrl: "https://gazebomengaji.com/donasi/",
+            // Tempelkan kode <svg>...</svg> Anda atau link file .svg di sini:
+            qrisSvg: "images/qr-gazmen.svg", 
             sheetCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlyiBuI8q7dgfTvzIv0RgBVDvT2zk_XoW7hbq3GHT1XRrR20aneHpQc1xQmUxOZfiZODR49YUuw8XH/pub?gid=399437584&single=true&output=csv",
             presensiScriptUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlyiBuI8q7dgfTvzIv0RgBVDvT2zk_XoW7hbq3GHT1XRrR20aneHpQc1xQmUxOZfiZODR49YUuw8XH/pub?gid=0&single=true&output=csv" // Link Web App Google Apps Script jika ingin menyimpan database
         };
@@ -553,7 +563,16 @@
             const qrisContainer = document.getElementById('donasi-qris-box');
             if (qrisContainer) {
                 qrisContainer.innerHTML = '';
-                if (typeof QRCode !== 'undefined') {
+                
+                // Jika tersedia QRIS SVG khusus (kode <svg>...</svg> atau link file SVG)
+                if (EVENT_CONFIG.qrisSvg && EVENT_CONFIG.qrisSvg.trim() !== "") {
+                    const svgContent = EVENT_CONFIG.qrisSvg.trim();
+                    if (svgContent.startsWith("<svg") || svgContent.startsWith("&lt;svg")) {
+                        qrisContainer.innerHTML = svgContent;
+                    } else {
+                        qrisContainer.innerHTML = `<img src="${svgContent}" alt="QRIS Gazebo Mengaji" class="w-32 h-32 object-contain mx-auto">`;
+                    }
+                } else if (typeof QRCode !== 'undefined') {
                     new QRCode(qrisContainer, {
                         text: EVENT_CONFIG.qrisUrl || "https://gazebomengaji.org/infaq-qris",
                         width: 120,
@@ -891,6 +910,33 @@
             } catch (err) {
                 console.error("Error downloading receipt:", err);
                 showToast("Gagal mengunduh struk.");
+            }
+        }
+
+        async function downloadQrisImage() {
+            const qrisBox = document.getElementById('donasi-qris-box');
+            if (!qrisBox) return;
+
+            showToast("Mengunduh barcode QRIS...");
+
+            try {
+                if (typeof html2canvas === 'function') {
+                    const canvas = await html2canvas(qrisBox, {
+                        scale: 3,
+                        useCORS: true,
+                        allowTaint: true,
+                        backgroundColor: '#ffffff'
+                    });
+                    const image = canvas.toDataURL("image/png");
+                    const link = document.createElement('a');
+                    link.download = `QRIS-Gazebo-Mengaji.png`;
+                    link.href = image;
+                    link.click();
+                    showToast("Barcode QRIS Berhasil Diunduh!");
+                }
+            } catch (err) {
+                console.error("Error downloading QRIS:", err);
+                showToast("Gagal mengunduh QRIS.");
             }
         }
 
