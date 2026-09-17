@@ -7,7 +7,7 @@
 
     <!-- Mobile Web App & Home Screen Icon Tags -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Gazebo Mengaji">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#f1f5f9">
@@ -53,10 +53,16 @@
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #cbd5e1;
+            background-color: #f1f5f9;
             color: #0f172a;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        @media (min-width: 768px) {
+            body {
+                background-color: #cbd5e1;
+            }
         }
 
         .hide-scrollbar::-webkit-scrollbar {
