@@ -1330,7 +1330,7 @@
         }
 
         async function loadKajianData() {
-            if (SPREADSHEET__URL && SPREADSHEET_CSV_URL.trim() !== "") {
+            if (SPREADSHEET_CSV_URL && SPREADSHEET_CSV_URL.trim() !== "") {
                 try {
                     const response = await fetch(SPREADSHEET_CSV_URL);
                     const csvText = await response.text();
