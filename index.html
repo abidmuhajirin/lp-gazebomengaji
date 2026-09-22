@@ -1170,7 +1170,7 @@
           2. Klik File -> Bagikan -> Publikasikan ke Web -> Pilih Format "CSV".
           3. Salin link CSV tersebut lalu tempel ke SPREADSHEET_CSV_URL di bawah ini:
         */
-        const SPREADSHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSlyiBuI8q7dgfTvzIv0RgBVDvT2zk_XoW7hbq3GHT1XRrR20aneHpQc1xQmUxOZfiZODR49YUuw8XH/pub?gid=1654582640&single=true&output=csv"; // Paste URL CSV Google Spreadsheet Anda di sini
+        const SPREADSHEET_CSV_URL = ""; // Paste URL CSV Google Spreadsheet Anda di sini
 
         // Data bawaan jika Spreadsheet belum diisi / offline
         const defaultKajianData = [
@@ -1285,7 +1285,7 @@
                 const isMendatang = badgeText.toUpperCase().includes('MENDATANG');
                 const badgeClass = isMendatang
                     ? 'bg-white text-red-600 dark:bg-white dark:text-red-600 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5 border border-zinc-200 dark:border-zinc-700 shadow-sm'
-                    : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider border border-zinc-200 dark:border-zinc-700';
+                    : 'bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider border border-zinc-200/80 dark:border-zinc-700 shadow-sm';
 
                 const badgeDot = isMendatang ? '<span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>' : '';
                 const btnIcon = isMendatang ? 'arrow-up-right' : 'play-circle';
@@ -1296,7 +1296,7 @@
                 const imgDisplayUrl = formatImageUrl(item.thumbnail);
 
                 return `
-                    <div class="snap-start min-w-[250px] sm:min-w-[270px] max-w-[280px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
+                    <div class="snap-start min-w-[250px] sm:min-w-[270px] max-w-[280px] rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 p-4 flex flex-col justify-between shadow-sm">
                         <div>
                             <!-- Badge Label / Tanggal -->
                             <div class="mb-3 flex items-center justify-between">
@@ -1306,9 +1306,9 @@
                                 </span>
                             </div>
 
-                            <!-- Thumbnail Clean 9:16 Poster with Direct Pop-up Click -->
-                            <div onclick="openImageModal('${imgDisplayUrl}', 'Poster ${badgeText}')" class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-3 bg-zinc-100 dark:bg-zinc-800 cursor-pointer group">
-                                <img src="${imgDisplayUrl}" alt="Poster Kajian" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src='https://placehold.co/500x888/18181b/ffffff?text=Poster+Kajian'">
+                            <!-- Thumbnail Clean 9:16 Poster -->
+                            <div onclick="openImageModal('${imgDisplayUrl}', 'Poster ${badgeText}')" class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-3 bg-white dark:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-700/80 cursor-pointer group shadow-sm">
+                                <img src="${imgDisplayUrl}" alt="Poster Kajian" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src='https://placehold.co/500x888/ffffff/18181b?text=Poster+Kajian'">
                             </div>
 
                             <!-- Nama Ustadz -->
