@@ -1163,7 +1163,7 @@
           PANDUAN GOOGLE SPREADSHEET:
           1. Buat Google Sheet dengan 4 atau 5 Kolom:
              Kolom A: Status/Tanggal (misal: "KAJIAN MENDATANG", "18 SEP 2026", "02 SEP 2026")
-             Kolom B: Link Thumbnail Flyer (misal: "images/kajian-mendatang1.png")
+             Kolom B: Link Thumbnail Flyer (misal: "https://drive.google.com/file/d/1ABC.../view" atau "images/kajian-1.png")
              Kolom C: Nama Ustadz (misal: "Ahmad Anshori, Lc., Mpd")
              Kolom D: Tombol Url (misal: "https://www.youtube.com/watch?v=...")
              Kolom E (Opsional): Label Tombol (misal: "Lihat Detail" / "Tonton Rekaman")
@@ -1211,21 +1211,23 @@
             }
         ];
 
-        // Fungsi helper untuk mengonversi link Google Drive biasa menjadi link direct image
+        // Konverter Link Google Drive ke Direct Image Link
         function formatImageUrl(url) {
             if (!url) return 'https://placehold.co/500x888/18181b/ffffff?text=Poster+Kajian';
-            let cleanUrl = url.trim();
+            const cleanUrl = url.trim().replace(/^"(.*)"$/, '$1');
+
+            // Cek apakah link berasal dari Google Drive
             if (cleanUrl.includes('drive.google.com')) {
                 let fileId = '';
-                const matchFileD = cleanUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-                if (matchFileD) {
-                    fileId = matchFileD[1];
-                } else {
-                    const matchIdParam = cleanUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-                    if (matchIdParam) {
-                        fileId = matchIdParam[1];
-                    }
+                const matchD = cleanUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                const matchId = cleanUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+
+                if (matchD && matchD[1]) {
+                    fileId = matchD[1];
+                } else if (matchId && matchId[1]) {
+                    fileId = matchId[1];
                 }
+
                 if (fileId) {
                     return `https://lh3.googleusercontent.com/d/${fileId}`;
                 }
@@ -1233,12 +1235,37 @@
             return cleanUrl;
         }
 
-        // Parser CSV Ringkas
+        // Parser CSV Ringkas yang Mendukung Tanda Kutip & Koma dalam Sel (Gelar Ustadz)
+        function parseCSVLine(line) {
+            const result = [];
+            let cur = '';
+            let inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') {
+                    if (inQuotes && line[i + 1] === '"') {
+                        cur += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    result.push(cur.trim());
+                    cur = '';
+                } else {
+                    cur += char;
+                }
+            }
+            result.push(cur.trim());
+            return result;
+        }
+
         function parseCSV(text) {
-            const lines = text.trim().split('\n');
+            const lines = text.trim().split(/\r?\n/);
             const result = [];
             for (let i = 0; i < lines.length; i++) {
-                const row = lines[i].split(',').map(cell => cell.trim().replace(/^"(.*)"$/, '$1'));
+                if (!lines[i].trim()) continue;
+                const row = parseCSVLine(lines[i]);
                 if (row.length >= 3) {
                     result.push(row);
                 }
@@ -1251,7 +1278,11 @@
             if (!container) return;
 
             container.innerHTML = dataList.map((item) => {
-                const isMendatang = (item.badge || '').toUpperCase().includes('MENDATANG');
+                const badgeText = (item.badge || '').replace(/^"(.*)"$/, '$1').trim();
+                const ustadzText = (item.ustadz || '').replace(/^"(.*)"$/, '$1').trim();
+                const targetUrl = (item.url || '').replace(/^"(.*)"$/, '$1').trim();
+                
+                const isMendatang = badgeText.toUpperCase().includes('MENDATANG');
                 const badgeClass = isMendatang
                     ? 'bg-white text-red-600 dark:bg-white dark:text-red-600 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5 border border-zinc-200 dark:border-zinc-700 shadow-sm'
                     : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider border border-zinc-200 dark:border-zinc-700';
@@ -1259,7 +1290,7 @@
                 const badgeDot = isMendatang ? '<span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>' : '';
                 const btnIcon = isMendatang ? 'arrow-up-right' : 'play-circle';
                 const defaultBtnText = isMendatang ? 'Lihat Detail' : 'Tonton Rekaman';
-                const labelTombol = item.buttonText || defaultBtnText;
+                const labelTombol = item.buttonText ? item.buttonText.replace(/^"(.*)"$/, '$1').trim() : defaultBtnText;
                 
                 // Konversi URL gambar jika memakai Google Drive
                 const imgDisplayUrl = formatImageUrl(item.thumbnail);
@@ -1271,23 +1302,23 @@
                             <div class="mb-3 flex items-center justify-between">
                                 <span class="${badgeClass}">
                                     ${badgeDot}
-                                    <span>${item.badge}</span>
+                                    <span>${badgeText}</span>
                                 </span>
                             </div>
 
                             <!-- Thumbnail Clean 9:16 Poster with Direct Pop-up Click -->
-                            <div onclick="openImageModal('${imgDisplayUrl}', 'Poster ${item.badge}')" class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-3 bg-zinc-100 dark:bg-zinc-800 cursor-pointer group">
+                            <div onclick="openImageModal('${imgDisplayUrl}', 'Poster ${badgeText}')" class="relative aspect-[9/16] rounded-2xl overflow-hidden mb-3 bg-zinc-100 dark:bg-zinc-800 cursor-pointer group">
                                 <img src="${imgDisplayUrl}" alt="Poster Kajian" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src='https://placehold.co/500x888/18181b/ffffff?text=Poster+Kajian'">
                             </div>
 
                             <!-- Nama Ustadz -->
                             <div class="pt-1">
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400">Ustadz: <strong class="text-black dark:text-white">${item.ustadz}</strong></p>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400">Ustadz: <strong class="text-black dark:text-white">${ustadzText}</strong></p>
                             </div>
                         </div>
 
                         <!-- Tombol Aksi -->
-                        <a href="${item.url || '#'}" target="_blank" class="mt-4 w-full bg-black text-white dark:bg-white dark:text-black py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95">
+                        <a href="${targetUrl || '#'}" target="_blank" class="mt-4 w-full bg-black text-white dark:bg-white dark:text-black py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95">
                             <span>${labelTombol}</span>
                             <i data-lucide="${btnIcon}" class="w-3.5 h-3.5"></i>
                         </a>
@@ -1299,7 +1330,7 @@
         }
 
         async function loadKajianData() {
-            if (SPREADSHEET_CSV_URL && SPREADSHEET_CSV_URL.trim() !== "") {
+            if (SPREADSHEET__URL && SPREADSHEET_CSV_URL.trim() !== "") {
                 try {
                     const response = await fetch(SPREADSHEET_CSV_URL);
                     const csvText = await response.text();
