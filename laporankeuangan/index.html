@@ -161,8 +161,8 @@
             <!-- Brand Title & Logo (Left-aligned & Larger on Mobile) -->
             <div class="flex items-center gap-3 w-full md:w-auto min-w-0 justify-start">
                 <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-900 flex items-center justify-center flex-shrink-0 shadow-md p-2">
-    <img src="images/gazmen-36x36.svg" alt="Logo Gazebo Mengaji" class="w-full h-full object-contain">
-</div>
+                    <img src="images/gazmen-36x36.svg" alt="Logo Gazebo Mengaji" class="w-full h-full object-contain">
+                </div>
                 <div class="min-w-0 text-left flex flex-col justify-center">
                     <span class="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-[0.18em] block leading-none mb-0.5 select-none">Laporan Keuangan</span>
                     <h1 class="text-base sm:text-lg md:text-xl font-black text-slate-900 tracking-tight leading-none">
@@ -518,19 +518,30 @@
         </div>
     </div>
 
-    <!-- Image Modal -->
+    <!-- Image / Document Modal (Di-update untuk mendukung preview Google Drive) -->
     <div id="imageModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel max-w-lg w-full p-5 space-y-3">
+        <div class="glass-panel max-w-2xl w-full p-5 space-y-3">
             <div class="flex items-center justify-between border-b border-slate-200/80 pb-2">
                 <h4 class="font-black text-slate-900 text-xs uppercase" id="proofTitle">Bukti Nota Transaksi</h4>
                 <button onclick="closeImageModal()" class="text-slate-400 hover:text-slate-700">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
-            <div class="glass-panel-subtle max-h-[65vh] overflow-hidden flex items-center justify-center p-2">
-                <img id="proofImage" src="" alt="Bukti Nota" class="max-h-[60vh] w-auto object-contain rounded-lg">
+            
+            <div class="glass-panel-subtle h-[60vh] overflow-hidden flex items-center justify-center p-2 relative">
+                <!-- Image Container -->
+                <img id="proofImage" src="" alt="Bukti Nota" class="max-h-full w-auto object-contain rounded-lg hidden">
+                
+                <!-- Iframe Container for Google Drive Documents / PDFs -->
+                <iframe id="proofIframe" src="" class="w-full h-full rounded-lg border-0 hidden"></iframe>
             </div>
-            <p class="text-xs text-center text-slate-600 font-medium" id="proofDesc"></p>
+
+            <div class="flex items-center justify-between gap-2 pt-1">
+                <p class="text-xs text-slate-600 font-medium truncate flex-1" id="proofDesc"></p>
+                <a id="proofExternalLink" href="#" target="_blank" class="glass-btn px-3 py-1.5 text-xs font-bold text-emerald-700 flex items-center gap-1 flex-shrink-0">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Link
+                </a>
+            </div>
         </div>
     </div>
 
@@ -1151,17 +1162,65 @@
             document.getElementById('detailModal').classList.add('hidden');
         }
 
+        // Helper untuk parse & format URL Google Drive
+        function getDriveUrls(rawUrl) {
+            if (!rawUrl) return { embedUrl: '', directImageUrl: '', originalUrl: '' };
+            
+            let url = rawUrl.trim();
+            let fileId = '';
+
+            // Ekstrak File ID dari berbagai format link Google Drive
+            const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                fileId = match[1];
+            }
+
+            if (fileId) {
+                return {
+                    embedUrl: `https://drive.google.com/file/d/${fileId}/preview`,
+                    directImageUrl: `https://lh3.googleusercontent.com/d/${fileId}`,
+                    originalUrl: url
+                };
+            }
+
+            return { embedUrl: url, directImageUrl: url, originalUrl: url };
+        }
+
         function openImageModal(id) {
             const item = state.transactions.find(t => t.id === id);
             if (!item || !item.bukti) return;
 
-            document.getElementById('proofImage').src = item.bukti;
-            document.getElementById('proofDesc').innerText = item.keterangan || '';
-            document.getElementById('proofTitle').innerText = `Nota: ${item.kategori || 'Bukti Transaksi'}`;
+            const proofImg = document.getElementById('proofImage');
+            const proofIframe = document.getElementById('proofIframe');
+            const proofDesc = document.getElementById('proofDesc');
+            const proofTitle = document.getElementById('proofTitle');
+            const proofExtLink = document.getElementById('proofExternalLink');
+
+            const drive = getDriveUrls(item.bukti);
+
+            proofDesc.innerText = item.keterangan || '';
+            proofTitle.innerText = `Nota: ${item.kategori || 'Bukti Transaksi'}`;
+            proofExtLink.href = drive.originalUrl;
+
+            // Cek apakah link berasal dari Google Drive
+            if (item.bukti.includes('drive.google.com')) {
+                proofImg.classList.add('hidden');
+                proofIframe.src = drive.embedUrl;
+                proofIframe.classList.remove('hidden');
+            } else {
+                // Untuk URL gambar biasa / direct image
+                proofIframe.classList.add('hidden');
+                proofIframe.src = '';
+                proofImg.src = drive.directImageUrl;
+                proofImg.classList.remove('hidden');
+            }
+
             document.getElementById('imageModal').classList.remove('hidden');
         }
 
         function closeImageModal() {
+            const proofIframe = document.getElementById('proofIframe');
+            if (proofIframe) proofIframe.src = ''; // reset iframe saat ditutup
             document.getElementById('imageModal').classList.add('hidden');
         }
 
