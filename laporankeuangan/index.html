@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gazebo Mengaji - Keuangan </title>
+    <title>Gazebo Mengaji - Keuangan</title>
 
     <!-- Favicon SVG Utama (Untuk Browser Modern) -->
     <link rel="icon" type="image/svg+xml" href="images/gazmen-36x36.svg">
@@ -148,7 +148,7 @@
 </head>
 <body class="h-full antialiased flex flex-col min-h-screen relative overflow-x-hidden bg-slate-100 text-slate-800">
 
-    <!-- Seamless Radial Ambient Background Glow (No Side Bands or Cropping Lines) -->
+    <!-- Seamless Radial Ambient Background Glow -->
     <div class="fixed inset-0 pointer-events-none -z-10 bg-slate-100" style="background-image: 
         radial-gradient(ellipse at 50% -10%, rgba(16, 185, 129, 0.12) 0%, transparent 65%),
         radial-gradient(ellipse at 50% 110%, rgba(16, 185, 129, 0.08) 0%, transparent 65%);">
@@ -158,7 +158,7 @@
     <header class="py-4 px-4 sm:px-6 lg:px-8 max-w-7xl w-full mx-auto">
         <div class="glass-panel p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 sm:gap-4">
             
-            <!-- Brand Title & Logo (Left-aligned & Larger on Mobile) -->
+            <!-- Brand Title & Logo -->
             <div class="flex items-center gap-3 w-full md:w-auto min-w-0 justify-start">
                 <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-900 flex items-center justify-center flex-shrink-0 shadow-md p-2">
                     <img src="images/gazmen-36x36.svg" alt="Logo Gazebo Mengaji" class="w-full h-full object-contain">
@@ -171,7 +171,7 @@
                 </div>
             </div>
 
-            <!-- Date & Hijri Calendar Header Badge (Horizontal on Desktop/iPad, Neat on Mobile) -->
+            <!-- Date & Hijri Calendar Header Badge -->
             <div class="flex items-center justify-between md:justify-end gap-3 w-full md:w-auto border-t md:border-t-0 pt-3 md:pt-0 border-slate-200/80">
                 <div class="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2 text-xs font-bold text-slate-700 text-left md:text-right">
                     <div class="flex items-center gap-1.5 flex-wrap">
@@ -236,7 +236,7 @@
                 </div>
             </div>
 
-            <!-- Net Balance (Dominant Emerald Balance Focus Card) -->
+            <!-- Net Balance Card -->
             <div class="glass-panel p-5 flex flex-col justify-between relative overflow-hidden border-2 border-emerald-500/80 bg-gradient-to-br from-emerald-600 via-emerald-600 to-teal-700 text-white shadow-lg shadow-emerald-600/20 group rounded-2xl">
                 <div class="flex items-center justify-between relative z-10">
                     <span class="text-[11px] font-black uppercase tracking-wider text-emerald-100">Saldo Dana Saat Ini</span>
@@ -282,7 +282,7 @@
                     <p class="text-xs text-slate-500 mt-0.5">Tingkatan porsi pengeluaran dari nominal terbesar hingga terkecil</p>
                 </div>
 
-                <!-- Date Filter Controls specifically for Chart -->
+                <!-- Date Filter Controls for Chart -->
                 <div class="flex flex-wrap items-center gap-2">
                     <div class="flex items-center gap-1.5 bg-white/80 border border-slate-200/80 px-2 py-1 rounded-xl shadow-xs">
                         <i class="fa-solid fa-calendar-days text-emerald-600 text-xs"></i>
@@ -356,7 +356,7 @@
                     </div>
                 </div>
 
-                <!-- Unified Date Range Filter Box (No More Colliding Boxes on Mobile) -->
+                <!-- Unified Date Range Filter Box -->
                 <div class="col-span-2 sm:col-span-3 lg:col-span-2 min-w-0">
                     <label class="text-[10px] uppercase font-black tracking-wider text-slate-500 flex items-center gap-1 mb-1">
                         <i class="fa-regular fa-calendar-days text-emerald-600 text-[11px]"></i>
@@ -518,7 +518,7 @@
         </div>
     </div>
 
-    <!-- Image / Document Modal (Di-update untuk mendukung preview Google Drive) -->
+    <!-- Image / Document Modal -->
     <div id="imageModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel max-w-2xl w-full p-5 space-y-3">
             <div class="flex items-center justify-between border-b border-slate-200/80 pb-2">
@@ -588,7 +588,7 @@
         function updateLiveTimeAndHijri() {
             const now = new Date();
             
-            // Format Masehi Date & Time (e.g., 8 September 2026)
+            // Format Masehi Date & Time
             const masehiFormatted = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
             const timeFormatted = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
             
@@ -610,8 +610,6 @@
                     year: 'numeric'
                 });
                 let hijriStr = hijriFormatter.format(now);
-                
-                // Clean up any existing trailing 'H' or 'AH' generated by browser locale to avoid double "H H"
                 hijriStr = hijriStr.replace(/\s*(AH|H)\s*$/i, '').trim();
 
                 const hijriEl = document.getElementById('headerHijriDate');
@@ -621,6 +619,77 @@
             } catch (e) {
                 console.warn('Hijri date formatting fallback', e);
             }
+        }
+
+        // Comprehensive Date Parser that handles Indonesian Month Names, ISO, DD/MM/YYYY, etc.
+        function parseNormalizedDate(dateStr) {
+            if (!dateStr) return 0;
+            const cleanStr = String(dateStr).trim();
+            if (!cleanStr) return 0;
+
+            // 1. Match DD/MM/YYYY, DD-MM-YYYY, or DD.MM.YYYY (with optional HH:MM:SS)
+            const ddmmyyyy = cleanStr.match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?/);
+            if (ddmmyyyy) {
+                let day = parseInt(ddmmyyyy[1], 10);
+                let month = parseInt(ddmmyyyy[2], 10) - 1;
+                let year = parseInt(ddmmyyyy[3], 10);
+                if (year < 100) year += 2000;
+                let hour = ddmmyyyy[4] ? parseInt(ddmmyyyy[4], 10) : 0;
+                let min = ddmmyyyy[5] ? parseInt(ddmmyyyy[5], 10) : 0;
+                let sec = ddmmyyyy[6] ? parseInt(ddmmyyyy[6], 10) : 0;
+                
+                if (month >= 0 && month <= 11 && day >= 1 && day <= 31) {
+                    const dt = new Date(year, month, day, hour, min, sec);
+                    if (!isNaN(dt.getTime())) return dt.getTime();
+                }
+            }
+
+            // 2. Match YYYY-MM-DD or YYYY/MM/DD
+            const yyyymmdd = cleanStr.match(/^(\d{4})[\/\-\.](\d{1,2})[\/\-\.](\d{1,2})/);
+            if (yyyymmdd) {
+                let year = parseInt(yyyymmdd[1], 10);
+                let month = parseInt(yyyymmdd[2], 10) - 1;
+                let day = parseInt(yyyymmdd[3], 10);
+                if (month >= 0 && month <= 11 && day >= 1 && day <= 31) {
+                    const dt = new Date(year, month, day);
+                    if (!isNaN(dt.getTime())) return dt.getTime();
+                }
+            }
+
+            // 3. Map Indonesian Month Names to English for JS Date.parse
+            const indoMonths = {
+                'januari': 'january', 'jan': 'jan',
+                'februari': 'february', 'feb': 'feb',
+                'maret': 'march', 'mar': 'mar',
+                'april': 'april', 'apr': 'apr',
+                'mei': 'may',
+                'juni': 'june', 'jun': 'jun',
+                'juli': 'july', 'jul': 'jul',
+                'agustus': 'august', 'agu': 'aug', 'agt': 'aug',
+                'september': 'september', 'sep': 'sep',
+                'oktober': 'october', 'okt': 'oct',
+                'november': 'november', 'nov': 'nov',
+                'desember': 'december', 'des': 'dec'
+            };
+
+            let lower = cleanStr.toLowerCase();
+            let engStr = lower;
+            Object.keys(indoMonths).forEach(m => {
+                const regex = new RegExp('\\b' + m + '\\b', 'gi');
+                engStr = engStr.replace(regex, indoMonths[m]);
+            });
+
+            let parsedMs = Date.parse(engStr);
+            if (!isNaN(parsedMs)) {
+                return parsedMs;
+            }
+
+            parsedMs = Date.parse(cleanStr);
+            if (!isNaN(parsedMs)) {
+                return parsedMs;
+            }
+
+            return 0;
         }
 
         // Fetch CSV from Google Sheets with PapaParse
@@ -749,6 +818,9 @@
             const type = typeFilter ? typeFilter.value : 'ALL';
             const category = categoryFilter ? categoryFilter.value : 'ALL';
 
+            const filterStartMs = startDate ? parseNormalizedDate(startDate) : 0;
+            const filterEndMs = endDate ? parseNormalizedDate(endDate) + (24 * 60 * 60 * 1000 - 1) : Infinity;
+
             state.filteredTransactions = state.transactions.filter(item => {
                 const matchesSearch = (item.keterangan || '').toLowerCase().includes(search) || 
                                       (item.nama || '').toLowerCase().includes(search) || 
@@ -757,15 +829,22 @@
                 const matchesType = (type === 'ALL') || (item.jenis === type);
                 const matchesCategory = (category === 'ALL') || (item.kategori === category);
 
-                const matchesStartDate = !startDate || item.tanggal >= startDate;
-                const matchesEndDate = !endDate || item.tanggal <= endDate;
+                const itemMs = parseNormalizedDate(item.tanggal);
+                const matchesStartDate = !startDate || (itemMs >= filterStartMs);
+                const matchesEndDate = !endDate || (itemMs <= filterEndMs);
 
                 return matchesSearch && matchesType && matchesCategory && matchesStartDate && matchesEndDate;
             });
 
-            // Urutkan transaksi dari tanggal terbaru ke paling lama (Newest First)
+            // Urutkan transaksi dari tanggal terbaru ke paling lama (Strict Newest First)
+            // Jika tanggal sama, urutkan berdasarkan ID transaksi terbesar (yang diinput belakangan)
             state.filteredTransactions.sort((a, b) => {
-                return new Date(b.tanggal) - new Date(a.tanggal);
+                const timeA = parseNormalizedDate(a.tanggal);
+                const timeB = parseNormalizedDate(b.tanggal);
+                if (timeB !== timeA) {
+                    return timeB - timeA; // Positive means b (newer) comes before a
+                }
+                return (b.id || 0) - (a.id || 0);
             });
 
             state.currentPage = 1;
@@ -936,7 +1015,7 @@
                 recordCount.innerText = `Menampilkan ${startIdx + 1}–${endIdx} dari ${totalItems} transaksi`;
             }
 
-            // Render Pagination
+            // Render Pagination Controls
             if (paginationEl) {
                 let pButtons = '';
                 const prevDisabled = state.currentPage === 1;
@@ -1029,10 +1108,12 @@
             let filteredOutflows = state.transactions.filter(t => t.jenis === 'OUTFLOW');
 
             if (preset !== 'ALL' || startDate || endDate) {
+                const startMs = startDate ? parseNormalizedDate(startDate) : 0;
+                const endMs = endDate ? parseNormalizedDate(endDate) + (24 * 60 * 60 * 1000 - 1) : Infinity;
+
                 filteredOutflows = filteredOutflows.filter(t => {
-                    const matchesStart = !startDate || t.tanggal >= startDate;
-                    const matchesEnd = !endDate || t.tanggal <= endDate;
-                    return matchesStart && matchesEnd;
+                    const itemMs = parseNormalizedDate(t.tanggal);
+                    return itemMs >= startMs && itemMs <= endMs;
                 });
             }
 
@@ -1169,7 +1250,6 @@
             let url = rawUrl.trim();
             let fileId = '';
 
-            // Ekstrak File ID dari berbagai format link Google Drive
             const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
             if (match && match[1]) {
                 fileId = match[1];
@@ -1202,13 +1282,11 @@
             proofTitle.innerText = `Nota: ${item.kategori || 'Bukti Transaksi'}`;
             proofExtLink.href = drive.originalUrl;
 
-            // Cek apakah link berasal dari Google Drive
             if (item.bukti.includes('drive.google.com')) {
                 proofImg.classList.add('hidden');
                 proofIframe.src = drive.embedUrl;
                 proofIframe.classList.remove('hidden');
             } else {
-                // Untuk URL gambar biasa / direct image
                 proofIframe.classList.add('hidden');
                 proofIframe.src = '';
                 proofImg.src = drive.directImageUrl;
@@ -1220,7 +1298,7 @@
 
         function closeImageModal() {
             const proofIframe = document.getElementById('proofIframe');
-            if (proofIframe) proofIframe.src = ''; // reset iframe saat ditutup
+            if (proofIframe) proofIframe.src = '';
             document.getElementById('imageModal').classList.add('hidden');
         }
 
@@ -1400,8 +1478,9 @@
 
         function formatDate(dateStr) {
             if (!dateStr) return '-';
-            const d = new Date(dateStr);
-            if (isNaN(d.getTime())) return dateStr;
+            const parsedMs = parseNormalizedDate(dateStr);
+            if (parsedMs === 0) return dateStr;
+            const d = new Date(parsedMs);
             return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
         }
 
