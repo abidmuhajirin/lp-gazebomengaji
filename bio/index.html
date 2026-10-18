@@ -441,12 +441,13 @@
                 <header className="px-5 pt-5 pb-3 bg-[#F6F6F4] flex items-center justify-between shrink-0 z-10">
                   <div className="flex items-center gap-2.5">
 
-                    <div
-                      className="w-10 h-10 rounded-full bg-[#C5FF28] text-black font-black text-sm flex items-center justify-center shadow-xs shrink-0"
-                    >
-                      <!-- SVG Putih di Light Mode (karena kotak hitam), Hitam di Dark Mode (karena kotak putih) -->
-        <img src="images/gazmen-36x36.svg" alt="Logo Gazebo Mengaji" class="w-full h-full object-contain invert dark:invert-0">
-                    </div>
+                    <div className="w-10 h-10 rounded-full bg-[#000000] flex items-center justify-center shadow-xs shrink-0 overflow-hidden p-1.5">
+  <img
+    src="images/gazmen-36x36.svg"
+    alt="Logo Gazebo Mengaji"
+    className="w-full h-full object-contain"
+  />
+</div>
 
                     <div className="text-left">
                       {visitorName && (
