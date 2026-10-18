@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕌</text></svg>" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Gazebo Mengaji - Bio Link</title>
 
     <!-- Tailwind CSS (CDN) -->
@@ -14,6 +14,10 @@
     <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
 
     <style>
+      html, body { height: 100%; margin: 0; overflow: hidden; }
+      .app-shell { height: 100vh; height: 100dvh; }
+      @media (min-width: 640px) { .app-shell { height: 840px; } }
+      .nav-safe { padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px)); }
       @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
       @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
       .animate-in { animation: fadeIn 250ms ease-out both; }
@@ -86,6 +90,10 @@
 
         // Masukkan ID Google Spreadsheet Anda di sini
         spreadsheetId: "1fJnk6Xp8Vf8_XEnKrRk4xHNQKJAavRmp14kCQmnywSQ",
+
+        // Tab yang dibaca: isi angka 1 (tab pertama, apa pun namanya)
+        // atau tulis nama tab persis, contoh: "Jadwal Kajian"
+        sheetTab: "BIO KAJIAN",
 
         jadwalKajianDefault: [
           {
@@ -208,7 +216,7 @@
             return;
           }
 
-          const apiUrl = `https://opensheet.elk.sh/${GAZEBO_CONFIG.spreadsheetId}/Sheet1`;
+          const apiUrl = `https://opensheet.elk.sh/${GAZEBO_CONFIG.spreadsheetId}/${encodeURIComponent(GAZEBO_CONFIG.sheetTab)}`;
 
           fetch(apiUrl)
             .then((res) => res.json())
@@ -375,7 +383,7 @@
             `}</style>
 
             {/* Mobile Canvas Container */}
-            <div className="w-full max-w-[420px] h-[100vh] sm:h-[840px] bg-[#F6F6F4] sm:rounded-[44px] shadow-2xl overflow-hidden flex flex-col relative border border-white/10">
+            <div className="w-full max-w-[420px] app-shell bg-[#F6F6F4] sm:rounded-[44px] shadow-2xl overflow-hidden flex flex-col relative border border-white/10">
 
               {/* HEADER (Home Tab) */}
               {activeTab === 'home' && (
@@ -383,12 +391,7 @@
                   <div className="flex items-center gap-2.5">
 
                     <div
-                      onClick={() => {
-                        setTempInputName(visitorName);
-                        setIsNameModalOpen(true);
-                      }}
-                      className="w-10 h-10 rounded-full bg-[#C5FF28] text-black font-black text-sm flex items-center justify-center shadow-xs shrink-0 cursor-pointer hover:scale-105 transition-transform"
-                      title="Atur Nama Pengunjung"
+                      className="w-10 h-10 rounded-full bg-[#C5FF28] text-black font-black text-sm flex items-center justify-center shadow-xs shrink-0"
                     >
                       GM
                     </div>
@@ -854,7 +857,7 @@
               </div>
 
               {/* BOTTOM NAVIGATION */}
-              <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-[#F6F6F4] via-[#F6F6F4]/95 to-transparent z-20">
+              <div className="absolute bottom-0 left-0 right-0 p-3 nav-safe bg-gradient-to-t from-[#F6F6F4] via-[#F6F6F4]/95 to-transparent z-20">
                 <div className="bg-black border border-neutral-800 rounded-full p-1.5 shadow-xl flex items-center justify-around text-white">
                   {[
                     { key: 'home', label: 'Home', Icon: Home },
