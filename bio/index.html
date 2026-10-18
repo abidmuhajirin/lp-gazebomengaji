@@ -10,7 +10,7 @@
   </head>
   <body class="bg-[#111111] text-white">
     <div id="root"></div>
-    <!-- Path src harus diawali dengan garis miring '/' agar Vite mengenali modul saat build -->
-    <script type="module" src="/src/main.jsx"></script>
+    <!-- Path src menggunakan relatif './' agar kompatibel dengan subfolder /bio/ -->
+    <script type="module" src="./src/main.jsx"></script>
   </body>
 </html>
