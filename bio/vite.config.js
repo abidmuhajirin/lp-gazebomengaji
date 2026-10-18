@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
+// Relative base path './' menjamin semua asset JS/CSS terbaca sempurna di /bio/
 export default defineConfig({
   plugins: [react()],
-  base: './', // Memastikan path file JS/CSS menggunakan relatif URL untuk subfolder /bio/
+  base: './',
 });
