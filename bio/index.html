@@ -188,6 +188,15 @@
 
       const QRIS_DATA = "00020101021126580014ID.GO.QRIS.WWW01189360091400000000000215ID10265070408830303UMI51440014ID.LINKAJA.WWW01189360091400000000000215ID10265070408830303UMI5204581253033605802ID5914GAZEBO%20MENGAJI6010YOGYAKARTA61055511162070703A016304C0A2";
 
+      // Ubah link Google Drive (…/file/d/ID/view atau …?id=ID) jadi link gambar langsung
+      const toDirectImage = (url) => {
+        if (!url || typeof url !== 'string') return url;
+        const u = url.trim();
+        if (!u.includes('drive.google.com') && !u.includes('docs.google.com')) return u;
+        const m = u.match(/\/d\/([a-zA-Z0-9_-]+)/) || u.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        return m ? `https://lh3.googleusercontent.com/d/${m[1]}=w1000` : u;
+      };
+
       function App() {
         const [activeTab, setActiveTab] = useState('home');
         const [visitorName, setVisitorName] = useState('');
@@ -225,7 +234,7 @@
                 const formatted = data.map((row, idx) => ({
                   id: idx + 1,
                   status: row.status || row.A || (idx === 0 ? "KAJIAN MENDATANG" : "JADWAL KAJIAN"),
-                  posterImage: row.posterImage || row.B || GAZEBO_CONFIG.jadwalKajianDefault[0].posterImage,
+                  posterImage: toDirectImage(row.posterImage || row.B || GAZEBO_CONFIG.jadwalKajianDefault[0].posterImage),
                   speaker: row.speaker || row.C || "Pemateri",
                   title: row.title || row.E || "Kajian Rutin",
                   link: row.link || row.D || GAZEBO_CONFIG.youtubeUrl
