@@ -42,10 +42,10 @@ const GAZEBO_CONFIG = {
   qrisNmid: "ID1026507040883",
   qrisOwner: "GAZEBO MENGAJI",
 
-  // Masukkan ID Google Spreadsheet Anda di sini jika sudah ada
+  // Masukkan ID Google Spreadsheet Anda di sini
   spreadsheetId: "ID_SPREADSHEET_ANDA", 
 
-  // Daftar Poster default sebelum dihubungkan ke Google Spreadsheet
+  // Daftar Poster default (6 Poster Visual)
   jadwalKajianDefault: [
     {
       id: 1,
@@ -149,7 +149,7 @@ export default function App() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [posterPreview, setPosterPreview] = useState(null);
   
-  // State Dynamic dari Spreadsheet (Default: 6 Gambar Poster Visual Lengkap)
+  // State Dynamic dari Google Spreadsheet
   const [jadwalKajian, setJadwalKajian] = useState(GAZEBO_CONFIG.jadwalKajianDefault);
 
   // Pop Up Form Donatur Tetap
@@ -161,7 +161,7 @@ export default function App() {
     isAgreed: false
   });
 
-  // Integrasi Otomatis Google Spreadsheet via OpenSheet (Jika spreadsheetId diisi)
+  // Integrasi Otomatis Google Spreadsheet via OpenSheet
   useEffect(() => {
     if (!GAZEBO_CONFIG.spreadsheetId || GAZEBO_CONFIG.spreadsheetId === "ID_SPREADSHEET_ANDA") {
       return;
@@ -210,12 +210,13 @@ export default function App() {
   useEffect(() => {
     if (activeTab !== 'kajian') return;
 
+    const listLength = (jadwalKajian && jadwalKajian.length) || 1;
     const interval = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % jadwalKajian.length);
+      setActiveSlide((prev) => (prev + 1) % listLength);
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [activeTab, jadwalKajian.length]);
+  }, [activeTab, jadwalKajian]);
 
   const triggerToast = (msg) => {
     setToastMessage(msg);
@@ -297,16 +298,18 @@ export default function App() {
     triggerToast("Membuka poster...");
   };
 
+  const slideList = (jadwalKajian && jadwalKajian.length > 0) ? jadwalKajian : GAZEBO_CONFIG.jadwalKajianDefault;
+
   const nextSlide = () => {
-    setActiveSlide((prev) => (prev + 1) % jadwalKajian.length);
+    setActiveSlide((prev) => (prev + 1) % slideList.length);
   };
 
   const prevSlide = () => {
-    setActiveSlide((prev) => (prev - 1 + jadwalKajian.length) % jadwalKajian.length);
+    setActiveSlide((prev) => (prev - 1 + slideList.length) % slideList.length);
   };
 
-  // Kajian Mendatang (Baris Pertama / Index 0)
-  const kajianMendatang = jadwalKajian[0] || GAZEBO_CONFIG.jadwalKajianDefault[0];
+  // Kajian Mendatang (Null Safe)
+  const kajianMendatang = slideList[0] || GAZEBO_CONFIG.jadwalKajianDefault[0];
 
   return (
     <div className="min-h-screen bg-[#111111] flex items-center justify-center p-0 sm:p-4 font-sans text-black antialiased selection:bg-[#C5FF28] selection:text-black">
@@ -590,13 +593,13 @@ export default function App() {
             </div>
           )}
 
-          {/* TAB 2: KAJIAN (Instagram Story View) */}
+          {}
           {activeTab === 'kajian' && (
             <div className="h-full flex flex-col justify-between items-center animate-in fade-in duration-300">
               
               {/* Main Full-Height 9:16 Instagram Story Card */}
               <div className="w-full flex-1 flex flex-col justify-between relative">
-                {jadwalKajian.map((kj, index) => {
+                {slideList.map((kj, index) => {
                   if (index !== activeSlide) return null;
                   
                   return (
@@ -621,7 +624,7 @@ export default function App() {
                         
                         {/* Instagram Progress Bars */}
                         <div className="flex gap-1.5 mb-2.5">
-                          {jadwalKajian.map((_, i) => (
+                          {slideList.map((_, i) => (
                             <button
                               key={i}
                               onClick={() => setActiveSlide(i)}
@@ -704,7 +707,7 @@ export default function App() {
 
               {/* Bullet Dots Slide Indicators */}
               <div className="flex items-center justify-center gap-2 pt-2.5 pb-1 shrink-0 z-10">
-                {jadwalKajian.map((_, i) => (
+                {slideList.map((_, i) => (
                   <button
                     key={i}
                     onClick={() => setActiveSlide(i)}
@@ -720,7 +723,7 @@ export default function App() {
             </div>
           )}
 
-          {/* TAB 3: DONASI */}
+          {}
           {activeTab === 'donasi' && (
             <div className="space-y-3.5 animate-in fade-in duration-300">
               
@@ -819,7 +822,7 @@ export default function App() {
             </div>
           )}
 
-          {/* TAB 4: KEGIATAN */}
+          {}
           {activeTab === 'kegiatan' && (
             <div className="space-y-3.5 animate-in fade-in duration-300">
               
@@ -945,6 +948,7 @@ export default function App() {
           </div>
         </div>
 
+        {}
         {/* POP UP MODAL GABUNG GRUP WA (IKHWAN & AKHWAT) */}
         {isWaGroupModalOpen && (
           <div className="absolute inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
