@@ -2,19 +2,10 @@
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕌</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gazebo Mengaji - Bio Link</title>
 
-    <!-- Mobile Web App & Home Screen Icon Tags -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Gazebo Mengaji">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#f1f5f9">
-
-<!-- App Icon (Ganti link URL di bawah dengan URL logo Gazebo Mengaji Anda) -->
-<link rel="apple-touch-icon" sizes="180x180" href="images/icon180-gazmen.png">
-<link rel="icon" type="image/png" sizes="192x192" href="images/icon192-gazmen.png">
     <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React 18 + Babel (dikompilasi langsung di browser, tanpa build/Vercel) -->
@@ -23,14 +14,9 @@
     <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
 
     <style>
-      html, body { height: 100%; margin: 0; overflow: hidden; }
-      /* Mobile: menempel ke layar yang benar-benar terlihat (aman untuk Safari iPhone dengan tab bar di bawah) */
-      .app-shell { position: fixed; top: 0; left: 0; right: 0; bottom: 0; margin: 0 auto; }
-      /* Desktop: tampil sebagai kartu ponsel di tengah */
-      @media (min-width: 640px) {
-        .app-shell { position: relative; top: auto; left: auto; right: auto; bottom: auto; height: 840px; }
-      }
-      .nav-safe { padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px)); }
+      /* Tampilan default awal: tinggi 100vh di HP, kartu 840px di desktop */
+      .app-shell { height: 100vh; }
+      @media (min-width: 640px) { .app-shell { height: 840px; } }
       @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
       @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
       .animate-in { animation: fadeIn 250ms ease-out both; }
@@ -877,7 +863,7 @@
               </div>
 
               {/* BOTTOM NAVIGATION */}
-              <div className="absolute bottom-0 left-0 right-0 p-3 nav-safe bg-gradient-to-t from-[#F6F6F4] via-[#F6F6F4]/95 to-transparent z-20">
+              <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-[#F6F6F4] via-[#F6F6F4]/95 to-transparent z-20">
                 <div className="bg-black border border-neutral-800 rounded-full p-1.5 shadow-xl flex items-center justify-around text-white">
                   {[
                     { key: 'home', label: 'Home', Icon: Home },
