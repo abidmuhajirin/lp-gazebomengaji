@@ -115,7 +115,7 @@
       <header class="sticky top-0 z-30 bg-[#eaecef]/90 backdrop-blur-md px-4 sm:px-8 py-3.5">
         <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
           
-          <!-- Left User Profile Pill (NO Assalamu'alaikum) -->
+          <!-- Left User Profile Pill -->
           <div class="flex items-center gap-2.5 bg-[#d9f99d] text-[#1a2e05] px-3.5 py-2 rounded-full shadow-xs border border-[#bef264]">
             <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-extrabold text-xs shadow-xs">
               {{ auth.user.name ? auth.user.name.charAt(0) : 'U' }}
@@ -128,13 +128,11 @@
 
           <!-- Right Quick Actions -->
           <div class="flex items-center gap-2">
-            <!-- Refresh Button -->
             <button @click="fetchQuestions" :disabled="isFetching" title="Muat Ulang Data"
               class="w-10 h-10 rounded-full bg-white hover:bg-slate-100 border border-slate-200/80 text-slate-800 flex items-center justify-center shadow-xs transition active:scale-95 disabled:opacity-50">
               <i data-lucide="refresh-cw" :class="isFetching ? 'animate-spin text-brand-700' : ''" class="w-4 h-4"></i>
             </button>
 
-            <!-- Logout Black Pill -->
             <button @click="handleLogout" title="Keluar"
               class="hidden sm:flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-black text-white rounded-full text-xs font-extrabold shadow-xs transition active:scale-95">
               <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
@@ -202,7 +200,6 @@
           <!-- 4 CARDS GRID -->
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             
-            <!-- Card 1: Total Pertanyaan -->
             <div class="bg-white p-5 rounded-3xl border border-slate-200/70 shadow-xs relative overflow-hidden flex flex-col justify-between h-36">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Total</span>
@@ -216,7 +213,6 @@
               </div>
             </div>
 
-            <!-- Card 2: Belum Dibaca -->
             <div @click="setTab('unread')" class="bg-white p-5 rounded-3xl border border-slate-200/70 shadow-xs relative overflow-hidden flex flex-col justify-between h-36 cursor-pointer hover:border-amber-300 transition active:scale-95">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-extrabold text-amber-700 uppercase tracking-wider">Belum Dibaca</span>
@@ -230,7 +226,6 @@
               </div>
             </div>
 
-            <!-- Card 3: Belum Dijawab -->
             <div @click="setTab('pending')" class="bg-white p-5 rounded-3xl border border-slate-200/70 shadow-xs relative overflow-hidden flex flex-col justify-between h-36 cursor-pointer hover:border-rose-300 transition active:scale-95">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-extrabold text-rose-700 uppercase tracking-wider">Belum Dijawab</span>
@@ -244,7 +239,6 @@
               </div>
             </div>
 
-            <!-- Card 4: Sudah Dijawab -->
             <div @click="setTab('answered')" class="bg-white p-5 rounded-3xl border border-slate-200/70 shadow-xs relative overflow-hidden flex flex-col justify-between h-36 cursor-pointer hover:border-emerald-300 transition active:scale-95">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-extrabold text-emerald-700 uppercase tracking-wider">Sudah Dijawab</span>
@@ -569,6 +563,7 @@
         const loginError = ref('');
         const isSubmittingLogin = ref(false);
 
+        // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
         const gasUrl = ref('https://script.google.com/macros/s/AKfycbzAzW2MZqNx6O6kNMq0VnZrWG6ed39TJEqZBYU-1US5awfP1hh3prCLsI8bX5s4p7Jw/exec');
 
         const questions = ref([]);
