@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Ustadz — Gazebo Mengaji</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Vue 3 CDN for reactive UI state -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              400: '#4ade80',
+              500: '#22c55e',
+              700: '#15803d',
+              800: '#166534',
+              900: '#0f392b',
+              950: '#071e16',
+            },
+            accent: {
+              lime: '#d9f99d',
+              limeDark: '#3f6212',
+              violet: '#e0e7ff',
+              violetDark: '#3730a3'
+            }
+          },
+          borderRadius: {
+            '2xl': '20px',
+            '3xl': '28px',
+            '4xl': '36px',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    [v-cloak] { display: none !important; }
+    body { background-color: #eaecef; color: #0f172a; }
+    
+    /* Smooth Transitions */
+    .fade-enter-active, .fade-leave-active { transition: opacity 0.2s ease, transform 0.2s ease; }
+    .fade-enter-from, .fade-leave-to { opacity: 0; transform: translateY(8px); }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    /* Hide scrollbar for horizontal tab sliding on mobile */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="font-sans antialiased bg-[#eaecef] min-h-screen text-slate-900 selection:bg-brand-100 selection:text-brand-900">
+
+  <div id="app" v-cloak>
+
+    <!-- ==================== VIEW 1: HALAMAN LOGIN ==================== -->
+    <div v-if="!auth.isAuthenticated" class="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-[#eaecef]">
+      <div class="max-w-md w-full bg-white rounded-4xl shadow-xl shadow-slate-300/40 border border-slate-200/60 p-7 sm:p-9 relative">
+        
+        <!-- Header Brand -->
+        <div class="text-center mb-8">
+          <div class="w-16 h-16 rounded-3xl bg-slate-900 text-white flex items-center justify-center mx-auto mb-4 shadow-lg shadow-slate-900/15">
+            <i data-lucide="shield-check" class="w-8 h-8 stroke-[2]"></i>
+          </div>
+          <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Dashboard Ustadz</h1>
+          <p class="text-xs text-slate-500 font-semibold mt-1">Gazebo Mengaji • Portal Pertanyaan</p>
+        </div>
+
+        <!-- Form Login -->
+        <form @submit.prevent="handleLogin" class="space-y-4">
+          <div>
+            <label class="block text-xs font-extrabold text-slate-700 mb-1.5 ml-1">Email Ustadz / Admin</label>
+            <input type="email" v-model="loginForm.email" required placeholder="ustadz@gazebomengaji.org"
+              class="w-full px-4 py-3.5 bg-slate-100/90 border border-transparent rounded-2xl text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-900/5 transition">
+          </div>
+
+          <div>
+            <label class="block text-xs font-extrabold text-slate-700 mb-1.5 ml-1">Kata Sandi</label>
+            <input type="password" v-model="loginForm.password" required placeholder="••••••••"
+              class="w-full px-4 py-3.5 bg-slate-100/90 border border-transparent rounded-2xl text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-900/5 transition">
+          </div>
+
+          <div v-if="loginError" class="bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-2xl p-3.5 flex items-start gap-2.5">
+            <i data-lucide="alert-circle" class="w-4 h-4 text-rose-500 flex-shrink-0 mt-0.5"></i>
+            <span>{{ loginError }}</span>
+          </div>
+
+          <button type="submit" :disabled="isSubmittingLogin"
+            class="w-full py-4 px-6 bg-slate-900 hover:bg-black text-white font-extrabold rounded-2xl text-sm shadow-xl shadow-slate-900/20 focus:outline-none focus:ring-4 focus:ring-slate-900/20 transition active:scale-[0.98] disabled:opacity-60 flex items-center justify-center gap-2">
+            <span v-if="!isSubmittingLogin">Masuk ke Dashboard</span>
+            <span v-else class="flex items-center gap-2">
+              <span class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
+              Memproses...
+            </span>
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+
+    <!-- ==================== VIEW 2: UTAMA DASHBOARD ==================== -->
+    <div v-else class="min-h-screen pb-12">
+
+      <!-- TOP USER BANNER -->
+      <header class="sticky top-0 z-30 bg-[#eaecef]/90 backdrop-blur-md px-4 sm:px-8 py-3.5">
+        <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
+          
+          <!-- Left User Profile Pill -->
+          <div class="flex items-center gap-2.5 bg-[#d9f99d] text-[#1a2e05] px-3.5 py-2 rounded-full shadow-xs border border-[#bef264]">
+            <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-extrabold text-xs shadow-xs">
+              {{ auth.user.name.charAt(0) }}
+            </div>
+            <div class="pr-1">
+              <h1 class="text-xs font-extrabold leading-tight text-[#1a2e05]">Assalamu'alaikum, {{ auth.user.name }}</h1>
+              <p class="text-[10px] font-bold text-[#3f6212]/80">Jadwal: {{ auth.user.schedule_id }} • Gazebo Mengaji</p>
+            </div>
+          </div>
+
+          <!-- Right Quick Actions -->
+          <div class="flex items-center gap-2">
+            <!-- Refresh Button -->
+            <button @click="fetchQuestions" :disabled="isFetching" title="Muat Ulang Data"
+              class="w-10 h-10 rounded-full bg-white hover:bg-slate-100 border border-slate-200/80 text-slate-800 flex items-center justify-center shadow-xs transition active:scale-95 disabled:opacity-50">
+              <i data-lucide="rotate-cw" class="w-4 h-4" :class="isFetching ? 'animate-spin text-brand-700' : ''"></i>
+            </button>
+
+            <!-- Logout Black Pill -->
+            <button @click="handleLogout" title="Keluar"
+              class="hidden sm:flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-black text-white rounded-full text-xs font-extrabold shadow-xs transition active:scale-95">
+              <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+              <span>Keluar</span>
+            </button>
+          </div>
+
+        </div>
+      </header>
+
+      <!-- MAIN CONTAINER -->
+      <main class="max-w-6xl mx-auto px-4 sm:px-8 mt-4 space-y-6">
+
+        <!-- HORIZONTAL SCROLLABLE TAB PILLS (MOBILE-OPTIMIZED NAV) -->
+        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+          <button @click="setTab('dashboard')" 
+            :class="activeTab === 'dashboard' ? 'bg-slate-900 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60'"
+            class="px-4 py-2.5 rounded-full text-xs font-extrabold whitespace-nowrap transition active:scale-95 flex items-center gap-2">
+            <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
+            <span>Ringkasan</span>
+          </button>
+
+          <button @click="setTab('all')" 
+            :class="activeTab === 'all' ? 'bg-slate-900 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60'"
+            class="px-4 py-2.5 rounded-full text-xs font-extrabold whitespace-nowrap transition active:scale-95 flex items-center gap-2">
+            <i data-lucide="inbox" class="w-3.5 h-3.5"></i>
+            <span>Semua Pertanyaan</span>
+            <span class="ml-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold" :class="activeTab === 'all' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-700'">{{ stats.total }}</span>
+          </button>
+
+          <button @click="setTab('unread')" 
+            :class="activeTab === 'unread' ? 'bg-slate-900 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60'"
+            class="px-4 py-2.5 rounded-full text-xs font-extrabold whitespace-nowrap transition active:scale-95 flex items-center gap-2">
+            <i data-lucide="mail-warning" class="w-3.5 h-3.5 text-amber-500"></i>
+            <span>Belum Dibaca</span>
+            <span v-if="stats.unread > 0" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400 text-amber-950">{{ stats.unread }}</span>
+          </button>
+
+          <button @click="setTab('pending')" 
+            :class="activeTab === 'pending' ? 'bg-slate-900 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60'"
+            class="px-4 py-2.5 rounded-full text-xs font-extrabold whitespace-nowrap transition active:scale-95 flex items-center gap-2">
+            <i data-lucide="clock" class="w-3.5 h-3.5 text-rose-500"></i>
+            <span>Belum Dijawab</span>
+            <span v-if="stats.pending > 0" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-500 text-white">{{ stats.pending }}</span>
+          </button>
+
+          <button @click="setTab('answered')" 
+            :class="activeTab === 'answered' ? 'bg-slate-900 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60'"
+            class="px-4 py-2.5 rounded-full text-xs font-extrabold whitespace-nowrap transition active:scale-95 flex items-center gap-2">
+            <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-500"></i>
+            <span>Sudah Dijawab</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-700">{{ stats.answered }}</span>
+          </button>
+
+          <button @click="handleLogout" class="sm:hidden px-4 py-2.5 rounded-full text-xs font-extrabold bg-rose-100 text-rose-800 border border-rose-200 whitespace-nowrap flex items-center gap-1.5 ml-auto">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+            <span>Keluar</span>
+          </button>
+        </div>
+
+
+        <!-- ================= TAB CONTENT 1: RINGKASAN DASHBOARD ================= -->
+        <div v-if="activeTab === 'dashboard'" class="space-y-6">
+
+          <!-- 4 CARDS GRID (INSPIRED BY SMART DASHBOARD GRID CARDS IN REFERENCE IMAGE) -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            
+            <!-- Card 1: Total Pertanyaan -->
+            <div class="bg-white p-5 rounded-3xl border border-slate-200/70 shadow-xs relative overflow-hidden flex flex-col justify-between h-36">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Total</span>
+                <div class="w-9 h-9 rounded-full bg-slate-100 text-slate-800 flex items-center justify-center">
+                  <i data-lucide="inbox" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div>
+                <div class="text-3xl font-extrabold text-slate-900">{{ stats.total }}</div>
+                <p class="text-[11px] text-slate-400 font-semibold mt-0.5">Semua data tersimpan</p>
+              </div>
+            </div>
+
+            <!-- Card 2: Belum Dibaca -->
+            <div @click="setTab('unread')" class="bg-white p-5 rounded-3xl border border-slate-200/70 shadow-xs relative overflow-hidden flex flex-col justify-between h-36 cursor-pointer hover:border-amber-300 transition active:scale-95">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-extrabold text-amber-700 uppercase tracking-wider">Belum Dibaca</span>
+                <div class="w-9 h-9 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center">
+                  <i data-lucide="mail-warning" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div>
+                <div class="text-3xl font-extrabold text-slate-900">{{ stats.unread }}</div>
+                <p class="text-[11px] text-amber-600 font-bold mt-0.5">Perlu ditinjau</p>
+              </div>
+            </div>
+
+            <!-- Card 3: Belum Dijawab -->
+            <div @click="setTab('pending')" class="bg-white p-5 rounded-3xl border border-slate-200/70 shadow-xs relative overflow-hidden flex flex-col justify-between h-36 cursor-pointer hover:border-rose-300 transition active:scale-95">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-extrabold text-rose-700 uppercase tracking-wider">Belum Dijawab</span>
+                <div class="w-9 h-9 rounded-full bg-rose-100 text-rose-800 flex items-center justify-center">
+                  <i data-lucide="help-circle" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div>
+                <div class="text-3xl font-extrabold text-slate-900">{{ stats.pending }}</div>
+                <p class="text-[11px] text-rose-600 font-bold mt-0.5">Menunggu respon ustadz</p>
+              </div>
+            </div>
+
+            <!-- Card 4: Sudah Dijawab -->
+            <div @click="setTab('answered')" class="bg-white p-5 rounded-3xl border border-slate-200/70 shadow-xs relative overflow-hidden flex flex-col justify-between h-36 cursor-pointer hover:border-emerald-300 transition active:scale-95">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-extrabold text-emerald-700 uppercase tracking-wider">Sudah Dijawab</span>
+                <div class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center">
+                  <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div>
+                <div class="text-3xl font-extrabold text-slate-900">{{ stats.answered }}</div>
+                <p class="text-[11px] text-emerald-700 font-bold mt-0.5">Telah dijawab ustadz</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- SECTION PERTANYAAN TERBARU (LIST LAYOUT INSPIRED BY REFERENCE ITEM LISTS) -->
+          <div class="bg-white rounded-3xl border border-slate-200/70 p-5 sm:p-7 shadow-xs">
+            <div class="flex items-center justify-between mb-5">
+              <div>
+                <h3 class="text-base font-extrabold text-slate-900">Pertanyaan Terbaru</h3>
+                <p class="text-xs text-slate-400 font-semibold">5 pertanyaan paling akhir masuk</p>
+              </div>
+              <button @click="setTab('all')" class="w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-black transition active:scale-95" title="Lihat Semua">
+                <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <!-- List Terbaru dengan Soft Pill Containers -->
+            <div v-if="recentQuestions.length > 0" class="space-y-3">
+              <div v-for="q in recentQuestions" :key="q.id" 
+                @click="openDetail(q)"
+                class="p-4 rounded-2xl bg-slate-100/70 hover:bg-slate-100 border border-slate-200/50 transition cursor-pointer flex items-center justify-between gap-3 group">
+                
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xs font-extrabold text-slate-900 truncate">{{ q.nama }}</span>
+                    <span class="text-[10px] text-slate-400 font-medium">• {{ formatDate(q.timestamp) }}</span>
+                  </div>
+                  <p class="text-xs text-slate-600 font-medium line-clamp-1 leading-relaxed">{{ q.pertanyaan }}</p>
+                </div>
+
+                <div class="flex items-center gap-2 flex-shrink-0">
+                  <!-- Badge Answer Status -->
+                  <span :class="getAnswerBadgeClass(q.answer_status)" class="text-[10px] px-2.5 py-1 rounded-full font-extrabold hidden sm:inline-block">
+                    {{ getAnswerLabel(q.answer_status) }}
+                  </span>
+
+                  <!-- Circular Arrow Button (Directly Matching Reference UI List Arrow) -->
+                  <div class="w-8 h-8 rounded-full bg-white text-slate-800 border border-slate-200/80 flex items-center justify-center group-hover:bg-slate-900 group-hover:text-white transition">
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div v-else class="py-12 text-center">
+              <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
+                <i data-lucide="inbox" class="w-6 h-6"></i>
+              </div>
+              <p class="text-xs font-extrabold text-slate-800">Belum Ada Pertanyaan</p>
+              <p class="text-[11px] text-slate-400 font-medium mt-0.5">Pertanyaan jamaah akan otomatis muncul di sini.</p>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ================= TAB CONTENT 2: LIST PERTANYAAN FULL ================= -->
+        <div v-else class="space-y-4">
+          
+          <!-- SEARCH & FILTER BAR -->
+          <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/70 shadow-xs space-y-3 sm:space-y-0 sm:flex sm:items-center sm:gap-3">
+            
+            <!-- Search Input Pill -->
+            <div class="relative flex-1">
+              <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-3.5"></i>
+              <input type="text" v-model="searchQuery" placeholder="Cari nama atau isi pertanyaan..."
+                class="w-full pl-10 pr-4 py-2.5 bg-slate-100/80 border border-transparent rounded-full text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-slate-300 focus:outline-none transition">
+            </div>
+
+            <!-- Filter Dropdowns Pill -->
+            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar">
+              <select v-model="filterAnswerStatus" class="px-3.5 py-2.5 bg-slate-100/80 border border-transparent rounded-full text-xs text-slate-800 font-extrabold focus:bg-white focus:outline-none">
+                <option value="ALL">Semua Status Jawaban</option>
+                <option value="PENDING">Belum Dijawab</option>
+                <option value="ANSWERED">Sudah Dijawab</option>
+                <option value="NOT_ANSWERED">Belum Sempat</option>
+              </select>
+
+              <select v-model="filterReadStatus" class="px-3.5 py-2.5 bg-slate-100/80 border border-transparent rounded-full text-xs text-slate-800 font-extrabold focus:bg-white focus:outline-none">
+                <option value="ALL">Semua Status Baca</option>
+                <option value="UNREAD">Belum Dibaca</option>
+                <option value="READ">Sudah Dibaca</option>
+              </select>
+
+              <select v-model="sortBy" class="px-3.5 py-2.5 bg-slate-100/80 border border-transparent rounded-full text-xs text-slate-800 font-extrabold focus:bg-white focus:outline-none">
+                <option value="NEWEST">Terbaru</option>
+                <option value="OLDEST">Terlama</option>
+                <option value="PENDING_FIRST">Belum Dijawab Dulu</option>
+              </select>
+            </div>
+
+          </div>
+
+          <!-- LIST OF CARDS (MOBILE & DESKTOP UNIFIED CLEAN LIST) -->
+          <div class="bg-white rounded-3xl border border-slate-200/70 shadow-xs overflow-hidden">
+            
+            <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between text-xs text-slate-500 font-semibold">
+              <span>Menampilkan {{ paginatedQuestions.length }} dari {{ filteredQuestions.length }} pertanyaan</span>
+            </div>
+
+            <!-- Mobile & Desktop List Items -->
+            <div class="divide-y divide-slate-100">
+              <div v-for="q in paginatedQuestions" :key="q.id" 
+                @click="openDetail(q)"
+                class="p-4 sm:p-5 hover:bg-slate-50/80 transition cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                :class="q.read_status === 'UNREAD' ? 'bg-amber-50/30' : ''">
+                
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xs sm:text-sm font-extrabold text-slate-900">{{ q.nama }}</span>
+                    <span class="text-[10px] text-slate-400 font-medium">• {{ formatDate(q.timestamp) }}</span>
+                    <span v-if="q.read_status === 'UNREAD'" class="text-[9px] bg-amber-400 text-amber-950 font-extrabold px-2 py-0.5 rounded-full uppercase">Baru</span>
+                  </div>
+                  <p class="text-xs sm:text-sm text-slate-700 line-clamp-2 leading-relaxed font-medium">{{ q.pertanyaan }}</p>
+                </div>
+
+                <div class="flex items-center justify-between sm:justify-end gap-3 flex-shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100/60">
+                  <span :class="getAnswerBadgeClass(q.answer_status)" class="text-[10px] px-3 py-1 rounded-full font-extrabold">
+                    {{ getAnswerLabel(q.answer_status) }}
+                  </span>
+
+                  <!-- Circular Arrow Icon -->
+                  <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-700 group-hover:bg-slate-900 group-hover:text-white flex items-center justify-center transition">
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div v-if="filteredQuestions.length === 0" class="py-16 text-center">
+              <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
+                <i data-lucide="search-x" class="w-6 h-6"></i>
+              </div>
+              <p class="text-xs font-extrabold text-slate-800">Pertanyaan Tidak Ditemukan</p>
+              <p class="text-[11px] text-slate-400 font-medium mt-1">Sesuaikan kata kunci atau filter Anda.</p>
+            </div>
+
+            <!-- PAGINATION -->
+            <div v-if="totalPages > 1" class="px-5 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+              <button @click="currentPage--" :disabled="currentPage === 1"
+                class="px-4 py-2 bg-white border border-slate-200 text-xs font-extrabold text-slate-700 rounded-full hover:bg-slate-100 transition disabled:opacity-40">
+                ← Sebelum
+              </button>
+
+              <span class="text-xs text-slate-500 font-extrabold">Halaman {{ currentPage }} dari {{ totalPages }}</span>
+
+              <button @click="currentPage++" :disabled="currentPage === totalPages"
+                class="px-4 py-2 bg-white border border-slate-200 text-xs font-extrabold text-slate-700 rounded-full hover:bg-slate-100 transition disabled:opacity-40">
+                Lanjut →
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </main>
+
+    </div>
+
+
+    <!-- ==================== MODAL DETAIL PERTANYAAN ==================== -->
+    <div v-if="selectedQuestion" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-4xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative border border-slate-200/80 max-h-[90vh] flex flex-col justify-between">
+        
+        <div>
+          <!-- Header Modal -->
+          <div class="flex items-start justify-between pb-4 border-b border-slate-100">
+            <div>
+              <span class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100 inline-block mb-1">
+                Detail Pertanyaan Jamaah
+              </span>
+              <h3 class="text-lg font-extrabold text-slate-900">{{ selectedQuestion.nama }}</h3>
+              <p class="text-xs text-slate-400 font-medium">{{ formatDate(selectedQuestion.timestamp) }}</p>
+            </div>
+            <button @click="closeDetail" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <!-- Metadata Pill Box -->
+          <div class="grid grid-cols-2 gap-3 my-4 p-3.5 bg-slate-50 rounded-2xl border border-slate-100 text-xs">
+            <div>
+              <span class="block text-[10px] font-extrabold text-slate-400 uppercase">Domisili</span>
+              <span class="font-bold text-slate-800">{{ selectedQuestion.alamat_domisili || 'Tidak diisi' }}</span>
+            </div>
+            <div>
+              <span class="block text-[10px] font-extrabold text-slate-400 uppercase">No. WhatsApp</span>
+              <a :href="getWaUrl(selectedQuestion.nomor_whatsapp)" target="_blank" class="font-extrabold text-emerald-700 hover:underline inline-flex items-center gap-1">
+                <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> {{ selectedQuestion.nomor_whatsapp }}
+              </a>
+            </div>
+          </div>
+
+          <!-- Question Content Preserved Text -->
+        <div class="my-4">
+          <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Isi Pertanyaan</span>
+          <div class="bg-slate-100/90 p-4 rounded-2xl text-xs sm:text-sm text-slate-800 leading-relaxed font-sans whitespace-pre-wrap max-h-56 overflow-y-auto border border-slate-200/50">
+            {{ selectedQuestion.pertanyaan }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Status Buttons -->
+      <div class="pt-4 border-t border-slate-100 space-y-3">
+        <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider text-center">Kelola Status Jawaban</span>
+        
+        <div class="grid grid-cols-3 gap-2">
+          <button @click="updateQuestionStatus(selectedQuestion, 'READ', 'ANSWERED')"
+            :class="selectedQuestion.answer_status === 'ANSWERED' ? 'bg-emerald-700 text-white font-extrabold shadow-md' : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100 font-extrabold'"
+            class="py-3 px-2 rounded-2xl text-[11px] transition flex items-center justify-center gap-1 border border-emerald-200">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i>
+            <span>Sudah</span>
+          </button>
+
+          <button @click="updateQuestionStatus(selectedQuestion, 'READ', 'NOT_ANSWERED')"
+            :class="selectedQuestion.answer_status === 'NOT_ANSWERED' ? 'bg-amber-600 text-white font-extrabold shadow-md' : 'bg-amber-50 text-amber-800 hover:bg-amber-100 font-extrabold'"
+            class="py-3 px-2 rounded-2xl text-[11px] transition flex items-center justify-center gap-1 border border-amber-200">
+            <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+            <span>Belum Sempat</span>
+          </button>
+
+          <button @click="updateQuestionStatus(selectedQuestion, 'READ', 'PENDING')"
+            :class="selectedQuestion.answer_status === 'PENDING' ? 'bg-rose-600 text-white font-extrabold shadow-md' : 'bg-rose-50 text-rose-800 hover:bg-rose-100 font-extrabold'"
+            class="py-3 px-2 rounded-2xl text-[11px] transition flex items-center justify-center gap-1 border border-rose-200">
+            <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+            <span>Belum</span>
+          </button>
+        </div>
+
+        <button @click="closeDetail" class="w-full py-3 bg-slate-900 hover:bg-black text-white font-extrabold rounded-full text-xs transition active:scale-95">
+          Selesai
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+<!-- VUE 3 APPLICATION SCRIPT -->
+<script>
+  const { createApp, ref, computed, onMounted, nextTick } = Vue;
+
+  createApp({
+    setup() {
+      const initialMockQuestions = [
+        {
+          id: "Q-101",
+          timestamp: "2026-10-19T10:15:00Z",
+          nama: "Ahmad Fauzi",
+          nomor_whatsapp: "081234567890",
+          alamat_domisili: "Sleman, Yogyakarta",
+          pertanyaan: "Ustadz, bagaimana hukumnya meluruskan dan merapatkan shaf saat jamaah? Apakah tumit harus saling menempel?",
+          schedule_id: "SCH-001",
+          read_status: "UNREAD",
+          answer_status: "PENDING"
+        },
+        {
+          id: "Q-102",
+          timestamp: "2026-10-19T09:40:00Z",
+          nama: "Siti Rahmawati",
+          nomor_whatsapp: "085678901234",
+          alamat_domisili: "Bantul",
+          pertanyaan: "Izin bertanya Ustadz, untuk shalat sunnah dhuha sebaiknya dikerjakan berapa rakaat secara rutin?",
+          schedule_id: "SCH-001",
+          read_status: "UNREAD",
+          answer_status: "PENDING"
+        },
+        {
+          id: "Q-103",
+          timestamp: "2026-10-18T18:30:00Z",
+          nama: "Hendra Wijaya",
+          nomor_whatsapp: "087812345678",
+          alamat_domisili: "Kota Yogyakarta",
+          pertanyaan: "Mohon penjelasan Ustadz mengenai zakat perdagangan barang persediaan online shop.",
+          schedule_id: "SCH-001",
+          read_status: "READ",
+          answer_status: "ANSWERED"
+        },
+        {
+          id: "Q-104",
+          timestamp: "2026-10-18T18:10:00Z",
+          nama: "Nur Hasanah",
+          nomor_whatsapp: "081901234567",
+          alamat_domisili: "Klaten",
+          pertanyaan: "Bagaimana cara menjaga keistiqamahan membaca Al-Qur'an setiap hari bagi pekerja kantoran?",
+          schedule_id: "SCH-002",
+          read_status: "UNREAD",
+          answer_status: "PENDING"
+        },
+        {
+          id: "Q-105",
+          timestamp: "2026-10-18T16:00:00Z",
+          nama: "Budi Santoso",
+          nomor_whatsapp: "081299887766",
+          alamat_domisili: "Sleman",
+          pertanyaan: "Ustadz, bagaimana tata cara sujud sahwi jika kita ragu jumlah rakaat shalat Subuh?",
+          schedule_id: "SCH-002",
+          read_status: "READ",
+          answer_status: "ANSWERED"
+        }
+      ];
+
+      const auth = ref({
+        isAuthenticated: false,
+        user: { name: 'Ustadz Ahmad', email: 'ustadz1@gazebomengaji.org', role: 'USTADZ', schedule_id: 'SCH-001' }
+      });
+
+      const loginForm = ref({ email: '', password: '' });
+      const loginError = ref('');
+      const isSubmittingLogin = ref(false);
+
+      // TEMPELKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI BAWAH INI JIKA SUDAH READY
+      const gasUrl = ref('PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE');
+
+      const questions = ref([]);
+      const activeTab = ref('dashboard');
+      const searchQuery = ref('');
+      const filterAnswerStatus = ref('ALL');
+      const filterReadStatus = ref('ALL');
+      const sortBy = ref('NEWEST');
+      const currentPage = ref(1);
+      const itemsPerPage = 15;
+
+      const selectedQuestion = ref(null);
+      const isFetching = ref(false);
+
+      const isLiveBackend = computed(() => {
+        return gasUrl.value && gasUrl.value.startsWith('http');
+      });
+
+      // ISOLASI DATA PERTANYAAN KHUSUS SCHEDULE ID USTADZ YANG LOGIN
+      const userQuestions = computed(() => {
+        if (!auth.value.user || !auth.value.user.schedule_id) return questions.value;
+        return questions.value.filter(q => q.schedule_id === auth.value.user.schedule_id);
+      });
+
+      const stats = computed(() => {
+        const total = userQuestions.value.length;
+        const unread = userQuestions.value.filter(q => q.read_status === 'UNREAD').length;
+        const pending = userQuestions.value.filter(q => q.answer_status === 'PENDING').length;
+        const answered = userQuestions.value.filter(q => q.answer_status === 'ANSWERED').length;
+        return { total, unread, pending, answered };
+      });
+
+      const recentQuestions = computed(() => {
+        return [...userQuestions.value].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 5);
+      });
+
+      const filteredQuestions = computed(() => {
+        let res = [...userQuestions.value];
+
+        if (searchQuery.value.trim()) {
+          const q = searchQuery.value.toLowerCase();
+          res = res.filter(item => 
+            item.nama.toLowerCase().includes(q) || 
+            item.pertanyaan.toLowerCase().includes(q)
+          );
+        }
+
+        if (filterAnswerStatus.value !== 'ALL') {
+          res = res.filter(item => item.answer_status === filterAnswerStatus.value);
+        }
+
+        if (filterReadStatus.value !== 'ALL') {
+          res = res.filter(item => item.read_status === filterReadStatus.value);
+        }
+
+        if (sortBy.value === 'NEWEST') {
+          res.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+        } else if (sortBy.value === 'OLDEST') {
+          res.sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+        } else if (sortBy.value === 'PENDING_FIRST') {
+          res.sort((a,b) => (a.answer_status === 'PENDING' ? -1 : 1));
+        }
+
+        return res;
+      });
+
+      const totalPages = computed(() => {
+        return Math.ceil(filteredQuestions.value.length / itemsPerPage) || 1;
+      });
+
+      const paginatedQuestions = computed(() => {
+        const start = (currentPage.value - 1) * itemsPerPage;
+        return filteredQuestions.value.slice(start, start + itemsPerPage);
+      });
+
+      const fillDemoAccount = (schedId) => {
+        if (schedId === 'SCH-002') {
+          loginForm.value.email = 'ustadz2@gazebomengaji.org';
+          loginForm.value.password = 'ustadz123';
+          auth.value.user = { name: 'Ustadz Hanan', email: 'ustadz2@gazebomengaji.org', role: 'USTADZ', schedule_id: 'SCH-002' };
+        } else {
+          loginForm.value.email = 'ustadz1@gazebomengaji.org';
+          loginForm.value.password = 'ustadz123';
+          auth.value.user = { name: 'Ustadz Ahmad', email: 'ustadz1@gazebomengaji.org', role: 'USTADZ', schedule_id: 'SCH-001' };
+        }
+      };
+
+      const handleLogin = async () => {
+        isSubmittingLogin.value = true;
+        loginError.value = '';
+
+        if (!loginForm.value.email || !loginForm.value.password) {
+          loginError.value = 'Email dan kata sandi wajib diisi.';
+          isSubmittingLogin.value = false;
+          return;
+        }
+
+        if (isLiveBackend.value) {
+          try {
+            const res = await fetch(gasUrl.value, {
+              method: 'POST',
+              body: JSON.stringify({
+                action: 'login',
+                email: loginForm.value.email,
+                password: loginForm.value.password
+              })
+            });
+            const data = await res.json();
+            if (data.success) {
+              auth.value.isAuthenticated = true;
+              auth.value.user = data.user;
+              await fetchQuestions();
+            } else {
+              loginError.value = data.message || 'Email atau kata sandi salah.';
+            }
+          } catch (err) {
+            loginError.value = 'Gagal terhubung ke server Google Sheets.';
+          }
+        } else {
+          // Mode Demo Default
+          await new Promise(r => setTimeout(r, 400));
+          auth.value.isAuthenticated = true;
+          auth.value.user = {
+            name: 'Ustadz Ahmad',
+            email: loginForm.value.email,
+            role: 'USTADZ',
+            schedule_id: 'SCH-001'
+          };
+          fetchQuestions();
+        }
+        isSubmittingLogin.value = false;
+      };
+
+      const handleLogout = () => {
+        auth.value.isAuthenticated = false;
+        loginForm.value.password = '';
+      };
+
+      const fetchQuestions = async () => {
+        isFetching.value = true;
+
+        if (isLiveBackend.value) {
+          try {
+            const res = await fetch(`${gasUrl.value}?action=getQuestions&schedule_id=${auth.value.user.schedule_id}`);
+            const data = await res.json();
+            if (data.success && Array.isArray(data.questions)) {
+              questions.value = data.questions;
+            }
+          } catch (err) {
+            console.warn('Fallback ke data demo:', err);
+          }
+        } else {
+          if (questions.value.length === 0) {
+            questions.value = [...initialMockQuestions];
+          }
+        }
+
+        isFetching.value = false;
+        nextTick(() => lucide.createIcons());
+      };
+
+      const setTab = (tab) => {
+        activeTab.value = tab;
+        
+        if (tab === 'unread') {
+          filterReadStatus.value = 'UNREAD';
+            filterAnswerStatus.value = 'ALL';
+          } else if (tab === 'pending') {
+            filterAnswerStatus.value = 'PENDING';
+            filterReadStatus.value = 'ALL';
+          } else if (tab === 'answered') {
+            filterAnswerStatus.value = 'ANSWERED';
+            filterReadStatus.value = 'ALL';
+          } else if (tab === 'all') {
+            filterAnswerStatus.value = 'ALL';
+            filterReadStatus.value = 'ALL';
+          }
+          nextTick(() => lucide.createIcons());
+        };
+
+        const openDetail = (question) => {
+          selectedQuestion.value = { ...question };
+          if (question.read_status === 'UNREAD') {
+            updateQuestionStatus(question, 'READ', question.answer_status);
+          }
+          nextTick(() => lucide.createIcons());
+        };
+
+        const closeDetail = () => {
+          selectedQuestion.value = null;
+        };
+
+        const updateQuestionStatus = async (q, newRead, newAnswer) => {
+          q.read_status = newRead;
+          q.answer_status = newAnswer;
+
+          const target = questions.value.find(item => item.id === q.id);
+          if (target) {
+            target.read_status = newRead;
+            target.answer_status = newAnswer;
+          }
+
+          if (selectedQuestion.value && selectedQuestion.value.id === q.id) {
+            selectedQuestion.value.read_status = newRead;
+            selectedQuestion.value.answer_status = newAnswer;
+          }
+
+          if (isLiveBackend.value) {
+            try {
+              await fetch(gasUrl.value, {
+                method: 'POST',
+                body: JSON.stringify({
+                  action: 'updateStatus',
+                  id: q.id,
+                  read_status: newRead,
+                  answer_status: newAnswer
+                })
+              });
+            } catch (e) {
+              console.error('Gagal memperbarui status backend:', e);
+            }
+          }
+        };
+
+        const formatDate = (isoStr) => {
+          if (!isoStr) return '-';
+          const d = new Date(isoStr);
+          return d.toLocaleString('id-ID', {
+            day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+          });
+        };
+
+        const getWaUrl = (wa) => {
+          if (!wa) return '#';
+          let clean = wa.replace(/[-\s]/g, '');
+          if (clean.startsWith('08')) clean = '628' + clean.substring(2);
+          if (clean.startsWith('+')) clean = clean.substring(1);
+          return `https://wa.me/${clean}`;
+        };
+
+        const getAnswerBadgeClass = (status) => {
+          if (status === 'ANSWERED') return 'bg-emerald-100 text-emerald-800 border border-emerald-200';
+          if (status === 'NOT_ANSWERED') return 'bg-amber-100 text-amber-800 border border-amber-200';
+          return 'bg-rose-100 text-rose-800 border border-rose-200';
+        };
+
+        const getAnswerLabel = (status) => {
+          if (status === 'ANSWERED') return 'Sudah Dijawab';
+          if (status === 'NOT_ANSWERED') return 'Belum Sempat';
+          return 'Belum Dijawab';
+        };
+
+        onMounted(() => {
+          lucide.createIcons();
+        });
+
+        return {
+          auth, loginForm, loginError, isSubmittingLogin, fillDemoAccount, handleLogin, handleLogout,
+          gasUrl, isLiveBackend,
+          questions, stats, recentQuestions, activeTab, setTab, searchQuery, filterAnswerStatus, filterReadStatus,
+          sortBy, currentPage, itemsPerPage, totalPages, filteredQuestions, paginatedQuestions,
+          selectedQuestion, openDetail, closeDetail, updateQuestionStatus,
+          isFetching, fetchQuestions, formatDate, getWaUrl, getAnswerBadgeClass, getAnswerLabel
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
