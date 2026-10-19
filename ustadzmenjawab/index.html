@@ -143,7 +143,6 @@
         </div>
       </header>
 
-      <!-- MAIN CONTAINER -->
       <main class="max-w-6xl mx-auto px-4 sm:px-8 mt-4 space-y-6">
 
         <!-- HORIZONTAL SCROLLABLE TAB PILLS -->
@@ -490,7 +489,6 @@
   </div>
 
 
-  <!-- VUE 3 APPLICATION SCRIPT -->
   <script>
     const { createApp, ref, computed, onMounted, onUpdated, nextTick } = Vue;
 
@@ -693,7 +691,7 @@
               loginError.value = 'Gagal terhubung ke server Google Sheets.';
             }
           } else {
-            await new Promise(r => setTimeout(r, 400));
+            await new Promise(r => setTimeout(r, 300));
             auth.value.isAuthenticated = true;
             
             const isDemoAdmin = loginForm.value.email.toLowerCase().includes('admin');
@@ -717,25 +715,31 @@
         const fetchQuestions = async () => {
           isFetching.value = true;
 
-          if (isLiveBackend.value) {
-            try {
+          try {
+            if (isLiveBackend.value) {
               const sched = auth.value.user ? auth.value.user.schedule_id : 'ALL';
               const res = await fetch(`${gasUrl.value}?action=getQuestions&schedule_id=${sched}`);
+              if (!res.ok) throw new Error('Network error');
               const data = await res.json();
-              if (data.success && Array.isArray(data.questions)) {
+              if (data && data.success && Array.isArray(data.questions)) {
                 questions.value = data.questions;
+              } else if (questions.value.length === 0) {
+                questions.value = [...initialMockQuestions];
               }
-            } catch (err) {
-              console.warn('Fallback ke data demo:', err);
+            } else {
+              if (questions.value.length === 0) {
+                questions.value = [...initialMockQuestions];
+              }
             }
-          } else {
+          } catch (err) {
+            console.warn('Backend GAS tidak merespons, memuat data lokal:', err);
             if (questions.value.length === 0) {
               questions.value = [...initialMockQuestions];
             }
+          } finally {
+            isFetching.value = false;
+            refreshIcons();
           }
-
-          isFetching.value = false;
-          refreshIcons();
         };
 
         const setTab = (tab) => {
