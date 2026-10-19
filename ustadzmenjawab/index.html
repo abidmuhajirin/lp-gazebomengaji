@@ -81,7 +81,7 @@
         <!-- Header Brand -->
         <div class="text-center mb-8">
           <div class="w-16 h-16 rounded-3xl bg-slate-900 text-white flex items-center justify-center mx-auto mb-4 shadow-lg shadow-slate-900/15">
-            <i data-lucide="shield-check" class="w-8 h-8 stroke-[2]"></i>
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
           </div>
           <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Dashboard Ustadz</h1>
           <p class="text-xs text-slate-500 font-semibold mt-1">Gazebo Mengaji • Portal Pertanyaan</p>
@@ -130,11 +130,11 @@
           <!-- Left User Profile Pill -->
           <div class="flex items-center gap-2.5 bg-[#d9f99d] text-[#1a2e05] px-3.5 py-2 rounded-full shadow-xs border border-[#bef264]">
             <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-extrabold text-xs shadow-xs">
-              {{ auth.user.name.charAt(0) }}
+              {{ auth.user.name ? auth.user.name.charAt(0) : 'U' }}
             </div>
             <div class="pr-1">
               <h1 class="text-xs font-extrabold leading-tight text-[#1a2e05]">Assalamu'alaikum, {{ auth.user.name }}</h1>
-              <p class="text-[10px] font-bold text-[#3f6212]/80">Jadwal: {{ auth.user.schedule_id }} • Gazebo Mengaji</p>
+              <p class="text-[10px] font-bold text-[#3f6212]/80">Akses: {{ auth.user.role === 'ADMIN' || auth.user.schedule_id === 'ALL' ? 'Semua Pertanyaan (Admin)' : 'Jadwal ' + auth.user.schedule_id }}</p>
             </div>
           </div>
 
@@ -143,13 +143,13 @@
             <!-- Refresh Button -->
             <button @click="fetchQuestions" :disabled="isFetching" title="Muat Ulang Data"
               class="w-10 h-10 rounded-full bg-white hover:bg-slate-100 border border-slate-200/80 text-slate-800 flex items-center justify-center shadow-xs transition active:scale-95 disabled:opacity-50">
-              <i data-lucide="rotate-cw" class="w-4 h-4" :class="isFetching ? 'animate-spin text-brand-700' : ''"></i>
+              <svg class="w-4 h-4" :class="isFetching ? 'animate-spin text-brand-700' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
             </button>
 
             <!-- Logout Black Pill -->
             <button @click="handleLogout" title="Keluar"
               class="hidden sm:flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-black text-white rounded-full text-xs font-extrabold shadow-xs transition active:scale-95">
-              <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
               <span>Keluar</span>
             </button>
           </div>
@@ -587,7 +587,6 @@
       const loginError = ref('');
       const isSubmittingLogin = ref(false);
 
-      // TEMPELKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI BAWAH INI JIKA SUDAH READY
       const gasUrl = ref('https://script.google.com/macros/s/AKfycbzAzW2MZqNx6O6kNMq0VnZrWG6ed39TJEqZBYU-1US5awfP1hh3prCLsI8bX5s4p7Jw/exec');
 
       const questions = ref([]);
@@ -606,10 +605,19 @@
         return gasUrl.value && gasUrl.value.startsWith('http');
       });
 
-      // ISOLASI DATA PERTANYAAN KHUSUS SCHEDULE ID USTADZ YANG LOGIN
+      // ISOLASI DATA PERTANYAAN KHUSUS SCHEDULE ID USTADZ / ADMIN
       const userQuestions = computed(() => {
-        if (!auth.value.user || !auth.value.user.schedule_id) return questions.value;
-        return questions.value.filter(q => q.schedule_id === auth.value.user.schedule_id);
+        if (!auth.value.user) return questions.value;
+        const userRole = auth.value.user.role;
+        const schedId = auth.value.user.schedule_id;
+
+        // Jika user adalah ADMIN atau schedule_id adalah ALL / kosong -> Tampilkan SEMUA pertanyaan
+        if (userRole === 'ADMIN' || schedId === 'ALL' || !schedId) {
+          return questions.value;
+        }
+
+        // Jika Ustadz biasa -> Filter khusus schedule_id milik ustadz tersebut
+        return questions.value.filter(q => String(q.schedule_id) === String(schedId));
       });
 
       const stats = computed(() => {
@@ -630,8 +638,8 @@
         if (searchQuery.value.trim()) {
           const q = searchQuery.value.toLowerCase();
           res = res.filter(item => 
-            item.nama.toLowerCase().includes(q) || 
-            item.pertanyaan.toLowerCase().includes(q)
+            (item.nama && item.nama.toLowerCase().includes(q)) || 
+            (item.pertanyaan && item.pertanyaan.toLowerCase().includes(q))
           );
         }
 
@@ -662,18 +670,6 @@
         const start = (currentPage.value - 1) * itemsPerPage;
         return filteredQuestions.value.slice(start, start + itemsPerPage);
       });
-
-      const fillDemoAccount = (schedId) => {
-        if (schedId === 'SCH-002') {
-          loginForm.value.email = 'ustadz2@gazebomengaji.org';
-          loginForm.value.password = 'ustadz123';
-          auth.value.user = { name: 'Ustadz Hanan', email: 'ustadz2@gazebomengaji.org', role: 'USTADZ', schedule_id: 'SCH-002' };
-        } else {
-          loginForm.value.email = 'ustadz1@gazebomengaji.org';
-          loginForm.value.password = 'ustadz123';
-          auth.value.user = { name: 'Ustadz Ahmad', email: 'ustadz1@gazebomengaji.org', role: 'USTADZ', schedule_id: 'SCH-001' };
-        }
-      };
 
       const handleLogin = async () => {
         isSubmittingLogin.value = true;
@@ -707,14 +703,16 @@
             loginError.value = 'Gagal terhubung ke server Google Sheets.';
           }
         } else {
-          // Mode Demo Default
+          // Mode Simulasi Lokal
           await new Promise(r => setTimeout(r, 400));
           auth.value.isAuthenticated = true;
+          
+          const isDemoAdmin = loginForm.value.email.toLowerCase().includes('admin');
           auth.value.user = {
-            name: 'Ustadz Ahmad',
+            name: isDemoAdmin ? 'Admin Gazebo' : 'Ustadz Ahmad',
             email: loginForm.value.email,
-            role: 'USTADZ',
-            schedule_id: 'SCH-001'
+            role: isDemoAdmin ? 'ADMIN' : 'USTADZ',
+            schedule_id: isDemoAdmin ? 'ALL' : 'SCH-001'
           };
           fetchQuestions();
         }
@@ -731,7 +729,8 @@
 
         if (isLiveBackend.value) {
           try {
-            const res = await fetch(`${gasUrl.value}?action=getQuestions&schedule_id=${auth.value.user.schedule_id}`);
+            const sched = auth.value.user ? auth.value.user.schedule_id : 'ALL';
+            const res = await fetch(`${gasUrl.value}?action=getQuestions&schedule_id=${sched}`);
             const data = await res.json();
             if (data.success && Array.isArray(data.questions)) {
               questions.value = data.questions;
@@ -746,114 +745,108 @@
         }
 
         isFetching.value = false;
-        nextTick(() => lucide.createIcons());
       };
 
       const setTab = (tab) => {
         activeTab.value = tab;
+        currentPage.value = 1;
         
         if (tab === 'unread') {
           filterReadStatus.value = 'UNREAD';
-            filterAnswerStatus.value = 'ALL';
-          } else if (tab === 'pending') {
-            filterAnswerStatus.value = 'PENDING';
-            filterReadStatus.value = 'ALL';
-          } else if (tab === 'answered') {
-            filterAnswerStatus.value = 'ANSWERED';
-            filterReadStatus.value = 'ALL';
-          } else if (tab === 'all') {
-            filterAnswerStatus.value = 'ALL';
-            filterReadStatus.value = 'ALL';
+          filterAnswerStatus.value = 'ALL';
+        } else if (tab === 'pending') {
+          filterAnswerStatus.value = 'PENDING';
+          filterReadStatus.value = 'ALL';
+        } else if (tab === 'answered') {
+          filterAnswerStatus.value = 'ANSWERED';
+          filterReadStatus.value = 'ALL';
+        } else if (tab === 'all') {
+          filterAnswerStatus.value = 'ALL';
+          filterReadStatus.value = 'ALL';
+        }
+      };
+
+      const openDetail = (question) => {
+        selectedQuestion.value = { ...question };
+        if (question.read_status === 'UNREAD') {
+          updateQuestionStatus(question, 'READ', question.answer_status);
+        }
+      };
+
+      const closeDetail = () => {
+        selectedQuestion.value = null;
+      };
+
+      const updateQuestionStatus = async (q, newRead, newAnswer) => {
+        q.read_status = newRead;
+        q.answer_status = newAnswer;
+
+        const target = questions.value.find(item => item.id === q.id);
+        if (target) {
+          target.read_status = newRead;
+          target.answer_status = newAnswer;
+        }
+
+        if (selectedQuestion.value && selectedQuestion.value.id === q.id) {
+          selectedQuestion.value.read_status = newRead;
+          selectedQuestion.value.answer_status = newAnswer;
+        }
+
+        if (isLiveBackend.value) {
+          try {
+            await fetch(gasUrl.value, {
+              method: 'POST',
+              body: JSON.stringify({
+                action: 'updateStatus',
+                id: q.id,
+                read_status: newRead,
+                answer_status: newAnswer
+              })
+            });
+          } catch (e) {
+            console.error('Gagal memperbarui status backend:', e);
           }
-          nextTick(() => lucide.createIcons());
-        };
+        }
+      };
 
-        const openDetail = (question) => {
-          selectedQuestion.value = { ...question };
-          if (question.read_status === 'UNREAD') {
-            updateQuestionStatus(question, 'READ', question.answer_status);
-          }
-          nextTick(() => lucide.createIcons());
-        };
-
-        const closeDetail = () => {
-          selectedQuestion.value = null;
-        };
-
-        const updateQuestionStatus = async (q, newRead, newAnswer) => {
-          q.read_status = newRead;
-          q.answer_status = newAnswer;
-
-          const target = questions.value.find(item => item.id === q.id);
-          if (target) {
-            target.read_status = newRead;
-            target.answer_status = newAnswer;
-          }
-
-          if (selectedQuestion.value && selectedQuestion.value.id === q.id) {
-            selectedQuestion.value.read_status = newRead;
-            selectedQuestion.value.answer_status = newAnswer;
-          }
-
-          if (isLiveBackend.value) {
-            try {
-              await fetch(gasUrl.value, {
-                method: 'POST',
-                body: JSON.stringify({
-                  action: 'updateStatus',
-                  id: q.id,
-                  read_status: newRead,
-                  answer_status: newAnswer
-                })
-              });
-            } catch (e) {
-              console.error('Gagal memperbarui status backend:', e);
-            }
-          }
-        };
-
-        const formatDate = (isoStr) => {
-          if (!isoStr) return '-';
-          const d = new Date(isoStr);
-          return d.toLocaleString('id-ID', {
-            day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
-          });
-        };
-
-        const getWaUrl = (wa) => {
-          if (!wa) return '#';
-          let clean = wa.replace(/[-\s]/g, '');
-          if (clean.startsWith('08')) clean = '628' + clean.substring(2);
-          if (clean.startsWith('+')) clean = clean.substring(1);
-          return `https://wa.me/${clean}`;
-        };
-
-        const getAnswerBadgeClass = (status) => {
-          if (status === 'ANSWERED') return 'bg-emerald-100 text-emerald-800 border border-emerald-200';
-          if (status === 'NOT_ANSWERED') return 'bg-amber-100 text-amber-800 border border-amber-200';
-          return 'bg-rose-100 text-rose-800 border border-rose-200';
-        };
-
-        const getAnswerLabel = (status) => {
-          if (status === 'ANSWERED') return 'Sudah Dijawab';
-          if (status === 'NOT_ANSWERED') return 'Belum Sempat';
-          return 'Belum Dijawab';
-        };
-
-        onMounted(() => {
-          lucide.createIcons();
+      const formatDate = (isoStr) => {
+        if (!isoStr) return '-';
+        const d = new Date(isoStr);
+        return d.toLocaleString('id-ID', {
+          day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
         });
+      };
 
-        return {
-          auth, loginForm, loginError, isSubmittingLogin, fillDemoAccount, handleLogin, handleLogout,
-          gasUrl, isLiveBackend,
-          questions, stats, recentQuestions, activeTab, setTab, searchQuery, filterAnswerStatus, filterReadStatus,
-          sortBy, currentPage, itemsPerPage, totalPages, filteredQuestions, paginatedQuestions,
-          selectedQuestion, openDetail, closeDetail, updateQuestionStatus,
-          isFetching, fetchQuestions, formatDate, getWaUrl, getAnswerBadgeClass, getAnswerLabel
-        };
-      }
-    }).mount('#app');
-  </script>
+      const getWaUrl = (wa) => {
+        if (!wa) return '#';
+        let clean = wa.replace(/[-\s]/g, '');
+        if (clean.startsWith('08')) clean = '628' + clean.substring(2);
+        if (clean.startsWith('+')) clean = clean.substring(1);
+        return `https://wa.me/${clean}`;
+      };
+
+      const getAnswerBadgeClass = (status) => {
+        if (status === 'ANSWERED') return 'bg-emerald-100 text-emerald-800 border border-emerald-200';
+        if (status === 'NOT_ANSWERED') return 'bg-amber-100 text-amber-800 border border-amber-200';
+        return 'bg-rose-100 text-rose-800 border border-rose-200';
+      };
+
+      const getAnswerLabel = (status) => {
+        if (status === 'ANSWERED') return 'Sudah Dijawab';
+        if (status === 'NOT_ANSWERED') return 'Belum Sempat';
+        return 'Belum Dijawab';
+      };
+
+      return {
+        auth, loginForm, loginError, isSubmittingLogin, handleLogin, handleLogout,
+        gasUrl, isLiveBackend,
+        questions, stats, recentQuestions, activeTab, setTab, searchQuery, filterAnswerStatus, filterReadStatus,
+        sortBy, currentPage, itemsPerPage, totalPages, filteredQuestions, paginatedQuestions,
+        selectedQuestion, openDetail, closeDetail, updateQuestionStatus,
+        isFetching, fetchQuestions, formatDate, getWaUrl, getAnswerBadgeClass, getAnswerLabel
+      };
+    }
+  }).mount('#app');
+</script>
 </body>
 </html>
