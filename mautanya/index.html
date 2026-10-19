@@ -372,7 +372,7 @@
      * Tempelkan URL Web App Google Apps Script Anda di bawah ini.
      */
     let config = {
-      gasUrl: 'https://script.google.com/macros/s/AKfycbzAzW2MZqNx6O6kNMq0VnZrWG6ed39TJEqZBYU-1US5awfP1hh3prCLsI8bX5s4p7Jw/exec', // <--- TEMPELKAN URL Web App Google Apps Script DI SINI
+      gasUrl: 'https://script.google.com/macros/s/AKfycbzAzW2MZqNx6O6kNMq0VnZrWG6ed39TJEqZBYU-1US5awfP1hh3prCLsI8bX5s4p7Jw/exec', // <--- TEMPELKAN URL Web App Google Apps Script DI SINI (Contoh: https://script.google.com/macros/s/.../exec)
       fetchIntervalSeconds: 30
     };
 
@@ -402,8 +402,8 @@
         showView('status-loading');
       }
 
-      // Jika URL belum dimasukkan, jalankan mode tampilan langsung (Default OPEN untuk preview)
-      if (!config.gasUrl || config.gasUrl === 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+      // Jika URL belum dimasukkan atau masih placeholder, jalankan mode tampilan langsung (Default OPEN untuk preview)
+      if (!config.gasUrl || config.gasUrl === 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE' || !config.gasUrl.startsWith('http')) {
         renderState({
           status: 'OPEN',
           waktu_tutup: new Date(Date.now() + 3600 * 2 * 1000).toISOString()
@@ -422,10 +422,12 @@
 
       } catch (err) {
         console.error('Fetch Status Error:', err);
+        // Fallback otomatis ke mode tampilan terbuka agar form tetap bisa dipreview jika jaringan/GAS terganggu
         if (!isSilent && !isSuccessStateActive) {
-          document.getElementById('error-message-text').innerText = 
-            "Gagal memverifikasi status dari server Apps Script. Silakan periksa koneksi internet atau URL script Anda.";
-          showView('status-error');
+          renderState({
+            status: 'OPEN',
+            waktu_tutup: new Date(Date.now() + 3600 * 2 * 1000).toISOString()
+          });
         }
       }
     }
