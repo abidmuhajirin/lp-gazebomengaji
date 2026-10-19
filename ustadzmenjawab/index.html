@@ -233,7 +233,10 @@
             <div class="flex items-center justify-between mb-5">
               <div>
                 <h3 class="text-base font-extrabold text-slate-900">Pertanyaan Terbaru</h3>
-                <p class="text-xs text-slate-400 font-semibold">5 pertanyaan paling akhir masuk</p>
+                <p class="text-xs text-slate-400 font-semibold">
+                  Sisa {{ stats.total - stats.answered }} pertanyaan belum terjawab
+                  <span v-if="stats.total - stats.answered > 5">(menampilkan 5 terbaru)</span>
+                </p>
               </div>
               <button @click="setTab('all')" class="w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-black transition active:scale-95" title="Lihat Semua">
                 <app-icon name="arrow-up-right" class="w-4 h-4"></app-icon>
@@ -269,8 +272,8 @@
               <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
                 <app-icon name="inbox" class="w-6 h-6"></app-icon>
               </div>
-              <p class="text-xs font-extrabold text-slate-800">Belum Ada Pertanyaan</p>
-              <p class="text-[11px] text-slate-400 font-medium mt-0.5">Pertanyaan jamaah akan otomatis muncul di sini.</p>
+              <p class="text-xs font-extrabold text-slate-800">{{ stats.total > 0 ? 'Semua Pertanyaan Sudah Dijawab' : 'Belum Ada Pertanyaan' }}</p>
+              <p class="text-[11px] text-slate-400 font-medium mt-0.5">{{ stats.total > 0 ? 'Alhamdulillah, tidak ada pertanyaan tersisa.' : 'Pertanyaan jamaah akan otomatis muncul di sini.' }}</p>
             </div>
 
           </div>
@@ -541,7 +544,10 @@
         });
 
         const recentQuestions = computed(() =>
-          [...userQuestions.value].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 5)
+          userQuestions.value
+            .filter(q => q.answer_status !== 'ANSWERED')
+            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+            .slice(0, 5)
         );
 
         const filteredQuestions = computed(() => {
