@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Pertanyaan Kajian - Gazebo Mengaji</title>
+  <!-- Google Fonts & Tailwind CSS CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#0f392b',
+              950: '#071e16',
+            }
+          },
+          borderRadius: {
+            '3xl': '24px',
+            '4xl': '32px',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #ebedf0;
+    }
+    
+    /* ANIMASI CENTANG SVG */
+    .checkmark-circle {
+      stroke-dasharray: 166;
+      stroke-dashoffset: 166;
+      stroke-width: 3.5;
+      stroke-miterlimit: 10;
+      stroke: #10b981;
+      fill: none;
+      animation: stroke-anim 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+    
+    .checkmark-check {
+      transform-origin: 50% 50%;
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+      stroke-width: 4;
+      stroke: #10b981;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      animation: stroke-anim 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.5s forwards;
+    }
+
+    @keyframes stroke-anim {
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased font-sans min-h-screen flex flex-col justify-between p-4 sm:p-6 selection:bg-brand-100 selection:text-brand-900">
+
+  <!-- MAIN CONTAINER (CLEAN & MINIMALIST LAYOUT WITHOUT NAV/HEADER) -->
+  <main class="max-w-md mx-auto w-full my-auto py-4">
+    
+    <!-- BRAND LOGO & TITLE HEADER (CLEAR NO NAVBAR) -->
+    <div class="text-center mb-6">
+      <!-- Logo Gazebo Mengaji -->
+      <div class="w-14 h-14 rounded-2xl bg-brand-900 text-brand-100 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-brand-900/10">
+        <i data-lucide="book-open" class="w-7 h-7 stroke-[2.2]"></i>
+      </div>
+      <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight mb-1">Form Pertanyaan Kajian</h1>
+      <p class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Gazebo Mengaji</p>
+    </div>
+
+    <!-- MAIN CARD CONTAINER (ULTRA CLEAN SOFT CARD) -->
+    <div class="bg-white rounded-4xl shadow-xl shadow-slate-200/60 border border-slate-100 p-6 sm:p-8 relative overflow-hidden">
+
+      <!-- LOADING OVERLAY STATUS CHECK -->
+      <div id="status-loading" class="py-10 text-center fade-in">
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-3 border-slate-900 border-t-transparent mb-3"></div>
+        <p class="text-xs font-semibold text-slate-500">Memeriksa status penerimaan...</p>
+      </div>
+
+      <!-- ERROR KONEKSI -->
+      <div id="status-error" class="hidden py-8 text-center fade-in">
+        <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-3">
+          <i data-lucide="wifi-off" class="w-6 h-6"></i>
+        </div>
+        <h3 class="text-sm font-bold text-slate-900 mb-1">Gagal Memuat Status</h3>
+        <p class="text-xs text-slate-500 mb-4 px-2 leading-relaxed" id="error-message-text">
+          Tidak dapat terhubung ke server. Silakan periksa koneksi internet Anda.
+        </p>
+        <button onclick="checkFormStatus()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-2xl text-xs font-semibold hover:bg-black transition active:scale-95">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Coba Lagi
+        </button>
+      </div>
+
+      <!-- VIEW A: FORM AKTIF (STATUS = OPEN) -->
+      <div id="view-open" class="hidden fade-in">
+
+        <!-- INFORMASI PETUNJUK (HANYA TAMPIL SAAT FORM DIPERLIHATKAN) -->
+        <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 mb-6 text-xs text-slate-600 flex items-start gap-3">
+          <i data-lucide="info" class="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5"></i>
+          <p class="leading-relaxed">
+            Isi pertanyaan dengan jelas dan santun. Pertanyaan akan diteruskan kepada ustadz untuk disampaikan sesuai kesempatan yang tersedia.
+          </p>
+        </div>
+        
+        <!-- Status Indicator Pill -->
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            </span>
+            <span class="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
+              Penerimaan Dibuka
+            </span>
+          </div>
+          <span id="close-time-info" class="text-[11px] text-slate-400 font-medium"></span>
+        </div>
+
+        <form id="question-form" onsubmit="handleFormSubmit(event)" class="space-y-4" novalidate>
+          
+          <!-- INPUT 1: NAMA -->
+          <div>
+            <label for="nama" class="block text-xs font-bold text-slate-700 mb-1.5 ml-1">
+              Nama <span class="text-rose-500">*</span>
+            </label>
+            <input type="text" id="nama" name="nama" placeholder="Masukkan nama Anda" required
+              class="w-full px-4 py-3 bg-slate-100/80 border border-transparent rounded-2xl text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-900/5 transition">
+            <p id="err-nama" class="hidden text-[11px] text-rose-600 font-medium mt-1 ml-1 flex items-center gap-1">
+              <i data-lucide="alert-circle" class="w-3 h-3"></i> Nama wajib diisi.
+            </p>
+          </div>
+
+          <!-- INPUT 2: NO WHATSAPP -->
+          <div>
+            <label for="nomor_whatsapp" class="block text-xs font-bold text-slate-700 mb-1.5 ml-1">
+              No. WhatsApp <span class="text-rose-500">*</span>
+            </label>
+            <input type="tel" id="nomor_whatsapp" name="nomor_whatsapp" placeholder="Contoh: 081234567890" required
+              class="w-full px-4 py-3 bg-slate-100/80 border border-transparent rounded-2xl text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-900/5 transition">
+            <p id="err-nomor_whatsapp" class="hidden text-[11px] text-rose-600 font-medium mt-1 ml-1 flex items-center gap-1">
+              <i data-lucide="alert-circle" class="w-3 h-3"></i> Format WhatsApp tidak valid (Gunakan 08... atau +62...).
+            </p>
+          </div>
+
+          <!-- INPUT 3: ALAMAT DOMISILI -->
+          <div>
+            <label for="alamat_domisili" class="block text-xs font-bold text-slate-700 mb-1.5 ml-1">
+              Alamat Domisili <span class="text-slate-400 font-normal">(Opsional)</span>
+            </label>
+            <input type="text" id="alamat_domisili" name="alamat_domisili" placeholder="Kota atau daerah tempat tinggal Anda"
+              class="w-full px-4 py-3 bg-slate-100/80 border border-transparent rounded-2xl text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-900/5 transition">
+          </div>
+
+          <!-- INPUT 4: PERTANYAAN -->
+          <div>
+            <div class="flex justify-between items-center mb-1.5 ml-1">
+              <label for="pertanyaan" class="block text-xs font-bold text-slate-700">
+                Pertanyaan <span class="text-rose-500">*</span>
+              </label>
+              <span id="char-count" class="text-[11px] text-slate-400 font-medium">0 / 3000</span>
+            </div>
+            <textarea id="pertanyaan" name="pertanyaan" rows="4" maxlength="3000" placeholder="Tuliskan pertanyaan Anda di sini dengan jelas..." required
+              oninput="updateCharCount()"
+              class="w-full px-4 py-3 bg-slate-100/80 border border-transparent rounded-2xl text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-900/5 transition resize-y min-h-[120px]"></textarea>
+            <p id="err-pertanyaan" class="hidden text-[11px] text-rose-600 font-medium mt-1 ml-1 flex items-center gap-1">
+              <i data-lucide="alert-circle" class="w-3 h-3"></i> Pertanyaan wajib diisi.
+            </p>
+          </div>
+
+          <!-- ERROR SUBMIT GENERAL -->
+          <div id="general-error" class="hidden bg-rose-50 border border-rose-100 text-rose-700 text-xs rounded-2xl p-3.5 flex items-start gap-2.5">
+            <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-500 flex-shrink-0 mt-0.5"></i>
+            <span id="general-error-text">Terjadi kesalahan. Silakan periksa kembali formulir Anda.</span>
+          </div>
+
+          <!-- TOMBOL KIRIM -->
+          <button type="submit" id="submit-btn" class="w-full py-4 px-6 bg-slate-900 hover:bg-black text-white font-bold rounded-2xl text-sm shadow-lg shadow-slate-900/10 focus:outline-none focus:ring-4 focus:ring-slate-900/20 transition active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2">
+            <span id="btn-text">Kirim Pertanyaan</span>
+            <span id="btn-spinner" class="hidden">
+              <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </span>
+          </button>
+        </form>
+      </div>
+
+      <!-- VIEW B: FORM BELUM DIBUKA (STATUS = UPCOMING) -->
+      <div id="view-upcoming" class="hidden text-center py-4 fade-in">
+        <div class="w-14 h-14 rounded-3xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center mx-auto mb-4">
+          <i data-lucide="calendar-clock" class="w-7 h-7"></i>
+        </div>
+        <h2 class="text-base font-bold text-slate-900 mb-1">Form Belum Dibuka</h2>
+        <p class="text-xs text-slate-500 mb-6 max-w-xs mx-auto">
+          Penerimaan pertanyaan untuk sesi kajian ini akan segera dibuka.
+        </p>
+
+        <!-- COUNTDOWN BOX -->
+        <div class="bg-slate-50 border border-slate-100 rounded-3xl p-4 mb-5">
+          <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Form dibuka dalam</span>
+          <div class="grid grid-cols-4 gap-2 text-center">
+            <div class="bg-white p-2.5 rounded-2xl shadow-xs border border-slate-100">
+              <span id="cd-days" class="block text-lg font-extrabold text-slate-900">00</span>
+              <span class="text-[9px] font-bold text-slate-400 uppercase">Hari</span>
+            </div>
+            <div class="bg-white p-2.5 rounded-2xl shadow-xs border border-slate-100">
+              <span id="cd-hours" class="block text-lg font-extrabold text-slate-900">00</span>
+              <span class="text-[9px] font-bold text-slate-400 uppercase">Jam</span>
+            </div>
+            <div class="bg-white p-2.5 rounded-2xl shadow-xs border border-slate-100">
+              <span id="cd-minutes" class="block text-lg font-extrabold text-slate-900">00</span>
+              <span class="text-[9px] font-bold text-slate-400 uppercase">Menit</span>
+            </div>
+            <div class="bg-white p-2.5 rounded-2xl shadow-xs border border-slate-100">
+              <span id="cd-seconds" class="block text-lg font-extrabold text-slate-900">00</span>
+              <span class="text-[9px] font-bold text-slate-400 uppercase">Detik</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-500 font-medium" id="upcoming-open-time-label"></p>
+      </div>
+
+      <!-- VIEW C: FORM DITUTUP (STATUS = CLOSED) -->
+      <div id="view-closed" class="hidden text-center py-4 fade-in">
+        <div class="w-14 h-14 rounded-3xl bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-4">
+          <i data-lucide="clock-3" class="w-7 h-7"></i>
+        </div>
+        <h2 class="text-base font-bold text-slate-900 mb-2">Penerimaan Telah Ditutup</h2>
+        <p class="text-xs text-slate-500 mb-5 max-w-sm mx-auto leading-relaxed" id="closed-message-text">
+          Maaf, penerimaan pertanyaan sedang ditutup. Silakan kembali pada jadwal berikutnya. Terima kasih atas pengertian Anda.
+        </p>
+
+        <!-- NEXT SCHEDULE COUNTDOWN -->
+        <div id="next-schedule-box" class="hidden bg-slate-50 border border-slate-100 rounded-3xl p-4 mt-4">
+          <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Pembukaan Berikutnya</span>
+          <div class="grid grid-cols-4 gap-2 text-center mb-2">
+            <div class="bg-white p-2 rounded-2xl border border-slate-100">
+              <span id="next-cd-days" class="block text-base font-extrabold text-slate-800">00</span>
+              <span class="text-[9px] text-slate-400 font-semibold">Hari</span>
+            </div>
+            <div class="bg-white p-2 rounded-2xl border border-slate-100">
+              <span id="next-cd-hours" class="block text-base font-extrabold text-slate-800">00</span>
+              <span class="text-[9px] text-slate-400 font-semibold">Jam</span>
+            </div>
+            <div class="bg-white p-2 rounded-2xl border border-slate-100">
+              <span id="next-cd-minutes" class="block text-base font-extrabold text-slate-800">00</span>
+              <span class="text-[9px] text-slate-400 font-semibold">Menit</span>
+            </div>
+            <div class="bg-white p-2 rounded-2xl border border-slate-100">
+              <span id="next-cd-seconds" class="block text-base font-extrabold text-slate-800">00</span>
+              <span class="text-[9px] text-slate-400 font-semibold">Detik</span>
+            </div>
+          </div>
+          <span id="next-open-time-label" class="text-[11px] text-slate-500 font-medium"></span>
+        </div>
+      </div>
+
+      <!-- VIEW D: KONFIRMASI SUKSES (DENGAN ANIMASI CENTANG SVG & MAU DONASI) -->
+      <div id="view-success" class="hidden text-center py-6 fade-in">
+        
+        <!-- ANIMASI CENTANG SVG -->
+        <div class="w-20 h-20 mx-auto mb-4 relative flex items-center justify-center">
+          <svg class="w-20 h-20" viewBox="0 0 52 52">
+            <circle class="checkmark-circle" cx="26" cy="26" r="23" />
+            <path class="checkmark-check" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+          </svg>
+        </div>
+
+        <h2 class="text-lg font-extrabold text-slate-900 mb-3">Pertanyaan Telah Terkirim</h2>
+        
+        <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 mb-6 text-left">
+          <p class="text-xs text-slate-600 leading-relaxed mb-3">
+            Pertanyaan telah terkirim, mohon bersabar dengan antrian pertanyaan. Apabila pertanyaan tidak dijawab oleh ustadz dikarenakan keterbatasan waktu, mohon bersabar. Semoga bisa dijawab di lain waktu.
+          </p>
+          <p class="text-xs font-bold text-slate-800 text-center pt-2.5 border-t border-slate-200/60">
+            Jazakumullahu khairan atas partisipasi Anda.
+          </p>
+        </div>
+
+        <!-- TOMBOL SELESAI / KIRIM PERTANYAAN LAIN -->
+        <button onclick="resetToHome()" class="w-full py-3.5 px-5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-2xl text-xs transition active:scale-95 mb-3">
+          Selesai / Kirim Pertanyaan Lain
+        </button>
+
+        <!-- TOMBOL MAU DONASI (BAR WARNA HIJAU) -->
+        <a href="https://gazebomengaji.com/donasi" target="_blank" rel="noopener noreferrer" id="donation-btn" class="w-full py-3.5 px-5 bg-brand-700 hover:bg-brand-800 text-white font-bold rounded-2xl text-xs transition active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-brand-700/20">
+          <i data-lucide="heart" class="w-4 h-4 fill-white text-white"></i>
+          <span>Mau Donasi?</span>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- FOOTER INFORMASI -->
+    <footer class="mt-8 text-center text-[11px] font-medium text-slate-400">
+      <p>© Gazebo Mengaji • Form Pertanyaan Kajian</p>
+    </footer>
+
+  </main>
+
+  <!-- JAVASCRIPT APP LOGIC -->
+  <script>
+    /**
+     * KONFIGURASI BACKEND GOOGLE APPS SCRIPT
+     * 
+     * Masukkan URL Web App Google Apps Script Anda pada variabel `gasUrl` di bawah ini.
+     * Contoh:
+     * gasUrl: 'https://script.google.com/macros/s/AKfycbx.../exec'
+     */
+    let config = {
+      gasUrl: 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE', // <--- TEMPELKAN URL CODE.GS ANDA DI SINI
+      fetchIntervalSeconds: 30
+    };
+
+    let countdownTimer = null;
+
+    // Initialize App
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      checkFormStatus();
+
+      // Periodic check status every 30s
+      setInterval(() => {
+        checkFormStatus(true); // silent check
+      }, config.fetchIntervalSeconds * 1000);
+    });
+
+    // Main Status Checker
+    async function checkFormStatus(isSilent = false) {
+      if (!isSilent) {
+        showView('status-loading');
+      }
+
+      // Jika URL belum dimasukkan, jalankan mode tampilan langsung (Default OPEN untuk preview)
+      if (!config.gasUrl || config.gasUrl === 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+        renderState({
+          status: 'OPEN',
+          waktu_tutup: new Date(Date.now() + 3600 * 2 * 1000).toISOString()
+        });
+        return;
+      }
+
+      try {
+        const res = await fetch(`${config.gasUrl}?action=getStatus`, { method: 'GET' });
+        if (!res.ok) throw new Error('Network response was not ok');
+        const data = await res.json();
+        renderState(data);
+
+      } catch (err) {
+        console.error('Fetch Status Error:', err);
+        if (!isSilent) {
+          document.getElementById('error-message-text').innerText = 
+            "Gagal memverifikasi status dari server Apps Script. Silakan periksa koneksi internet atau URL script Anda.";
+          showView('status-error');
+        }
+      }
+    }
+
+    // Render View Based On Status
+    function renderState(data) {
+      if (countdownTimer) clearInterval(countdownTimer);
+
+      if (data.status === 'OPEN') {
+        showView('view-open');
+        if (data.waktu_tutup) {
+          const closeDate = new Date(data.waktu_tutup);
+          document.getElementById('close-time-info').innerText = 
+            `Tutup ${formatTime(closeDate)} WIB`;
+        } else {
+          document.getElementById('close-time-info').innerText = '';
+        }
+      } 
+      else if (data.status === 'UPCOMING') {
+        showView('view-upcoming');
+        if (data.waktu_buka) {
+          const openDate = new Date(data.waktu_buka);
+          document.getElementById('upcoming-open-time-label').innerText = 
+            `Jadwal Buka: ${formatDateTime(openDate)} WIB`;
+          startCountdown(openDate, () => {
+            checkFormStatus();
+          });
+        }
+      } 
+      else if (data.status === 'CLOSED') {
+        showView('view-closed');
+        const nextBox = document.getElementById('next-schedule-box');
+        
+        if (data.next_waktu_buka) {
+          const nextOpen = new Date(data.next_waktu_buka);
+          if (nextOpen > new Date()) {
+            nextBox.classList.remove('hidden');
+            document.getElementById('next-open-time-label').innerText = 
+              `Jadwal berikutnya: ${formatDateTime(nextOpen)} WIB`;
+            startCountdown(nextOpen, () => {
+              checkFormStatus();
+            }, 'next-cd-');
+          } else {
+            nextBox.classList.add('hidden');
+          }
+        } else {
+          nextBox.classList.add('hidden');
+          document.getElementById('closed-message-text').innerText = 
+            "Maaf, penerimaan pertanyaan sedang ditutup. Belum ada jadwal pembukaan berikutnya. Silakan periksa kembali nanti.";
+        }
+      }
+    }
+
+    // Switch Visible Views
+    function showView(viewId) {
+      const views = ['status-loading', 'status-error', 'view-open', 'view-upcoming', 'view-closed', 'view-success'];
+      views.forEach(v => {
+        const el = document.getElementById(v);
+        if (v === viewId) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      });
+    }
+
+    // Character Counter
+    function updateCharCount() {
+      const text = document.getElementById('pertanyaan').value;
+      const counter = document.getElementById('char-count');
+      counter.innerText = `${text.length} / 3000`;
+      if (text.length >= 2900) {
+        counter.classList.add('text-amber-600', 'font-bold');
+      } else {
+        counter.classList.remove('text-amber-600', 'font-bold');
+      }
+    }
+
+    // Input Validation
+    function validateForm() {
+      let isValid = true;
+      
+      const nama = document.getElementById('nama').value.trim();
+      const wa = document.getElementById('nomor_whatsapp').value.trim();
+      const pertanyaan = document.getElementById('pertanyaan').value.trim();
+
+      ['nama', 'nomor_whatsapp', 'pertanyaan'].forEach(id => {
+        document.getElementById(`err-${id}`).classList.add('hidden');
+      });
+      document.getElementById('general-error').classList.add('hidden');
+
+      if (!nama) {
+        document.getElementById('err-nama').classList.remove('hidden');
+        isValid = false;
+      }
+
+      const waPattern = /^(\+62|62|0)8[1-9][0-9]{7,11}$/;
+      if (!wa || !waPattern.test(wa.replace(/[-\s]/g, ''))) {
+        document.getElementById('err-nomor_whatsapp').classList.remove('hidden');
+        isValid = false;
+      }
+
+      if (!pertanyaan) {
+        document.getElementById('err-pertanyaan').classList.remove('hidden');
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    // Form Submission Handler
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+
+      if (!validateForm()) {
+        return;
+      }
+
+      const submitBtn = document.getElementById('submit-btn');
+      const btnText = document.getElementById('btn-text');
+      const btnSpinner = document.getElementById('btn-spinner');
+      const genError = document.getElementById('general-error');
+      const genErrorText = document.getElementById('general-error-text');
+
+      submitBtn.disabled = true;
+      btnText.innerText = "Mengirim...";
+      btnSpinner.classList.remove('hidden');
+      genError.classList.add('hidden');
+
+      const payload = {
+        nama: document.getElementById('nama').value.trim(),
+        nomor_whatsapp: document.getElementById('nomor_whatsapp').value.trim(),
+        alamat_domisili: document.getElementById('alamat_domisili').value.trim(),
+        pertanyaan: document.getElementById('pertanyaan').value.trim()
+      };
+
+      try {
+        let result = null;
+
+        // Jika URL Apps Script sudah diisi, kirim langsung ke server Google
+        if (config.gasUrl && config.gasUrl !== 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+          const response = await fetch(config.gasUrl, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'text/plain;charset=utf-8',
+            },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+            throw new Error('Gagal mengirim data ke server.');
+          }
+
+          result = await response.json();
+        } else {
+          // Demo / Simulation mode
+          await new Promise(r => setTimeout(r, 1000));
+          result = { success: true, message: "Pertanyaan berhasil tersimpan (Simulasi)" };
+        }
+
+        if (result && result.success) {
+          document.getElementById('question-form').reset();
+          updateCharCount();
+          
+          // SHOW SUCCESS VIEW WITH ANIMATED CHECKMARK & HIDE INFO BOX
+          showView('view-success');
+        } else {
+          throw new Error(result.message || 'Gagal menyimpan pertanyaan.');
+        }
+
+      } catch (err) {
+        console.error('Submit Error:', err);
+        genErrorText.innerText = err.message || "Terjadi kesalahan jaringan. Silakan coba lagi.";
+        genError.classList.remove('hidden');
+      } finally {
+        submitBtn.disabled = false;
+        btnText.innerText = "Kirim Pertanyaan";
+        btnSpinner.classList.add('hidden');
+      }
+    }
+
+    function resetToHome() {
+      checkFormStatus();
+    }
+
+    // Countdown Helper Function
+    function startCountdown(targetDate, onZero, prefix = 'cd-') {
+      function update() {
+        const now = new Date().getTime();
+        const distance = targetDate.getTime() - now;
+
+        if (distance <= 0) {
+          clearInterval(countdownTimer);
+          if (onZero) onZero();
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        const dEl = document.getElementById(`${prefix}days`);
+        const hEl = document.getElementById(`${prefix}hours`);
+        const mEl = document.getElementById(`${prefix}minutes`);
+        const sEl = document.getElementById(`${prefix}seconds`);
+
+        if (dEl) dEl.innerText = String(days).padStart(2, '0');
+        if (hEl) hEl.innerText = String(hours).padStart(2, '0');
+        if (mEl) mEl.innerText = String(minutes).padStart(2, '0');
+        if (sEl) sEl.innerText = String(seconds).padStart(2, '0');
+      }
+
+      update();
+      countdownTimer = setInterval(update, 1000);
+    }
+
+    function formatTime(dateObj) {
+      return dateObj.toLocaleTimeString('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    function formatDateTime(dateObj) {
+      return dateObj.toLocaleString('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+  </script>
+</body>
+</html>
