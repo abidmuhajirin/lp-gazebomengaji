@@ -251,6 +251,7 @@
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center gap-2 mb-1">
                     <span class="text-xs font-extrabold text-slate-900 truncate">{{ q.nama }}</span>
+                    <span v-if="isAdmin && q.schedule_id" :class="getScheduleBadgeClass(q.schedule_id)" class="text-[9px] font-extrabold px-2 py-0.5 rounded-full flex-shrink-0">{{ q.schedule_id }}</span>
                     <span class="text-[10px] text-slate-400 font-medium">• {{ formatDate(q.timestamp) }}</span>
                   </div>
                   <p class="text-xs text-slate-600 font-medium line-clamp-1 leading-relaxed">{{ q.pertanyaan }}</p>
@@ -293,6 +294,11 @@
             </div>
 
             <div class="flex items-center gap-2 overflow-x-auto no-scrollbar">
+              <select v-if="isAdmin" v-model="filterSchedule" class="px-3.5 py-2.5 bg-slate-100/80 border border-transparent rounded-full text-xs text-slate-800 font-extrabold focus:bg-white focus:outline-none">
+                <option value="ALL">Semua Kajian</option>
+                <option v-for="s in scheduleOptions" :key="s" :value="String(s)">Kajian {{ s }}</option>
+              </select>
+
               <select v-model="filterAnswerStatus" class="px-3.5 py-2.5 bg-slate-100/80 border border-transparent rounded-full text-xs text-slate-800 font-extrabold focus:bg-white focus:outline-none">
                 <option value="ALL">Semua Status Jawaban</option>
                 <option value="PENDING">Belum Dijawab</option>
@@ -330,6 +336,7 @@
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center gap-2 mb-1">
                     <span class="text-xs sm:text-sm font-extrabold text-slate-900">{{ q.nama }}</span>
+                    <span v-if="isAdmin && q.schedule_id" :class="getScheduleBadgeClass(q.schedule_id)" class="text-[9px] font-extrabold px-2 py-0.5 rounded-full">{{ q.schedule_id }}</span>
                     <span class="text-[10px] text-slate-400 font-medium">• {{ formatDate(q.timestamp) }}</span>
                     <span v-if="q.read_status === 'UNREAD'" class="text-[9px] bg-amber-400 text-amber-950 font-extrabold px-2 py-0.5 rounded-full uppercase">Baru</span>
                   </div>
@@ -389,7 +396,10 @@
               <span class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100 inline-block mb-1">
                 Detail Pertanyaan Jamaah
               </span>
-              <h3 class="text-lg font-extrabold text-slate-900">{{ selectedQuestion.nama }}</h3>
+              <div class="flex items-center gap-2">
+                <h3 class="text-lg font-extrabold text-slate-900">{{ selectedQuestion.nama }}</h3>
+                <span v-if="isAdmin && selectedQuestion.schedule_id" :class="getScheduleBadgeClass(selectedQuestion.schedule_id)" class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">Kajian {{ selectedQuestion.schedule_id }}</span>
+              </div>
               <p class="text-xs text-slate-400 font-medium">{{ formatDate(selectedQuestion.timestamp) }}</p>
             </div>
             <button @click="closeDetail" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
@@ -525,6 +535,27 @@
 
         const isLiveBackend = computed(() => gasUrl.value && gasUrl.value.startsWith('http'));
 
+        // Khusus admin: identifikasi kajian lewat schedule_id
+        const isAdmin = computed(() => {
+          const u = auth.value.user;
+          return !!u && (u.role === 'ADMIN' || u.schedule_id === 'ALL');
+        });
+        const filterSchedule = ref('ALL');
+        const scheduleOptions = computed(() =>
+          [...new Set(questions.value.map(q => q.schedule_id).filter(Boolean))].sort()
+        );
+        const scheduleBadgeClasses = [
+          'bg-sky-100 text-sky-800 border border-sky-200',
+          'bg-violet-100 text-violet-800 border border-violet-200',
+          'bg-teal-100 text-teal-800 border border-teal-200',
+          'bg-orange-100 text-orange-800 border border-orange-200',
+          'bg-pink-100 text-pink-800 border border-pink-200'
+        ];
+        const getScheduleBadgeClass = (id) => {
+          const i = scheduleOptions.value.indexOf(id);
+          return scheduleBadgeClasses[(i < 0 ? 0 : i) % scheduleBadgeClasses.length];
+        };
+
         const userQuestions = computed(() => {
           if (!auth.value.user) return questions.value;
           const userRole = auth.value.user.role;
@@ -562,6 +593,7 @@
           }
           if (filterAnswerStatus.value !== 'ALL') res = res.filter(i => i.answer_status === filterAnswerStatus.value);
           if (filterReadStatus.value !== 'ALL') res = res.filter(i => i.read_status === filterReadStatus.value);
+          if (isAdmin.value && filterSchedule.value !== 'ALL') res = res.filter(i => String(i.schedule_id) === filterSchedule.value);
 
           if (sortBy.value === 'NEWEST') {
             res.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
@@ -729,6 +761,7 @@
         return {
           auth, loginForm, loginError, isSubmittingLogin, handleLogin, handleLogout,
           gasUrl, isLiveBackend,
+          isAdmin, filterSchedule, scheduleOptions, getScheduleBadgeClass,
           questions, stats, recentQuestions, activeTab, setTab, searchQuery, filterAnswerStatus, filterReadStatus,
           sortBy, currentPage, itemsPerPage, totalPages, filteredQuestions, paginatedQuestions,
           selectedQuestion, openDetail, closeDetail, updateQuestionStatus,
