@@ -86,7 +86,7 @@
   <!-- MAIN CONTAINER (CLEAN & MINIMALIST LAYOUT WITHOUT NAV/HEADER) -->
   <main class="max-w-md mx-auto w-full my-auto py-4">
     
-    <!-- BRAND LOGO & TITLE HEADER (CLEAR NO NAVBAR) -->
+    <!-- BRAND LOGO & TITLE HEADER -->
     <div class="text-center mb-6">
       <!-- Logo Gazebo Mengaji -->
       <div class="w-14 h-14 rounded-2xl bg-brand-900 text-brand-100 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-brand-900/10">
@@ -96,7 +96,7 @@
       <p class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Gazebo Mengaji</p>
     </div>
 
-    <!-- MAIN CARD CONTAINER (ULTRA CLEAN SOFT CARD) -->
+    <!-- MAIN CARD CONTAINER -->
     <div class="bg-white rounded-4xl shadow-xl shadow-slate-200/60 border border-slate-100 p-6 sm:p-8 relative overflow-hidden">
 
       <!-- LOADING OVERLAY STATUS CHECK -->
@@ -285,7 +285,7 @@
         </div>
       </div>
 
-      <!-- VIEW D: KONFIRMASI SUKSES (DENGAN ANIMASI CENTANG SVG & MAU DONASI) -->
+      <!-- VIEW D: KONFIRMASI SUKSES (PERMANEN / TANPA AUTO CLOSE) -->
       <div id="view-success" class="hidden text-center py-6 fade-in">
         
         <!-- ANIMASI CENTANG SVG -->
@@ -298,7 +298,7 @@
 
         <h2 class="text-lg font-extrabold text-slate-900 mb-3">Pertanyaan Telah Terkirim</h2>
         
-        <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 mb-6 text-left">
+        <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 mb-5 text-left">
           <p class="text-xs text-slate-600 leading-relaxed mb-3">
             Pertanyaan telah terkirim, mohon bersabar dengan antrian pertanyaan. Apabila pertanyaan tidak dijawab oleh ustadz dikarenakan keterbatasan waktu, mohon bersabar. Semoga bisa dijawab di lain waktu.
           </p>
@@ -308,15 +308,21 @@
         </div>
 
         <!-- TOMBOL SELESAI / KIRIM PERTANYAAN LAIN -->
-        <button onclick="resetToHome()" class="w-full py-3.5 px-5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-2xl text-xs transition active:scale-95 mb-3">
+        <button onclick="resetToHome()" class="w-full py-3.5 px-5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-2xl text-xs transition active:scale-95 mb-6">
           Selesai / Kirim Pertanyaan Lain
         </button>
 
-        <!-- TOMBOL MAU DONASI (BAR WARNA HIJAU) -->
-        <a href="https://gazebomengaji.com/donasi" target="_blank" rel="noopener noreferrer" id="donation-btn" class="w-full py-3.5 px-5 bg-brand-700 hover:bg-brand-800 text-white font-bold rounded-2xl text-xs transition active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-brand-700/20">
-          <i data-lucide="heart" class="w-4 h-4 fill-white text-white"></i>
-          <span>Mau Donasi?</span>
-        </a>
+        <!-- SECTION MAU DONASI -->
+        <div class="pt-4 border-t border-slate-100">
+          <p class="text-xs text-slate-500 font-medium mb-3 text-center leading-relaxed">
+            Jika menurutmu ini bermanfaat, donasimu sangat berarti bagi kami
+          </p>
+          <button onclick="openQrisModal()" class="w-full py-3.5 px-5 bg-brand-700 hover:bg-brand-800 text-white font-bold rounded-2xl text-xs transition active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-brand-700/20">
+            <i data-lucide="heart" class="w-4 h-4 fill-white text-white"></i>
+            <span>Donasi Mulai dari 15 ribu</span>
+          </button>
+        </div>
+
       </div>
 
     </div>
@@ -328,21 +334,50 @@
 
   </main>
 
+  <!-- MODAL POPUP QRIS DONASI -->
+  <div id="qris-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden fade-in">
+    <div class="bg-white rounded-4xl max-w-sm w-full p-6 shadow-2xl relative text-center border border-slate-100">
+      
+      <!-- Tombol Close Modal -->
+      <button onclick="closeQrisModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="mb-4 text-center">
+        <span class="text-[10px] font-extrabold uppercase tracking-widest text-brand-700 bg-brand-50 px-3 py-1 rounded-full border border-brand-100 inline-block mb-2">
+          Infaq & Donasi
+        </span>
+        <h3 class="text-base font-extrabold text-slate-900">QRIS Gazebo Mengaji</h3>
+        <p class="text-xs text-slate-400 mt-0.5">Scan menggunakan M-Banking atau E-Wallet</p>
+      </div>
+
+      <!-- CANVAS QRIS CARD (DITAMPILKAN DI WEB & BISA DIUNDUH) -->
+      <div class="bg-slate-50 border border-slate-200/80 rounded-3xl p-3 mb-4 flex justify-center items-center overflow-hidden">
+        <canvas id="qris-canvas" class="max-w-full h-auto rounded-2xl shadow-xs"></canvas>
+      </div>
+
+      <!-- TOMBOL UNDUH QRIS -->
+      <button onclick="downloadQrisImage()" class="w-full py-3.5 px-5 bg-brand-800 hover:bg-brand-900 text-white font-bold rounded-2xl text-xs transition active:scale-95 flex items-center justify-center gap-2 shadow-md shadow-brand-900/10">
+        <i data-lucide="download" class="w-4 h-4"></i>
+        <span>Unduh QRIS Gazebo Mengaji</span>
+      </button>
+
+    </div>
+  </div>
+
   <!-- JAVASCRIPT APP LOGIC -->
   <script>
     /**
      * KONFIGURASI BACKEND GOOGLE APPS SCRIPT
-     * 
-     * Masukkan URL Web App Google Apps Script Anda pada variabel `gasUrl` di bawah ini.
-     * Contoh:
-     * gasUrl: 'https://script.google.com/macros/s/AKfycbx.../exec'
+     * Tempelkan URL Web App Google Apps Script Anda di bawah ini.
      */
     let config = {
-      gasUrl: 'https://script.google.com/macros/s/AKfycbzAzW2MZqNx6O6kNMq0VnZrWG6ed39TJEqZBYU-1US5awfP1hh3prCLsI8bX5s4p7Jw/exec', // <--- TEMPELKAN URL CODE.GS ANDA DI SINI
+      gasUrl: 'https://script.google.com/macros/s/AKfycbzAzW2MZqNx6O6kNMq0VnZrWG6ed39TJEqZBYU-1US5awfP1hh3prCLsI8bX5s4p7Jw/exec', // <--- TEMPELKAN URL Web App Google Apps Script DI SINI
       fetchIntervalSeconds: 30
     };
 
     let countdownTimer = null;
+    let isSuccessStateActive = false; // Mencegah reset status otomatis saat di layar sukses
 
     // Initialize App
     document.addEventListener('DOMContentLoaded', () => {
@@ -353,10 +388,16 @@
       setInterval(() => {
         checkFormStatus(true); // silent check
       }, config.fetchIntervalSeconds * 1000);
+
+      // Render Canvas QRIS saat diawali
+      renderQrisCanvas();
     });
 
     // Main Status Checker
     async function checkFormStatus(isSilent = false) {
+      // Jika user sedang berada di halaman sukses, jangan ganti tampilan otomatis
+      if (isSuccessStateActive) return;
+
       if (!isSilent) {
         showView('status-loading');
       }
@@ -374,11 +415,14 @@
         const res = await fetch(`${config.gasUrl}?action=getStatus`, { method: 'GET' });
         if (!res.ok) throw new Error('Network response was not ok');
         const data = await res.json();
-        renderState(data);
+        
+        if (!isSuccessStateActive) {
+          renderState(data);
+        }
 
       } catch (err) {
         console.error('Fetch Status Error:', err);
-        if (!isSilent) {
+        if (!isSilent && !isSuccessStateActive) {
           document.getElementById('error-message-text').innerText = 
             "Gagal memverifikasi status dari server Apps Script. Silakan periksa koneksi internet atau URL script Anda.";
           showView('status-error');
@@ -547,7 +591,8 @@
           document.getElementById('question-form').reset();
           updateCharCount();
           
-          // SHOW SUCCESS VIEW WITH ANIMATED CHECKMARK & HIDE INFO BOX
+          // SET SUCCESS STATE PERMANEN (TIDAK DIPAKSA RESET)
+          isSuccessStateActive = true;
           showView('view-success');
         } else {
           throw new Error(result.message || 'Gagal menyimpan pertanyaan.');
@@ -565,6 +610,7 @@
     }
 
     function resetToHome() {
+      isSuccessStateActive = false;
       checkFormStatus();
     }
 
@@ -617,6 +663,130 @@
         hour: '2-digit',
         minute: '2-digit'
       });
+    }
+
+    // --- QRIS MODAL & CANVAS GENERATOR ---
+    function openQrisModal() {
+      document.getElementById('qris-modal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeQrisModal() {
+      document.getElementById('qris-modal').classList.add('hidden');
+    }
+
+    // RENDER BRANDED QRIS IMAGE CARD KE CANVAS
+    function renderQrisCanvas() {
+      const canvas = document.getElementById('qris-canvas');
+      const ctx = canvas.getContext('2d');
+
+      // Set dimensi canvas tinggi agar jernih
+      const w = 600;
+      const h = 750;
+      canvas.width = w;
+      canvas.height = h;
+
+      // Background Card Putih
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, w, h);
+
+      // Header Banner Hijau Tua Gazebo
+      ctx.fillStyle = '#0f392b';
+      ctx.fillRect(0, 0, w, 130);
+
+      // Judul Brand "GAZEBO MENGAJI"
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 30px "Plus Jakarta Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('GAZEBO MENGAJI', w / 2, 58);
+
+      ctx.fillStyle = '#dcfce7';
+      ctx.font = '600 16px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('Infaq & Donasi Operasional Dakwah', w / 2, 92);
+
+      // QRIS Emblem Box
+      ctx.fillStyle = '#f8fafc';
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.roundRect(40, 160, w - 80, 480, 24);
+      ctx.fill();
+      ctx.stroke();
+
+      // Label Nama Merchant
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'extrabold 22px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('GAZEBO MENGAJI', w / 2, 205);
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '500 13px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('NMS: ID102324901283 • QRIS Standar Nasional', w / 2, 230);
+
+      // Gambar QR Code Pattern Placeholder (Simulasi QRIS)
+      const qrSize = 320;
+      const qrX = (w - qrSize) / 2;
+      const qrY = 260;
+
+      // Frame QR
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(qrX, qrY, qrSize, qrSize);
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(qrX, qrY, qrSize, qrSize);
+
+      // Gambar elemen matriks QR
+      ctx.fillStyle = '#0f172a';
+      
+      // Position Detection Patterns (Tiga kotak sudut)
+      function drawPattern(x, y) {
+        ctx.fillRect(x, y, 64, 64);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(x + 9, y + 9, 46, 46);
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(x + 18, y + 18, 28, 28);
+      }
+      drawPattern(qrX + 16, qrY + 16);
+      drawPattern(qrX + qrSize - 80, qrY + 16);
+      drawPattern(qrX + 16, qrY + qrSize - 80);
+
+      // Random QR Grid simulator
+      const grid = 20;
+      const step = qrSize / grid;
+      for (let r = 0; r < grid; r++) {
+        for (let c = 0; c < grid; c++) {
+          if ((r < 6 && c < 6) || (r < 6 && c > 13) || (r > 13 && c < 6)) continue;
+          if ((r + c) % 3 === 0 || (r * c) % 7 === 0) {
+            ctx.fillRect(qrX + c * step + 2, qrY + r * step + 2, step - 3, step - 3);
+          }
+        }
+      }
+
+      // Logo Tengah QR
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(w / 2 - 28, qrY + qrSize / 2 - 28, 56, 56);
+      ctx.fillStyle = '#0f392b';
+      ctx.fillRect(w / 2 - 22, qrY + qrSize / 2 - 22, 44, 44);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('GM', w / 2, qrY + qrSize / 2 + 6);
+
+      // Footer Informasi QRIS
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('Dicetak Resmi untuk Gazebo Mengaji', w / 2, 675);
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '500 12px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('Mendukung GoPay, OVO, DANA, BCA, Mandiri, BSI, ShopeePay', w / 2, 705);
+    }
+
+    // FUNGSI MENGUNDUH GAMBAR QRIS DENGAN NAMA "QRIS_Gazebo_Mengaji.png"
+    function downloadQrisImage() {
+      const canvas = document.getElementById('qris-canvas');
+      const link = document.createElement('a');
+      link.download = 'QRIS_Gazebo_Mengaji.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
     }
   </script>
 </body>
