@@ -110,6 +110,10 @@
         // atau tulis nama tab persis, contoh: "Jadwal Kajian"
         sheetTab: "BIO KAJIAN",
 
+        // Koreksi tanggal Hijriyah (dalam hari) agar sama dengan ketetapan Kemenag RI.
+        // 0 = ikut hasil hitungan otomatis. Isi 1 untuk maju sehari, -1 untuk mundur sehari.
+        hijriAdjust: 1,
+
         // Tab untuk data Donasi Mendesak (baris 1 = header, baris 2 = data)
         // Header kolom: judul | deskripsi | thumbnail | target | terkumpul
         donasiTab: "DONASI",
@@ -252,6 +256,35 @@
       };
       const formatRupiah = (n) => 'Rp ' + Math.max(0, Math.round(n)).toLocaleString('id-ID');
 
+      /* ---------- Kalender Masehi & Hijriyah otomatis (zona waktu WIB) ---------- */
+      const HARI_ID = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+      const BULAN_MASEHI = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      // Penulisan nama bulan mengikuti kalender Hijriyah Indonesia (Kemenag RI)
+      const BULAN_HIJRIAH = ['Muharram', 'Safar', 'Rabiulawal', 'Rabiulakhir', 'Jumadilawal', 'Jumadilakhir', 'Rajab', 'Syaban', 'Ramadan', 'Syawal', 'Zulkaidah', 'Zulhijah'];
+
+      const jakartaYMD = (date) => {
+        const p = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Jakarta', year: 'numeric', month: 'numeric', day: 'numeric' }).formatToParts(date);
+        const get = (t) => parseInt(p.find((x) => x.type === t).value, 10);
+        return { y: get('year'), m: get('month'), d: get('day') };
+      };
+
+      // Hitungan lokal (cadangan bila API tidak bisa diakses). Masehi selalu dari jam perangkat (WIB).
+      const buildKalenderLocal = (adj = 0) => {
+        const { y, m, d } = jakartaYMD(new Date());
+        const base = new Date(Date.UTC(y, m - 1, d, 12));
+        const masehi = `${HARI_ID[base.getUTCDay()]}, ${d} ${BULAN_MASEHI[m - 1]} ${y} M`;
+        let hijriah = '';
+        try {
+          const hd = new Date(base.getTime() + adj * 86400000);
+          const hp = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', { timeZone: 'UTC', day: 'numeric', month: 'numeric', year: 'numeric' }).formatToParts(hd);
+          const hget = (t) => parseInt(hp.find((x) => x.type === t).value, 10);
+          hijriah = `${hget('day')} ${BULAN_HIJRIAH[hget('month') - 1]} ${hget('year')} H`;
+        } catch (e) {
+          hijriah = '';
+        }
+        return { key: `${y}-${m}-${d}`, masehi, hijriah };
+      };
+
       function App() {
         const [activeTab, setActiveTab] = useState('home');
         const [visitorName, setVisitorName] = useState('');
@@ -267,6 +300,32 @@
 
         const [jadwalKajian, setJadwalKajian] = useState(GAZEBO_CONFIG.jadwalKajianDefault);
         const [donasi, setDonasi] = useState(GAZEBO_CONFIG.donasiDefault);
+        const [kalender, setKalender] = useState(() => buildKalenderLocal(GAZEBO_CONFIG.hijriAdjust));
+
+        // Cek pergantian hari tiap menit (jika halaman dibiarkan terbuka)
+        useEffect(() => {
+          const timer = setInterval(() => {
+            const next = buildKalenderLocal(GAZEBO_CONFIG.hijriAdjust);
+            setKalender((prev) => (prev.key === next.key ? prev : next));
+          }, 60000);
+          return () => clearInterval(timer);
+        }, []);
+
+        // Tanggal Hijriyah dari API kalender Indonesia (nama bulan gaya Kemenag RI)
+        useEffect(() => {
+          let cancelled = false;
+          const adj = GAZEBO_CONFIG.hijriAdjust || 0;
+          fetch(`https://api.myquran.com/v3/cal/today?tz=Asia/Jakarta&adj=${adj}`)
+            .then((res) => res.json())
+            .then((res) => {
+              const h = res && res.status && res.data && res.data.hijr;
+              if (!cancelled && h && h.day && h.monthName && h.year) {
+                setKalender((prev) => ({ ...prev, hijriah: `${h.day} ${h.monthName} ${h.year} H` }));
+              }
+            })
+            .catch((err) => console.error("Gagal memuat kalender Hijriyah:", err));
+          return () => { cancelled = true; };
+        }, [kalender.key]);
 
         const [isDonaturModalOpen, setIsDonaturModalOpen] = useState(false);
         const [donaturForm, setDonaturForm] = useState({
@@ -531,10 +590,10 @@
                         </div>
                       )}
                       <h1 className="text-xs font-black text-black leading-tight mt-0.5 tracking-tight">
-                        8 Jumadilawal 1448 H
+                        {kalender.hijriah}
                       </h1>
                       <p className="text-[10px] text-neutral-500 font-medium leading-tight">
-                        Senin, 19 Oktober 2026 M
+                        {kalender.masehi}
                       </p>
                     </div>
                   </div>
