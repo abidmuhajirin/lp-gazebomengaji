@@ -110,6 +110,20 @@
         // atau tulis nama tab persis, contoh: "Jadwal Kajian"
         sheetTab: "BIO KAJIAN",
 
+        // Tab untuk data Donasi Mendesak (baris 1 = header, baris 2 = data)
+        // Header kolom: judul | deskripsi | thumbnail | target | terkumpul
+        donasiTab: "DONASI",
+
+        // Nilai bawaan jika spreadsheet kosong / gagal dimuat
+        donasiDefault: {
+          title: "Patungan Pengadaan Alat Media Dakwah",
+          desc: "Dukung kualitas live streaming, rekaman kajian, dan dokumentasi dakwah ini agar faedah ilmu dapat menjangkau lebih banyak orang.",
+          thumbnail: "https://images.unsplash.com/photo-1768797767742-353a378404b8?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
+          target: 21500000,
+          terkumpul: 0,
+          kodeUnik: "002"
+        },
+
         jadwalKajianDefault: [
           {
             id: 1,
@@ -230,6 +244,14 @@
         return m ? `https://lh3.googleusercontent.com/d/${m[1]}=w1000` : u;
       };
 
+      // Ubah "Rp 21.500.000" / "21500000" / 21500000 menjadi angka
+      const parseRupiah = (v) => {
+        if (typeof v === 'number') return v;
+        const n = parseInt(String(v || '').replace(/[^\d]/g, ''), 10);
+        return isNaN(n) ? 0 : n;
+      };
+      const formatRupiah = (n) => 'Rp ' + Math.max(0, Math.round(n)).toLocaleString('id-ID');
+
       function App() {
         const [activeTab, setActiveTab] = useState('home');
         const [visitorName, setVisitorName] = useState('');
@@ -244,6 +266,7 @@
         const [copied, setCopied] = useState(false);
 
         const [jadwalKajian, setJadwalKajian] = useState(GAZEBO_CONFIG.jadwalKajianDefault);
+        const [donasi, setDonasi] = useState(GAZEBO_CONFIG.donasiDefault);
 
         const [isDonaturModalOpen, setIsDonaturModalOpen] = useState(false);
         const [donaturForm, setDonaturForm] = useState({
@@ -278,6 +301,35 @@
             })
             .catch((err) => {
               console.error("Gagal memuat data Google Spreadsheet:", err);
+            });
+        }, []);
+
+        // Data Donasi Mendesak dari tab "DONASI"
+        useEffect(() => {
+          if (!GAZEBO_CONFIG.spreadsheetId || GAZEBO_CONFIG.spreadsheetId === "ID_SPREADSHEET_ANDA") {
+            return;
+          }
+
+          const url = `https://opensheet.elk.sh/${GAZEBO_CONFIG.spreadsheetId}/${encodeURIComponent(GAZEBO_CONFIG.donasiTab)}`;
+
+          fetch(url)
+            .then((res) => res.json())
+            .then((data) => {
+              if (Array.isArray(data) && data.length > 0) {
+                const row = data[0];
+                const d = GAZEBO_CONFIG.donasiDefault;
+                setDonasi({
+                  title: row.judul || d.title,
+                  desc: row.deskripsi || d.desc,
+                  thumbnail: toDirectImage(row.thumbnail) || d.thumbnail,
+                  target: parseRupiah(row.target) || d.target,
+                  terkumpul: parseRupiah(row.terkumpul),
+                  kodeUnik: String(row.kodeunik || d.kodeUnik).replace(/[^\d]/g, '') || d.kodeUnik
+                });
+              }
+            })
+            .catch((err) => {
+              console.error("Gagal memuat data donasi:", err);
             });
         }, []);
 
@@ -431,6 +483,11 @@
 
         const kajianMendatang = slideList[0] || GAZEBO_CONFIG.jadwalKajianDefault[0];
 
+        // Perhitungan progres donasi
+        const donasiPersen = donasi.target > 0 ? Math.min(100, (donasi.terkumpul / donasi.target) * 100) : 0;
+        const donasiPersenLabel = donasiPersen % 1 === 0 ? donasiPersen.toFixed(0) : donasiPersen.toFixed(1);
+        const donasiSisa = Math.max(0, donasi.target - donasi.terkumpul);
+
         return (
           <div className="min-h-screen bg-[#111111] flex items-center justify-center p-0 sm:p-4 font-sans text-black antialiased selection:bg-[#C5FF28] selection:text-black">
 
@@ -523,13 +580,62 @@
                         </span>
                       </div>
 
-                      <h2 className="text-sm sm:text-base font-black leading-snug tracking-tight text-white mt-1">
-                        Patungan Pengadaan Alat Media Dakwah
+                      {/* Thumbnail */}
+                      <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden bg-neutral-900 mb-3">
+                        <img
+                          src={donasi.thumbnail}
+                          alt={donasi.title}
+                          className="w-full h-full object-cover"
+                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                        />
+                      </div>
+
+                      <h2 className="text-sm sm:text-base font-black leading-snug tracking-tight text-white">
+                        {donasi.title}
                       </h2>
 
                       <p className="text-[10px] sm:text-[11px] text-neutral-400 mt-1 leading-relaxed font-normal">
-                        Dukung kualitas live streaming, rekaman kajian, dan dokumentasi dakwah Gazebo Mengaji agar faedah ilmu dapat menjangkau lebih banyak orang.
+                        {donasi.desc}
                       </p>
+
+                      {/* Indikator progres donasi */}
+                      <div className="mt-3">
+                        <div className="flex items-end justify-between mb-1">
+                          <span className="text-[10px] font-bold text-neutral-400">Terkumpul</span>
+                          <span className="text-[11px] font-black text-[#C5FF28]">{donasiPersenLabel}%</span>
+                        </div>
+                        <div className="w-full h-2.5 rounded-full bg-white/15 overflow-hidden">
+                          <div
+                            className="h-full rounded-full bg-[#C5FF28] transition-all duration-700"
+                            style={{ width: `${donasiPersen}%` }}
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-2 mt-2.5">
+                          <div>
+                            <div className="text-[9px] text-neutral-500 font-medium">Dana Terkumpul</div>
+                            <div className="text-[11px] font-black text-[#C5FF28] leading-tight">{formatRupiah(donasi.terkumpul)}</div>
+                          </div>
+                          <div>
+                            <div className="text-[9px] text-neutral-500 font-medium">Target</div>
+                            <div className="text-[11px] font-black text-white leading-tight">{formatRupiah(donasi.target)}</div>
+                          </div>
+                          <div>
+                            <div className="text-[9px] text-neutral-500 font-medium">Sisa Kurang</div>
+                            <div className="text-[11px] font-black text-white leading-tight">{formatRupiah(donasiSisa)}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Info kode unik donasi */}
+                      <div className="mt-3 rounded-2xl border border-[#C5FF28]/40 bg-[#C5FF28]/10 p-2.5">
+                        <div className="text-[10px] font-black text-[#C5FF28] uppercase tracking-wider">
+                          Kode Unik Donasi: [{donasi.kodeUnik}]
+                        </div>
+                        <p className="text-[10px] text-neutral-300 mt-1 leading-snug">
+                          Untuk donasi Pengadaan Alat Media Dakwah, tambahkan kode unik <span className="font-black text-white">{donasi.kodeUnik}</span> di akhir nominal transfer. Contoh: <span className="font-black text-white">Rp 100.{donasi.kodeUnik}</span>
+                        </p>
+                      </div>
 
                       <button
                         onClick={() => setActiveTab('donasi')}
