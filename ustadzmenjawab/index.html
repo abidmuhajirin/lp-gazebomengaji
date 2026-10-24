@@ -477,7 +477,32 @@
 
 
   <script>
-    const { createApp, ref, computed } = Vue;
+    const { createApp, ref, computed, onMounted } = Vue;
+
+    // ===== Sesi login (bertahan saat reload) =====
+    const SESSION_KEY = 'gazmen_ustadz_session';
+    const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 hari, ubah sesuai kebutuhan
+
+    const loadSession = () => {
+      try {
+        const raw = localStorage.getItem(SESSION_KEY);
+        if (!raw) return null;
+        const s = JSON.parse(raw);
+        if (!s || !s.user || Date.now() > s.expires) {
+          localStorage.removeItem(SESSION_KEY);
+          return null;
+        }
+        return s.user;
+      } catch (e) { return null; }
+    };
+    const saveSession = (user) => {
+      try {
+        localStorage.setItem(SESSION_KEY, JSON.stringify({ user, expires: Date.now() + SESSION_TTL_MS }));
+      } catch (e) {}
+    };
+    const clearSession = () => {
+      try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+    };
 
     // Path ikon (gaya Lucide, viewBox 24x24). Dirender oleh Vue, bukan oleh lucide.createIcons().
     const ICONS = {
@@ -520,9 +545,11 @@
             schedule_id: "SCH-002", read_status: "READ", answer_status: "ANSWERED" }
         ];
 
+        // Pulihkan sesi login dari localStorage (jika masih berlaku)
+        const savedUser = loadSession();
         const auth = ref({
-          isAuthenticated: false,
-          user: { name: 'Ustadz Ahmad', email: 'ustadz1@gazebomengaji.org', role: 'USTADZ', schedule_id: 'SCH-001' }
+          isAuthenticated: !!savedUser,
+          user: savedUser || { name: 'Ustadz Ahmad', email: 'ustadz1@gazebomengaji.org', role: 'USTADZ', schedule_id: 'SCH-001' }
         });
 
         const loginForm = ref({ email: '', password: '' });
@@ -648,6 +675,7 @@
               if (data.success) {
                 auth.value.user = data.user;
                 auth.value.isAuthenticated = true;
+                saveSession(data.user); // simpan sesi agar tidak login ulang saat reload
                 await fetchQuestions();
               } else {
                 loginError.value = data.message || 'Email atau kata sandi salah.';
@@ -665,12 +693,14 @@
               schedule_id: isDemoAdmin ? 'ALL' : 'SCH-001'
             };
             auth.value.isAuthenticated = true;
+            saveSession(auth.value.user); // simpan sesi agar tidak login ulang saat reload
             await fetchQuestions();
           }
           isSubmittingLogin.value = false;
         };
 
         const handleLogout = () => {
+          clearSession(); // hapus sesi tersimpan
           auth.value.isAuthenticated = false;
           selectedQuestion.value = null;
           activeTab.value = 'dashboard';
@@ -768,6 +798,11 @@
           if (status === 'NOT_ANSWERED') return 'Belum Sempat';
           return 'Belum Dijawab';
         };
+
+        // Setelah reload dengan sesi tersimpan, muat data pertanyaan otomatis
+        onMounted(() => {
+          if (auth.value.isAuthenticated) fetchQuestions();
+        });
 
         return {
           auth, loginForm, loginError, isSubmittingLogin, handleLogin, handleLogout,
