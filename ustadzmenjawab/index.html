@@ -11,6 +11,38 @@
 <meta name="apple-mobile-web-app-title" content="Gazebo Mengaji">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#f1f5f9">
+<!-- Manifest PWA dibuat otomatis dari sini (tidak perlu file manifest.webmanifest terpisah) -->
+<script>
+  (function () {
+    try {
+      var abs = function (p) { return new URL(p, location.href).href; };
+      var startUrl = location.origin + location.pathname;
+      var scope = startUrl.replace(/[^\/]*$/, '');
+      var manifest = {
+        id: startUrl,
+        name: 'Dashboard Ustadz — Gazebo Mengaji',
+        short_name: 'Gazebo Mengaji',
+        description: 'Portal pertanyaan jamaah untuk ustadz dan admin Gazebo Mengaji.',
+        lang: 'id',
+        start_url: startUrl,
+        scope: scope,
+        display: 'standalone',
+        background_color: '#eaecef',
+        theme_color: '#f1f5f9',
+        icons: [
+          { src: abs('images/icon192-gazmen.png'), sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: abs('images/icon512-gazmen.png'), sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: abs('images/icon512-gazmen.png'), sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+        ]
+      };
+      var blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+      var link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = URL.createObjectURL(blob);
+      document.head.appendChild(link);
+    } catch (e) { console.warn('Manifest PWA gagal dibuat:', e); }
+  })();
+</script>
 
 <!-- App Icon (Ganti link URL di bawah dengan URL logo Gazebo Mengaji Anda) -->
 <link rel="apple-touch-icon" sizes="180x180" href="images/icon180-gazmen.png">
@@ -93,6 +125,12 @@
               Memproses...
             </span>
           </button>
+
+          <button v-if="canInstall" type="button" @click="installApp"
+            class="w-full py-3 px-6 bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold rounded-2xl text-xs transition active:scale-[0.98] flex items-center justify-center gap-2">
+            <app-icon name="download" class="w-4 h-4"></app-icon>
+            <span>Install Aplikasi di Komputer</span>
+          </button>
         </form>
 
       </div>
@@ -116,6 +154,12 @@
           </div>
 
           <div class="flex items-center gap-2">
+            <button v-if="canInstall" @click="installApp" title="Install aplikasi di perangkat ini"
+              class="flex items-center gap-1.5 px-3.5 h-10 bg-white hover:bg-slate-100 border border-slate-200/80 text-slate-800 rounded-full text-xs font-extrabold shadow-xs transition active:scale-95">
+              <app-icon name="download" class="w-4 h-4"></app-icon>
+              <span class="hidden sm:inline">Install App</span>
+            </button>
+
             <button @click="fetchQuestions" :disabled="isFetching" title="Muat Ulang Data"
               class="w-10 h-10 rounded-full bg-white hover:bg-slate-100 border border-slate-200/80 text-slate-800 flex items-center justify-center shadow-xs transition active:scale-95 disabled:opacity-50">
               <app-icon name="refresh-cw" :class="isFetching ? 'animate-spin text-brand-700' : ''" class="w-4 h-4"></app-icon>
@@ -504,8 +548,21 @@
       try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
     };
 
+    // ===== PWA: tombol install =====
+    let deferredInstallPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();                 // tahan prompt bawaan, kita tampilkan lewat tombol sendiri
+      deferredInstallPrompt = e;
+      if (window.__setCanInstall) window.__setCanInstall(true);
+    });
+    window.addEventListener('appinstalled', () => {
+      deferredInstallPrompt = null;
+      if (window.__setCanInstall) window.__setCanInstall(false);
+    });
+
     // Path ikon (gaya Lucide, viewBox 24x24). Dirender oleh Vue, bukan oleh lucide.createIcons().
     const ICONS = {
+      'download': '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>',
       'shield-check': '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
       'alert-circle': '<circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/>',
       'refresh-cw': '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
@@ -799,12 +856,24 @@
           return 'Belum Dijawab';
         };
 
+        // ===== Install web app (PWA) =====
+        const canInstall = ref(!!deferredInstallPrompt);
+        window.__setCanInstall = (v) => { canInstall.value = v; };
+        const installApp = async () => {
+          if (!deferredInstallPrompt) return;
+          deferredInstallPrompt.prompt();
+          await deferredInstallPrompt.userChoice;
+          deferredInstallPrompt = null;
+          canInstall.value = false;
+        };
+
         // Setelah reload dengan sesi tersimpan, muat data pertanyaan otomatis
         onMounted(() => {
           if (auth.value.isAuthenticated) fetchQuestions();
         });
 
         return {
+          canInstall, installApp,
           auth, loginForm, loginError, isSubmittingLogin, handleLogin, handleLogout,
           gasUrl, isLiveBackend,
           isAdmin, filterSchedule, scheduleOptions, getScheduleBadgeClass,
